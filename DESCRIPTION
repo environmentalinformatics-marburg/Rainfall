@@ -1,0 +1,10 @@
+Package: Rainfall
+Type: Package
+Title: Functions for training, predictiion and validation of an MSG based optical rainfall retrieval
+Version: 1.0
+Date: 2015-02-16
+Author: Hanna Meyer
+Maintainer: Hanna Meyer <hanna.meyer@geo.uni-marburg.de>
+Description: Functions for training, predictiion and validation of an MSG based optical rainfall retrieval
+License: GNU GPL (>=3)
+Depends: raster, caret
