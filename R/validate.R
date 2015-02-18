@@ -11,6 +11,12 @@
 
 validate <- function (obs, pred, type="regression",...){
   require(Rsenal)
+  
+  if (sum(!is.na(values(pred)))==0||sum(!is.na(values(obs)))==0){
+    print ("error: one of the input rasters is empty")
+    stop
+  }
+  
   if (type=="regression"){
     stats <- regressionStats(values(pred), values(obs),adj.rsq=FALSE)
   }
