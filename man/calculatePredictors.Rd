@@ -4,8 +4,8 @@
 \alias{calculatePredictors}
 \title{Calculate predictors from MSG cloud masked data}
 \usage{
-calculatePredictors(scenerasters, sunzenith, variables, derivVariables,
-  xderivTexture, date)
+calculatePredictors(scenerasters, sunzenith, spectral, texture, pptext, zonstat,
+  shape, further = c("sunzenith", "jday"), date)
 }
 \arguments{
 \item{scenerasters}{A raster stack of cloud masked MSG scenes with non
@@ -13,18 +13,34 @@ clouded areas were set to NA}
 
 \item{sunzenith}{A raster of the sun zenith values}
 
-\item{variables}{A character vector indicating the msg channels to be included.
+\item{spectral}{A character vector indicating the msg channels to be included.
 Possible values: "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",
-"IR9.7","IR10.8","IR12.0","IR13.4".}
+"IR9.7","IR10.8","IR12.0","IR13.4","T0.6_1.6","T6.2_10.8","T7.3_12.0",
+"T8.7_10.8","T10.8_12.0", "T3.9_7.3","T3.9_10.8"}
 
-\item{derivVariables}{A character vector of derivated variables
- to be calculated. possible values are
-"T0.6_1.6","T6.2_10.8","T7.3_12.0","T8.7_10.8","T10.8_12.0",
-"T3.9_7.3","T3.9_10.8","sunzenith")}
+\item{texture}{data frame of all spectral and texture combinations which are
+to be calculated. (Tip: Use expand.grid to create this data.frame)}
 
-\item{xderivTexture}{MSG channels from which texture is to be calculated}
+\item{pptext}{data frame of all spectral and texture combinations which are
+to be calculated for teh overall cloud entity.
+ (Tip: Use expand.grid to create this data.frame)}
 
-\item{date}{Date of the msg scene in format yyyymmddhhmm}
+\item{zonstat}{data frame of all spectral and zonal stat combinations
+(min,max,mean or sd) which are to be calculated for the overall cloud entity.
+(Tip: Use expand.grid to create this data.frame)}
+
+\item{shape}{geoemtry variables which should be included. Possible values
+are "Ar",SI","CA","Ur","CAI","PAR","distEdges","Re","Ru","OIC",
+CI1","CO1","CI2","CO2","CCI1","CCI2","CO","SHD","C1","E",
+"TR","CR","C2","FR","EI","SF1","GSI","SF2","C3","SF3"}
+
+\item{further}{a character vector including Currently "jday" and/or
+"sunzenith" which will also be used as variables.
+see \code{\link{geometryVariables}} and \code{\link{borgIndices}}
+for description of the variables.}
+
+\item{date}{Date of the msg scene in format yyyymmddhhmm. Only imprtant if
+the day of the year (jday) is calculated (see param "further").}
 }
 \description{
 Calculate predictors from MSG cloud masked data
@@ -58,9 +74,16 @@ names(msg_example)<-c("VIS0.6","VIS0.8","NIR1.6","IR3.9",
 "WV6.2","WV7.3","IR8.7","IR9.7","IR10.8","IR12.0","IR13.4")
 
 #calculate variables (takes some time...)
-pred <- calculatePredictors(msg_example,sunzenith,variables=c("VIS0.6","VIS0.8","NIR1.6"),
-derivVariables=c("T0.6_1.6","T6.2_10.8"),
-xderivTexture=c("VIS0.6","T0.6_1.6"),date=date)
+pred <- calculatePredictors(msg_example,
+sunzenith,
+spectral=c("VIS0.6","VIS0.8","NIR1.6","T0.6_1.6","T6.2_10.8"),
+texture=expand.grid(c("VIS0.8","NIR1.6","T6.2_10.8"),
+c("variance", "contrast")),
+pptext=expand.grid("T3.9_10.8",c("variance", "contrast","mean")),
+shape=c("Ar","CAI","SI","CI1"),
+zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","WV7.3","T6.2_10.8"),
+var=c("mins","sds","mins","maxs")),
+date=date)
 print(pred)
 }
 

@@ -4,7 +4,7 @@
 \alias{geometryVariables}
 \title{Calculate selected geometry variables for clouds}
 \usage{
-geometryVariables(x)
+geometryVariables(x, var)
 }
 \arguments{
 \item{x}{A rasterLayer containing NA for non clouds and any value for
@@ -26,13 +26,14 @@ package="Rainfall"))
 msg_example=reclassify(msg_example, cbind(-99,NA))
 
 #calculate geometry Variables
-geometry <- geometryVariables(msg_example)
-plot(geometry[[1:5]])
+geometry <- geometryVariables(msg_example,var=c("Ar","Ur"))
+plot(geometry)
 }
 \author{
 Hanna Meyer
 }
 \seealso{
-\code{\link{SDMTools}}, \code{\link{clump}}, \code{\link{borgIndices}}
+\code{\link{SDMTools}}, \code{\link{clump}},
+ \code{\link{borgIndices}}
 }
 

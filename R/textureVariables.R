@@ -5,7 +5,8 @@
 #' @param nrasters A vector of channels to use from x. Default =nlayers(x)
 #' @param filter A vector of numbers indicating the environment sizes for which 
 #' the textures are calculated
-#' @param var A string vector of parameters to be calculated. see \code{\link{glcm}}
+#' @param var A string vector of parameters to be calculated.
+#'  see \code{\link{glcm}}
 #' @param n_grey Number of grey values. see \code{\link{glcm}}
 #' @param parallel A logical value indicating whether parameters are calculated 
 #' parallely or not
@@ -81,16 +82,20 @@ textureVariables <- function(x,nrasters=1:nlayers(x),filter=3,
       if (parallel){
         glcm_filter[[j]]<-foreach(i=nrasters,
                                   .packages= c("glcm","raster"))%dopar%{
-                                    glcm(x[[i]], window = c(filter[j], filter[j]), 
-                                         shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
+                                    glcm(x[[i]], 
+                                         window = c(filter[j], filter[j]), 
+                                         shift=list(c(0,1), c(1,1), c(1,0), 
+                                                    c(1,-1)),
                                          statistics=var,n_grey=n_grey,
                                          na_opt="ignore") 
                                   } 
       } else {
         glcm_filter[[j]]<-foreach(i=nrasters,
                                   .packages= c("glcm","raster"))%do%{
-                                    glcm(x[[i]], window = c(filter[j], filter[j]), 
-                                         shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
+                                    glcm(x[[i]], 
+                                         window = c(filter[j], filter[j]), 
+                                         shift=list(c(0,1), c(1,1), c(1,0), 
+                                                    c(1,-1)),
                                          statistics=var,n_grey=n_grey,
                                          na_opt="ignore") 
                                   }

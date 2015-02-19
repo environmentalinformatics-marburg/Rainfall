@@ -17,7 +17,8 @@ where clouds are already masked}
 \item{filter}{A vector of numbers indicating the environment sizes for which
 the textures are calculated}
 
-\item{var}{A string vector of parameters to be calculated. see \code{\link{glcm}}}
+\item{var}{A string vector of parameters to be calculated.
+see \code{\link{glcm}}}
 
 \item{parallel}{A logical value indicating whether parameters are calculated
 parallely or not}

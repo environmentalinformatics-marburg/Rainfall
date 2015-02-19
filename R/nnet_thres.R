@@ -1,7 +1,8 @@
 # nnet with cutoff as additional tuning parameter
 #  author: Max Kuhn
 # description Is used as internal function for caret's train and rfe
-# references http://www.r-bloggers.com/optimizing-probability-thresholds-for-class-imbalances/
+# references http://www.r-bloggers.com/optimizing-probability-
+#thresholds-for-class-imbalances/
 
 
 library(caret)
@@ -16,7 +17,9 @@ nnet_thres$parameters <- data.frame(parameter = c("size", "decay", "threshold"),
                                               "Probability Cutoff"))
 ## The default tuning grid code:
 nnet_thres$grid <- function(x, y, len = NULL) {
-  expand.grid(size = ((1:len) * 2) - 1, decay = c(0, 10 ^ seq(-1, -4, length = len - 1)), threshold = seq(.01, .99, length = len))
+  expand.grid(size = ((1:len) * 2) - 1,
+              decay = c(0, 10 ^ seq(-1, -4, length = len - 1)), 
+              threshold = seq(.01, .99, length = len))
 }
 
 ## Here we fit a single nnet model (with a fixed size and decay)
@@ -63,7 +66,6 @@ nnet_thres$predict = function(modelFit, newdata, submodels = NULL) {
     out <- cbind(out, 1 - out)
     dimnames(out)[[2]] <- rev(modelFit$obsLevels)
   }
-  #?????????????????????????????????????????????????????????????????????
   
   class1Prob=out[,modelFit$obsLevels[1]]
   

@@ -21,8 +21,12 @@ glcmPerPatch= function (x,patches,nrasters=1:nlayers(x),
     xperPatch<-x
     values(xperPatch)[values(patches)!=i]<-NA
     if  (sum(!is.na(values(xperPatch[[1]])))<9) {next}
-    xperPatch[170/2,250/2]<-apply(values(xperPatch),2,function(x){
-      mean(x,na.rm=TRUE)})
+    if (class(x)=="RasterStack"||class(x)=="RasterBrick"){
+      xperPatch[170/2,250/2]<-apply(values(xperPatch),2,"mean",na.rm=TRUE)
+    }
+    if (class(x)=="RasterLayer"){
+      xperPatch[170/2,250/2]<-mean(values(xperPatch),na.rm=TRUE)
+    }
     glcm_filter<-foreach(k=nrasters,.packages= c("glcm","raster"))%dopar%{
       glcm(xperPatch[[k]], window = c(dimx, dimy),
            shift=list(c(0,1), c(1,1), c(1,0)),statistics=var,n_grey=n_grey,
@@ -40,5 +44,30 @@ glcmPerPatch= function (x,patches,nrasters=1:nlayers(x),
     results<-rbind(results,resultsNew)
     
   }
-  return(results)
+  
+  
+  glcmPerPatchRaster<-foreach(k=2:ncol(results),.combine=stack,
+                              .packages=c("raster","doParallel"))%dopar%{
+                                reclassify(patches,matrix(c(
+                                  results[,1],results[,k]),ncol=2))}
+  reclasstable<-cbind(1:max(values(patches),na.rm=TRUE),
+                      1:max(values(patches),
+                            na.rm=TRUE)%in%results
+                      [,1])
+  reclasstable[reclasstable[,2]==0,2]=NA
+  reclasstable[!is.na(reclasstable[,2]),2]<-reclasstable[!is.na(
+    reclasstable[,2]),1]
+  reclasstable<-reclasstable[is.na(reclasstable[,2]),]
+  if (nrow(results)==1){
+    glcmPerPatchRaster<-reclassify(glcmPerPatchRaster,matrix(reclasstable,
+                                                             ncol=2))
+  } else{
+    glcmPerPatchRaster<-reclassify(glcmPerPatchRaster,reclasstable)
+  }
+  names(glcmPerPatchRaster)<-colnames(results)[-1]
+  names(glcmPerPatchRaster)<-paste0("pp_",names(glcmPerPatchRaster))
+  
+  return(glcmPerPatchRaster)
 }
+
+

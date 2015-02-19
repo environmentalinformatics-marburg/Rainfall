@@ -19,8 +19,8 @@
 #'  # set non clouded areas to NA:
 #'  msg_example=reclassify(msg_example, cbind(-99,NA))
 #'  #calculate geometry Variables
-#'  geometry <- geometryVariables(msg_example)
-#'  borg<-borgIndices(geometry$Ar,geometry$Up,geometry$Re*2, geometry$Ru*2)
+#'  geometry <- geometryVariables(msg_example,var=c("Ar","Ur","Re","Ru"))
+#'  borg<-borgIndices(geometry$Ar,geometry$Ur,geometry$Re*2, geometry$Ru*2)
 #'  plot(borg)
 
 borgIndices <- function(Ar,Ur,De,Du){
