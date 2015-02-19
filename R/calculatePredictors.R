@@ -78,24 +78,24 @@ calculatePredictors<-function (scenerasters,
                                further=c("sunzenith","jday"),
                                date){
   require(raster)
-  if (class(texture[,1])=="factor") texture[,1]= as.character(texture[,1])
-  if (class(texture[,2])=="factor") texture[,2]= as.character(texture[,2])
-  if (class(pptext[,1])=="factor") pptext[,1]= as.character(pptext[,1])
-  if (class(pptext[,2])=="factor") pptext[,2]= as.character(pptext[,2])
-  if (class(zonstat[,1])=="factor") zonstat[,1]= as.character(zonstat[,1])
-  if (class(zonstat[,2])=="factor") zonstat[,2]= as.character(zonstat[,2])
+  if (class(texture[,1])=="factor") texture[,1] <- as.character(texture[,1])
+  if (class(texture[,2])=="factor") texture[,2]<- as.character(texture[,2])
+  if (class(pptext[,1])=="factor") pptext[,1]<- as.character(pptext[,1])
+  if (class(pptext[,2])=="factor") pptext[,2]<- as.character(pptext[,2])
+  if (class(zonstat[,1])=="factor") zonstat[,1]<- as.character(zonstat[,1])
+  if (class(zonstat[,2])=="factor") zonstat[,2]<- as.character(zonstat[,2])
   
-  names=unique(c(spectral,texture[,1],pptext[,1]))
+  names<-unique(c(spectral,texture[,1],pptext[,1]))
   spectralvars <- spectralDerivate (scenerasters, names)
   spectralvars<-stack(scenerasters,spectralvars)
 
   ### Texture parameters #######################################################
 
-  glcm_varunique=unique(texture[,1]) #first column=spectral var,second =texture
+  glcm_varunique<-unique(texture[,1]) #first column=spectral var,second =texture
   glcm_input <-lapply(glcm_varunique,FUN=function(x)texture[,2][texture[,1]==x])
   names(glcm_input)<-glcm_varunique
 
-  glcm_filter=list()
+  glcm_filter<-list()
   for (i in 1: length (glcm_input)){
   glcm_filter[[i]] <- textureVariables (x=spectralvars[[names(glcm_input)[i]]],
                                     n_grey = 32,    
@@ -106,34 +106,31 @@ calculatePredictors<-function (scenerasters,
 
   
   ### Geometry parameters ######################################################
-  shape=c("cloudPatches",shape)
+  shape<-c("cloudPatches",shape)
   cloud_geometry <- geometryVariables (x=scenerasters[[4]],var=shape)
   
   ### Texture per Patch ########################################################
   
-  pp_glcm_varunique=unique(pptext[,1]) 
+  pp_glcm_varunique<-unique(pptext[,1]) 
   pp_glcm_input <-lapply(pp_glcm_varunique,
                          FUN=function(x)pptext[,2][pptext[,1]==x])
   names(  pp_glcm_input)<-pp_glcm_varunique
   
-  pp_glcmPatches=list()
-  glcmPerPatchRaster=list()
+  pp_glcmPatches<-list()
+  glcmPerPatchRaster<-list()
   for (i in 1: length (pp_glcm_input)){
-  
-  pp_glcmPatches[[i]]<-glcmPerPatch(x=spectralvars[[names(pp_glcm_input)[i]]],
+    pp_glcmPatches[[i]]<-glcmPerPatch(x=spectralvars[[names(pp_glcm_input)[i]]],
                                     patches=cloud_geometry$cloudPatches, 
                                     var=as.character(pp_glcm_input[[i]]))
   
   }
   ### zonal stat: Mean,sd,min,max per Pacth ####################################
-  zstat_varunique=unique(zonstat[,1])
+  zstat_varunique<-unique(zonstat[,1])
   zstat_input <-lapply(zstat_varunique,
                        FUN=function(x)zonstat[,2][zonstat[,1]==x])
   names(zstat_input)<-zstat_varunique
-  
-  zstatPatches=list()
-  
-  zonalstat=list()
+  zstatPatches<-list()
+  zonalstat<-list()
   for (i in 1: length (zstat_input)){
   zonalstat[[i]] <-ppStat( spectralvars[[names(zstat_input)[i]]],
                            cloud_geometry$cloudPatches, 
@@ -143,19 +140,19 @@ calculatePredictors<-function (scenerasters,
   
   ### further vars ######################################
   if (!is.null(further)){
-    namesF=c()
-    furtherVar=stack()
+    namesF<-c()
+    furtherVar<-stack()
     if ("jday" %in% further){
       dayOfYear<-scenerasters[[1]]
       values(dayOfYear)<-rep(strptime(date, "%Y%m%d")$yday+1,ncell(dayOfYear))
       furtherVar <- stack(furtherVar, dayOfYear)
-      namesF=c(namesF,"jday")
+      namesF<-c(namesF,"jday")
     }
     if ("sunzenith" %in% further){
-      furtherVar=stack(furtherVar,sunzenith)
-      namesF=c(namesF,"sunzenith")
+      furtherVar<-stack(furtherVar,sunzenith)
+      namesF<-c(namesF,"sunzenith")
     }
-    names(furtherVar)=namesF
+    names(furtherVar)<-namesF
   }
       
   

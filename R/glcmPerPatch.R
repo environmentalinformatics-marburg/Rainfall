@@ -3,7 +3,7 @@
 #'  @param x 
 #'  @return a raster stack of the texture parameters for each entity
 #'  @seealso \code{\link{calculateTexture}}, \code{\link{glcm}}
-glcmPerPatch= function (x,patches,nrasters=1:nlayers(x),
+glcmPerPatch <- function (x,patches,nrasters=1:nlayers(x),
                         var=c("mean", "variance", "homogeneity", 
                               "contrast", "dissimilarity", 
                               "entropy","second_moment"),n_grey=32){
@@ -54,7 +54,7 @@ glcmPerPatch= function (x,patches,nrasters=1:nlayers(x),
                       1:max(values(patches),
                             na.rm=TRUE)%in%results
                       [,1])
-  reclasstable[reclasstable[,2]==0,2]=NA
+  reclasstable[reclasstable[,2]==0,2]<-NA
   reclasstable[!is.na(reclasstable[,2]),2]<-reclasstable[!is.na(
     reclasstable[,2]),1]
   reclasstable<-reclasstable[is.na(reclasstable[,2]),]

@@ -23,7 +23,7 @@
 
 geometryVariables <- function(x, var){
   require(SDMTools)
-  namesvar=c()
+  namesvar<-c()
   cloudPatches<-clump(x)
   names(cloudPatches)<-"cloudPatches"
   cloudStats<-PatchStat(cloudPatches)
@@ -118,8 +118,8 @@ geometryVariables <- function(x, var){
                                                   "SF1","GSI","SF2","C3",
                                                   "SF3")))]
   
-  result<-eval(parse(text=paste0("stack(",paste0(
-    paste0(splitstring,collapse=","),collapse=""),")")))
+  result<-eval(parse(text=paste0("stack(",paste0(paste0(
+    splitstring,collapse=","),collapse=""),")")))
   names(result) <-var[as.logical(paste0(!var %in%c("CI1","CO1","CI2","CO2",
                                                    "CCI1","CCI2","CO","SHD",
                                                    "C1","E","TR","CR","C2","FR",

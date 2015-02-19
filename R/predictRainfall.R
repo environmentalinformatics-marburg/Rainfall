@@ -24,8 +24,8 @@ predictRainfall <- function (model, sunzenith, msg, variables, xderivTexture,
   tmp<-stack(unlist(predVars$glcm_filter))
   names(tmp)<-names(as.data.frame(lapply(predVars$glcm_filter$size_3,values)))
   modeldata<-stack(c(unlist(predVars[names(predVars)!="glcm_filter"]),tmp))
-  modeldata=modeldata[[model$coefnames]]
-  values(modeldata)[is.na(values(rainmask))] =NA
+  modeldata<-modeldata[[model$coefnames]]
+  values(modeldata)[is.na(values(rainmask))] <- NA
   prediction<-predict(modeldata,model)
   
 }
