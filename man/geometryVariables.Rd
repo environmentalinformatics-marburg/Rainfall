@@ -4,7 +4,7 @@
 \alias{geometryVariables}
 \title{Calculate selected geometry variables for clouds}
 \usage{
-geometryVariables(x, var)
+geometryVariables(x, var = c("Ar"))
 }
 \arguments{
 \item{x}{A rasterLayer containing NA for non clouds and any value for

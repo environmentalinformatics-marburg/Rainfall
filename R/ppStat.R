@@ -1,3 +1,6 @@
+#' Calculate zonal statistics for cloud patches
+#' @param x RasterLayer or rasterStack
+
 ppStat <- function (x, cloudPatches, var){
   require(raster)
   require(doParallel)

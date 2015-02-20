@@ -8,7 +8,7 @@
 #' @param seed Any integer number. Used to produce reproducable results
 #' @param varSize integer vector indicating the numbers of 
 #' variables to consider in rfe.
-#' @param nnetsize Number of hidden units in nnet
+#' @param nnetSize Number of hidden units in nnet
 #' @param nnetDecay. Decay value(s) used in nnet training
 #' @details Predictors are centered and scaled according to mean and sd values.
 #' If the day of the year is used as predictor, this variable is 

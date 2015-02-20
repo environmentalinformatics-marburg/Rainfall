@@ -3,10 +3,42 @@
 #'  @param x 
 #'  @return a raster stack of the texture parameters for each entity
 #'  @seealso \code{\link{calculateTexture}}, \code{\link{glcm}}
+#'  @examples
+#'  #' #list msg raster in the example folder:
+#' scenes<-list.files(system.file("msg",package="Rainfall"),
+#' pattern=".rst$")
+#' 
+#' # name the variables (according file name convention) 
+#' #which are to be used:
+#' x=c("ca02p0001","ca02p0002","ca02p0003","ct01dk004","ct01dk005",
+#' "ct01dk006","ct01dk007","ct01dk008","ct01dk009","ct01dk010","ct01dk011")
+#' 
+#' # raster the sunzenith raster which is defined as "ma11" according to 
+#' #file name conventions:
+#' sunzenith<-raster(system.file("msg",
+#' scenes[substr(scenes,20,23) =="ma11"],package="Rainfall"))
+#'  
+#' # stack the msg scenes:
+#' msg_example <-  stack(system.file("msg",
+#' scenes[substr(scenes,20,28)%in%x],package="Rainfall"))
+#' 
+#' date <- substr(scenes[1],1,12)
+#' 
+#' # set non clouded areas to NA:
+#' msg_example=reclassify(msg_example, cbind(-99,NA))
+#' 
+#' # name the msg channels:
+#' names(msg_example)<-c("VIS0.6","VIS0.8","NIR1.6","IR3.9",
+#' "WV6.2","WV7.3","IR8.7","IR9.7","IR10.8","IR12.0","IR13.4")
+#' 
+#' geometry <- geometryVariables(msg_example[[1]],var="cloudPatches")
+#' 
+#' glcmPerPatch(msg_example[[1]],geometry$cloudPatches,var=c("mean"))
+#'  
 glcmPerPatch <- function (x,patches,nrasters=1:nlayers(x),
-                        var=c("mean", "variance", "homogeneity", 
-                              "contrast", "dissimilarity", 
-                              "entropy","second_moment"),n_grey=32){
+                          var=c("mean", "variance", "homogeneity", 
+                                "contrast", "dissimilarity", 
+                                "entropy","second_moment"),n_grey=32){
   require(doParallel)
   registerDoParallel(detectCores())
   results<-c()
@@ -39,12 +71,12 @@ glcmPerPatch <- function (x,patches,nrasters=1:nlayers(x),
     names(resultsNew)<-c(rep("ID",length(var)),
                          paste0(expand.grid(var,names(x))[,1],
                                 "_",expand.grid(var,names(x))[,2]))
-    resultsNew<-resultsNew[-c(2:length(var))]
-    
+    if (length(var)>2){
+      resultsNew<-resultsNew[-c(2:length(var))]
+    }
     results<-rbind(results,resultsNew)
     
   }
-  
   
   glcmPerPatchRaster<-foreach(k=2:ncol(results),.combine=stack,
                               .packages=c("raster","doParallel"))%dopar%{

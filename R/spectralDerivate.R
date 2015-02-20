@@ -30,7 +30,9 @@ spectralDerivate <- function (x, names){
     spectralvars <- stack(spectralvars,x$IR3.9-x$IR10.8)
     varnames <- c(varnames,"T3.9_10.8")
   }
-  names(spectralvars) <- varnames
+  if (nlayers(spectralvars)>0){
+    names(spectralvars) <- varnames
+  }
   return (spectralvars)
 }
   

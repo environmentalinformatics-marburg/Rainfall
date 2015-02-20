@@ -57,24 +57,24 @@
 #' pred <- calculatePredictors(msg_example,
 #' sunzenith,
 #' spectral=c("VIS0.6","VIS0.8","NIR1.6","T0.6_1.6","T6.2_10.8"),
-#' texture=expand.grid(c("VIS0.8","NIR1.6","T6.2_10.8"),
+#' texture=expand.grid(c("NIR1.6","T6.2_10.8"),
 #' c("variance", "contrast")),
-#' pptext=expand.grid("T3.9_10.8",c("variance", "contrast","mean")),
+#' pptext=expand.grid("T3.9_10.8",c("variance","mean")),
 #' shape=c("Ar","CAI","SI","CI1"),
-#' zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","WV7.3","T6.2_10.8"),
-#' var=c("mins","sds","mins","maxs")),
+#' zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
+#' "var"=c("mins","sds","maxs")),
 #' date=date)
 #' print(pred)
 #' 
 
 
 calculatePredictors<-function (scenerasters,
-                               sunzenith,
                                spectral,
-                               texture,
-                               pptext,
-                               zonstat,
-                               shape,
+                               sunzenith=NULL,
+                               texture=NULL,
+                               pptext=NULL,
+                               zonstat=NULL,
+                               shape=NULL,
                                further=c("sunzenith","jday"),
                                date){
   require(raster)
@@ -87,57 +87,63 @@ calculatePredictors<-function (scenerasters,
   
   names<-unique(c(spectral,texture[,1],pptext[,1]))
   spectralvars <- spectralDerivate (scenerasters, names)
-  spectralvars<-stack(scenerasters,spectralvars)
-
-  ### Texture parameters #######################################################
-
-  glcm_varunique<-unique(texture[,1]) #first column=spectral var,second =texture
-  glcm_input <-lapply(glcm_varunique,FUN=function(x)texture[,2][texture[,1]==x])
-  names(glcm_input)<-glcm_varunique
-
-  glcm_filter<-list()
-  for (i in 1: length (glcm_input)){
-  glcm_filter[[i]] <- textureVariables (x=spectralvars[[names(glcm_input)[i]]],
-                                    n_grey = 32,    
-                                    var=as.character(glcm_input[[i]]),filter=3)
-  names(glcm_filter[[i]]$size_3)<-paste0("f3_",names(glcm_input)[i],"_",
-                                         names(glcm_filter[[i]]$size_3))
+  if (nlayers(spectralvars)>0){
+    spectralvars<-stack(scenerasters,spectralvars)
+  } else {
+    spectralvars<-scenerasters
   }
-
+  ### Texture parameters #######################################################
+  if (!is.null(texture)){
+    glcm_varunique<-unique(texture[,1]) #first column=spectral var,second =texture
+    glcm_input <-lapply(glcm_varunique,FUN=function(x)texture[,2][texture[,1]==x])
+    names(glcm_input)<-glcm_varunique
+    
+    glcm_filter<-list()
+    for (i in 1: length (glcm_input)){
+      glcm_filter[[i]] <- textureVariables (x=spectralvars[[names(glcm_input)[i]]],
+                                            n_grey = 32,    
+                                            var=as.character(glcm_input[[i]]),filter=3)
+      names(glcm_filter[[i]]$size_3)<-paste0("f3_",names(glcm_input)[i],"_",
+                                             names(glcm_filter[[i]]$size_3))
+    }
+  }
   
   ### Geometry parameters ######################################################
-  shape<-c("cloudPatches",shape)
-  cloud_geometry <- geometryVariables (x=scenerasters[[4]],var=shape)
-  
+  if (!is.null(shape)||!is.null(pptext)||!is.null(zonstat)){
+    shape<-c("cloudPatches",shape)
+    cloud_geometry <- geometryVariables (x=scenerasters[[4]],var=shape)
+  }
   ### Texture per Patch ########################################################
-  
-  pp_glcm_varunique<-unique(pptext[,1]) 
-  pp_glcm_input <-lapply(pp_glcm_varunique,
-                         FUN=function(x)pptext[,2][pptext[,1]==x])
-  names(  pp_glcm_input)<-pp_glcm_varunique
-  
-  pp_glcmPatches<-list()
-  glcmPerPatchRaster<-list()
-  for (i in 1: length (pp_glcm_input)){
-    pp_glcmPatches[[i]]<-glcmPerPatch(x=spectralvars[[names(pp_glcm_input)[i]]],
-                                    patches=cloud_geometry$cloudPatches, 
-                                    var=as.character(pp_glcm_input[[i]]))
-  
+  if (!is.null(pptext)){
+    pp_glcm_varunique<-unique(pptext[,1]) 
+    pp_glcm_input <-lapply(pp_glcm_varunique,
+                           FUN=function(x)pptext[,2][pptext[,1]==x])
+    names(  pp_glcm_input)<-pp_glcm_varunique
+    
+    pp_glcmPatches<-list()
+    glcmPerPatchRaster<-list()
+    for (i in 1: length (pp_glcm_input)){
+      pp_glcmPatches[[i]]<-glcmPerPatch(x=spectralvars[[names(pp_glcm_input)[i]]],
+                                        patches=cloud_geometry$cloudPatches, 
+                                        var=as.character(pp_glcm_input[[i]]))
+      
+    }
   }
   ### zonal stat: Mean,sd,min,max per Pacth ####################################
-  zstat_varunique<-unique(zonstat[,1])
-  zstat_input <-lapply(zstat_varunique,
-                       FUN=function(x)zonstat[,2][zonstat[,1]==x])
-  names(zstat_input)<-zstat_varunique
-  zstatPatches<-list()
-  zonalstat<-list()
-  for (i in 1: length (zstat_input)){
-  zonalstat[[i]] <-ppStat( spectralvars[[names(zstat_input)[i]]],
-                           cloud_geometry$cloudPatches, 
-                           var=zstat_input[[i]]) 
-  names(zonalstat)[[i]]<-names(spectralvars[[names(zstat_input)[i]]])
+  if (!is.null(zonstat)){
+    zstat_varunique<-unique(zonstat[,1])
+    zstat_input <-lapply(zstat_varunique,
+                         FUN=function(x)zonstat[,2][zonstat[,1]==x])
+    names(zstat_input)<-zstat_varunique
+    zstatPatches<-list()
+    zonalstat<-list()
+    for (i in 1: length (zstat_input)){
+      zonalstat[[i]] <-ppStat( spectralvars[[names(zstat_input)[i]]],
+                               cloud_geometry$cloudPatches, 
+                               var=zstat_input[[i]]) 
+      names(zonalstat)[[i]]<-names(spectralvars[[names(zstat_input)[i]]])
+    }
   }
-  
   ### further vars ######################################
   if (!is.null(further)){
     namesF<-c()
@@ -154,20 +160,23 @@ calculatePredictors<-function (scenerasters,
     }
     names(furtherVar)<-namesF
   }
-      
+  
   
   ##############################################################################
   ###             Compile data table
   ##############################################################################
   
-
+  
   result<-stack( spectralvars [[spectral]])
-  if(exists("glcm_filter")) result <- stack (result,stack(unlist(glcm_filter)))
-  if(nlayers(cloud_geometry>1)) result <- stack (result,cloud_geometry[[-1]])
-  if(exists("pp_glcmPatches")) result <- stack (result,stack(unlist(
+  if (!is.null(texture)) result <- stack (result,stack(unlist(glcm_filter)))
+  if(!is.null(shape)||!is.null(pptext)||!is.null(zonstat)){
+    if(nlayers(cloud_geometry>1)) result <- stack (result,cloud_geometry[[-1]])
+  }
+  if (!is.null(pptext)) {result <- stack (result,stack(unlist(
     pp_glcmPatches)))
-  if(exists("zonalstat")) result <- stack (result,stack(unlist(zonalstat)))
-  if(exists("furtherVar")) result <- stack (result,furtherVar)
+  }
+  if (!is.null(zonstat)) result <- stack (result,stack(unlist(zonalstat)))
+  if(!is.null(further)) result <- stack (result,furtherVar)
   
   return(result)
   

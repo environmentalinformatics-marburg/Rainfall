@@ -21,9 +21,9 @@ the threshold are used for rainfall rate training}
 \item{varSize}{integer vector indicating the numbers of
 variables to consider in rfe.}
 
-\item{seed}{Any integer number. Used to produce reproducable results}
+\item{nnetSize}{Number of hidden units in nnet}
 
-\item{nnetsize}{Number of hidden units in nnet}
+\item{seed}{Any integer number. Used to produce reproducable results}
 
 \item{nnetDecay.}{Decay value(s) used in nnet training}
 }

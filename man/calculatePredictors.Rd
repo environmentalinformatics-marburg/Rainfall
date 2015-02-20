@@ -4,19 +4,20 @@
 \alias{calculatePredictors}
 \title{Calculate predictors from MSG cloud masked data}
 \usage{
-calculatePredictors(scenerasters, sunzenith, spectral, texture, pptext, zonstat,
-  shape, further = c("sunzenith", "jday"), date)
+calculatePredictors(scenerasters, spectral, sunzenith = NULL,
+  texture = NULL, pptext = NULL, zonstat = NULL, shape = NULL,
+  further = c("sunzenith", "jday"), date)
 }
 \arguments{
 \item{scenerasters}{A raster stack of cloud masked MSG scenes with non
 clouded areas were set to NA}
 
-\item{sunzenith}{A raster of the sun zenith values}
-
 \item{spectral}{A character vector indicating the msg channels to be included.
 Possible values: "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",
 "IR9.7","IR10.8","IR12.0","IR13.4","T0.6_1.6","T6.2_10.8","T7.3_12.0",
 "T8.7_10.8","T10.8_12.0", "T3.9_7.3","T3.9_10.8"}
+
+\item{sunzenith}{A raster of the sun zenith values}
 
 \item{texture}{data frame of all spectral and texture combinations which are
 to be calculated. (Tip: Use expand.grid to create this data.frame)}
@@ -77,12 +78,12 @@ names(msg_example)<-c("VIS0.6","VIS0.8","NIR1.6","IR3.9",
 pred <- calculatePredictors(msg_example,
 sunzenith,
 spectral=c("VIS0.6","VIS0.8","NIR1.6","T0.6_1.6","T6.2_10.8"),
-texture=expand.grid(c("VIS0.8","NIR1.6","T6.2_10.8"),
+texture=expand.grid(c("NIR1.6","T6.2_10.8"),
 c("variance", "contrast")),
-pptext=expand.grid("T3.9_10.8",c("variance", "contrast","mean")),
+pptext=expand.grid("T3.9_10.8",c("variance","mean")),
 shape=c("Ar","CAI","SI","CI1"),
-zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","WV7.3","T6.2_10.8"),
-var=c("mins","sds","mins","maxs")),
+zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
+"var"=c("mins","sds","maxs")),
 date=date)
 print(pred)
 }

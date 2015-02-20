@@ -21,7 +21,10 @@
 #' plot(geometry)
 
 
-geometryVariables <- function(x, var){
+geometryVariables <- function(x, var=c("Ar")){
+  if (class(x)=="RasterStack"||class(x)=="RasterBrick"){
+    x <- x[[1]]
+  }
   require(SDMTools)
   namesvar<-c()
   cloudPatches<-clump(x)
