@@ -4,24 +4,11 @@
 \alias{predictRainfall}
 \title{Predicts the rainfall rate based on a trained model and MSG data}
 \usage{
-predictRainfall(model, sunzenith, msg, variables, xderivTexture, rainmask, date)
+predictRainfall(model, predictors)
 }
 \arguments{
 \item{model}{The final model from either caret's train or rfe.
 Use model$fit$finalModel or model$finalModel to get it}
-
-\item{sunzenith}{A raster of the sunzenith}
-
-\item{msg}{The 11 used channels of MSG. Use name conventions described
-in Details}
-
-\item{variables}{A string vector of variables which are included in
-the model.
-Variables which are actualy not needed by the model are ignored.}
-
-\item{xderivTexture}{A string vector of variables from which Textures are
-included in the model.
-Variables which are actualy not needed by the model are ignored.}
 
 \item{rainmask}{A raster indicates areas which are not raining with NA values}
 }
