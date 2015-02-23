@@ -19,31 +19,14 @@
 #' @references rfe Function in the caret package
 #' @examples
 
-#' #list msg raster in the example folder:
-#' scenes<-list.files(system.file("msg",package="Rainfall"),
-#' pattern=".rst$")
-#'
-#' # name the variables (according file name convention)
-#' #which are to be used:
-#' x=c("ca02p0001","ca02p0002","ca02p0003","ct01dk004","ct01dk005",
-#' "ct01dk006","ct01dk007","ct01dk008","ct01dk009","ct01dk010","ct01dk011")
-#' # raster the sunzenith raster which is defined as "ma11" according to
-#'
-#' #file name conventions:
-#' sunzenith<-raster(system.file("msg",
-#' scenes[substr(scenes,20,23) =="ma11"],package="Rainfall"))
-#'
 #' # stack the msg scenes:
-#' msg_example <-  stack(system.file("msg",
-#' scenes[substr(scenes,20,28)%in%x],package="Rainfall"))
-#' date <- substr(scenes[1],1,12)
+#' msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
 #' 
-#' # set non clouded areas to NA:
-#' msg_example=reclassify(msg_example, cbind(-99,NA))
+#' # raster the sunzenith 
+#' sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
 #' 
-#' # name the msg channels:
-#' names(msg_example)<-c("VIS0.6","VIS0.8","NIR1.6","IR3.9",
-#' "WV6.2","WV7.3","IR8.7","IR9.7","IR10.8","IR12.0","IR13.4")
+#' #get Date
+#' date <- getDate(inpath)
 #' 
 #' #calculate variables (takes some time...)
 #' pred <- calculatePredictors(msg_example,
@@ -54,7 +37,7 @@
 #'  pptext=expand.grid("T3.9_10.8",c("variance","mean")),
 #'  shape=c("Ar","CAI","SI","CI1"),
 #'  zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
-#'  var=c("mins","sds","maxs")),
+#'  var=c("min","sd","max")),
 #'  further=NULL,
 #'  date=date)
 #'  
@@ -65,7 +48,9 @@
 #' response <- values(response)
 #' 
 #' #Train small rfe model with 0.1% of the pixels (takes around 1 minute...)
-#' rfeModel <- rfe4rainfall(predictors,response,sampsize=0.001)
+#' rfeModel <- rfe4rainfall(predictors,
+#' response,
+#' sampsize=0.001)
 #' 
 #' # Show results:
 #' print(rfeModel)

@@ -1,4 +1,6 @@
-spectralDerivate <- function (x, names){
+spectralDerivate <- function (x, names=c("T0.6_1.6","T6.2_10.8","T7.3_12.0",
+                                         "T8.7_10.8","T10.8_12.0","T3.9_7.3",
+                                         "T3.9_10.8")){
   require (raster)
   spectralvars<-stack()
   varnames=c()

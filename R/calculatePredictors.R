@@ -9,12 +9,14 @@
 #' Possible values: "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",
 #' "IR9.7","IR10.8","IR12.0","IR13.4","T0.6_1.6","T6.2_10.8","T7.3_12.0",
 #' "T8.7_10.8","T10.8_12.0", "T3.9_7.3","T3.9_10.8"
-#' @param texture data frame of all spectral and texture combinations which are
+#' @param texture data frame of all spectral and texture combinations ("mean", "variance", "homogeneity", 
+#' "contrast", "dissimilarity", "entropy","second_moment") which are
 #' to be calculated. (Tip: Use expand.grid to create this data.frame)
 #' @param pptext data frame of all spectral and texture combinations which are
 #' to be calculated for teh overall cloud entity.
 #'  (Tip: Use expand.grid to create this data.frame)
-#' @param zonstat data frame of all spectral and zonal stat combinations
+#' @param zonstat data frame of all spectral and zonal stat 
+#' ("mean","min","max","sd") combinations
 #'  (min,max,mean or sd) which are to be calculated for the overall cloud entity.
 #'  (Tip: Use expand.grid to create this data.frame)
 #' @param shape geoemtry variables which should be included. Possible values
@@ -39,7 +41,7 @@
 #' sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
 #' 
 #' #get Date
-#' date <- getDate(inpath)
+#' date <- getDate(system.file("msg",package="Rainfall"))
 #' 
 #' #calculate variables (takes some time...)
 #' pred <- calculatePredictors(msg_example,
@@ -63,7 +65,7 @@
 #' sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
 #' 
 #' #get Date
-#' date <- getDate(inpath)
+#' date <- getDate(system.file("msg",package="Rainfall"))
 #' 
 #' load(system.file("rfeModel.RData",package="Rainfall"))
 #' pred<-calculatePredictors(msg_example,model=rfeModel,date=date)
@@ -81,6 +83,8 @@ calculatePredictors<-function (scenerasters,
                                further=c("sunzenith","jday"),
                                date){
   require(raster)
+  require(doParallel)
+  registerDoParallel(detectCores())
   
   if(!is.null(model)){
     vars<-varFromRfe(model)
@@ -114,14 +118,20 @@ calculatePredictors<-function (scenerasters,
     names(glcm_input)<-glcm_varunique
     
     glcm_filter<-list()
-    for (i in 1: length (glcm_input)){
-      glcm_filter[[i]] <- textureVariables (x=spectralvars[[names(glcm_input)[i]]],
-                                            n_grey = 32,    
-                                            var=as.character(glcm_input[[i]]),filter=3)
-      names(glcm_filter[[i]]$size_3)<-paste0("f3_",names(glcm_input)[i],"_",
-                                             names(glcm_filter[[i]]$size_3))
-    }
+    
+    glcm_filter<-foreach(i=1:length (glcm_input),
+                         .packages= c("glcm","raster","doParallel","Rainfall"))%dopar%{
+                           tmp<-textureVariables (x=spectralvars[[names(glcm_input)[i]]],
+                                                  n_grey = 32,    
+                                                  var=as.character(glcm_input[[i]]),filter=3)
+                           names(tmp$size_3)<-paste0("f3_",names(glcm_input)[i],"_",
+                                                     names(tmp$size_3))
+                           return(tmp)
+                         }
+    
   }
+  
+  
   
   ### Geometry parameters ######################################################
   if (!is.null(shape)||!is.null(pptext)||!is.null(zonstat)){
@@ -137,13 +147,19 @@ calculatePredictors<-function (scenerasters,
     
     pp_glcmPatches<-list()
     glcmPerPatchRaster<-list()
-    for (i in 1: length (pp_glcm_input)){
-      pp_glcmPatches[[i]]<-glcmPerPatch(x=spectralvars[[names(pp_glcm_input)[i]]],
-                                        patches=cloud_geometry$cloudPatches, 
-                                        var=as.character(pp_glcm_input[[i]]))
-      
-    }
+    
+    pp_glcmPatches<-foreach(i=1:length(pp_glcm_input),
+                            .packages= c("glcm","raster","doParallel",
+                                         "Rainfall"))%dopar%{
+                                           glcmPerPatch(x=spectralvars[[names(
+                                             pp_glcm_input)[i]]],
+                                             patches=cloud_geometry$cloudPatches, 
+                                             var=as.character(pp_glcm_input[[i]]))
+                                         }
+    
+    
   }
+  
   ### zonal stat: Mean,sd,min,max per Pacth ####################################
   if (!is.null(zonstat)){
     zstat_varunique<-unique(zonstat[,1])
@@ -152,12 +168,15 @@ calculatePredictors<-function (scenerasters,
     names(zstat_input)<-zstat_varunique
     zstatPatches<-list()
     zonalstat<-list()
-    for (i in 1: length (zstat_input)){
-      zonalstat[[i]] <-ppStat( spectralvars[[names(zstat_input)[i]]],
-                               cloud_geometry$cloudPatches, 
-                               var=zstat_input[[i]]) 
-      names(zonalstat)[[i]]<-names(spectralvars[[names(zstat_input)[i]]])
-    }
+    
+    zonalstat<-foreach(i=1: length (zstat_input),
+                       .packages= c("raster","doParallel",
+                                    "Rainfall"))%dopar%{
+                                      ppStat( spectralvars[[names(zstat_input)[i]]],
+                                              cloud_geometry$cloudPatches, 
+                                              var=zstat_input[[i]]) 
+                                    }
+    names(zonalstat)<-names(spectralvars[[names(zstat_input)]])
   }
   ### further vars ######################################
   if (!is.null(further)){

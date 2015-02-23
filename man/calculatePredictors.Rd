@@ -23,16 +23,18 @@ Possible values: "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",
 
 \item{sunzenith}{A raster of the sun zenith values}
 
-\item{texture}{data frame of all spectral and texture combinations which are
+\item{texture}{data frame of all spectral and texture combinations ("mean", "variance", "homogeneity",
+"contrast", "dissimilarity", "entropy","second_moment") which are
 to be calculated. (Tip: Use expand.grid to create this data.frame)}
 
 \item{pptext}{data frame of all spectral and texture combinations which are
 to be calculated for teh overall cloud entity.
  (Tip: Use expand.grid to create this data.frame)}
 
-\item{zonstat}{data frame of all spectral and zonal stat combinations
-(min,max,mean or sd) which are to be calculated for the overall cloud entity.
-(Tip: Use expand.grid to create this data.frame)}
+\item{zonstat}{data frame of all spectral and zonal stat
+("mean","min","max","sd") combinations
+ (min,max,mean or sd) which are to be calculated for the overall cloud entity.
+ (Tip: Use expand.grid to create this data.frame)}
 
 \item{shape}{geoemtry variables which should be included. Possible values
 are "Ar",SI","CA","Ur","CAI","PAR","distEdges","Re","Ru","OIC",
@@ -52,17 +54,16 @@ Calculate predictors from MSG cloud masked data
 }
 \examples{
 ############################################################################
-Example 1
+Example 1: Predictors from predictor list
 ############################################################################
-
- # stack the msg scenes:
+# stack the msg scenes:
 msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
 
 # raster the sunzenith
 sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
 
 #get Date
-date <- getDate(inpath)
+date <- getDate(system.file("msg",package="Rainfall"))
 
 #calculate variables (takes some time...)
 pred <- calculatePredictors(msg_example,
@@ -77,9 +78,8 @@ zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
 date=date)
 print(pred)
 ############################################################################
-Example 2
+Example 2:calculate predictors from an rfe model
 ############################################################################
-#calculate predictors from an rfe model
 #'  # stack the msg scenes:
 msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
 
@@ -87,7 +87,7 @@ msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
 sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
 
 #get Date
-date <- getDate(inpath)
+date <- getDate(system.file("msg",package="Rainfall"))
 
 load(system.file("rfeModel.RData",package="Rainfall"))
 pred<-calculatePredictors(msg_example,model=rfeModel,date=date)

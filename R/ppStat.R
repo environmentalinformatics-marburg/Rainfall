@@ -2,7 +2,15 @@
 #' @param scenerasters RasterLayer or rasterStack of spectral channels
 #' @param cloudPatches A Raster of cloud entities calculated 
 #' by \code{\link{geometryVariables}}
-#' @param var 
+#' @param var vector containing values of "mean","sd","min","max"
+#' @examples 
+#' msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"),
+#' channels="VIS0.8")
+#' 
+#' #calculate geometry Variables
+#' geometry <- geometryVariables(msg_example,var=c("cloudPatches"))
+#' 
+#' ppStat(msg_example,geometry$cloudPatches,var=c("mean","sd"))
 
 ppStat <- function (scenerasters, cloudPatches, var=c("mean","sd","min","max")){
   require(raster)

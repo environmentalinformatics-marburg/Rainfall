@@ -12,9 +12,18 @@ ppStat(scenerasters, cloudPatches, var = c("mean", "sd", "min", "max"))
 \item{cloudPatches}{A Raster of cloud entities calculated
 by \code{\link{geometryVariables}}}
 
-\item{var}{}
+\item{var}{vector containing values of "mean","sd","min","max"}
 }
 \description{
 Calculate zonal statistics for cloud patches
+}
+\examples{
+msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"),
+channels="VIS0.8")
+
+#calculate geometry Variables
+geometry <- geometryVariables(msg_example,var=c("cloudPatches"))
+
+ppStat(msg_example,geometry$cloudPatches,var=c("mean","sd"))
 }
 

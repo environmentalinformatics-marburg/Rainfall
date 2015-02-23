@@ -2,6 +2,11 @@
 #' 
 #' @param sceneraster A rasterLayer containing NA for non clouds and any value for 
 #' clouded areas
+#' @param var A list of character values indicating the variables to be used.
+#' Possible values
+#' are "Ar",SI","CA","Ur","CAI","PAR","distEdges","Re","Ru","OIC",
+#' CI1","CO1","CI2","CO2","CCI1","CCI2","CO","SHD","C1","E",
+#' "TR","CR","C2","FR","EI","SF1","GSI","SF2","C3","SF3"
 #' @return A list of RasterStacks containing the texture parameters for each 
 #' combination of channel and filter  
 #' @author Hanna Meyer
@@ -17,15 +22,12 @@
 #' plot(geometry)
 
 
-geometryVariables <- function(sceneraster, var=c("Ar"),setNA=-99){
+geometryVariables <- function(sceneraster, var=c("Ar")){
   if (class(sceneraster)=="RasterStack"||class(sceneraster)=="RasterBrick"){
     sceneraster <- sceneraster[[1]]
     print ("warning: only first element of the raster stack is used...")
   }
-  # set non clouded areas to NA:
-  if (!is.null(setNA)){
-    sceneraster <- reclassify(sceneraster, cbind(setNA,NA))
-  }
+
   require(SDMTools)
   namesvar<-c()
   cloudPatches<-clump(sceneraster)
@@ -53,7 +55,7 @@ geometryVariables <- function(sceneraster, var=c("Ar"),setNA=-99){
                           "SHD","C1","E","TR","CR","C2","FR","EI","SF1",
                           "GSI","SF2","C3","SF3")%in% var)){
     Ur<-reclassify(cloudPatches, 
-                   cbind(cloudStats$patchID,cloudStats$Ur))
+                   cbind(cloudStats$patchID,cloudStats$perimeter))
   }
   #core.area.index
   if ("CAI"%in% var){
