@@ -4,10 +4,10 @@
 \alias{geometryVariables}
 \title{Calculate selected geometry variables for clouds}
 \usage{
-geometryVariables(x, var = c("Ar"))
+geometryVariables(sceneraster, var = c("Ar"), setNA = -99)
 }
 \arguments{
-\item{x}{A rasterLayer containing NA for non clouds and any value for
+\item{sceneraster}{A rasterLayer containing NA for non clouds and any value for
 clouded areas}
 }
 \value{
@@ -18,12 +18,8 @@ combination of channel and filter
 Calculate selected geometry variables for clouds
 }
 \examples{
-msg_example <-  raster(system.file("msg",
-"201010081250_mt09s_ct01dk009_m1hct_1000_rg01de_003000.rst",
-package="Rainfall"))
-
-# set non clouded areas to NA:
-msg_example=reclassify(msg_example, cbind(-99,NA))
+msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"),
+channels="VIS0.8")
 
 #calculate geometry Variables
 geometry <- geometryVariables(msg_example,var=c("Ar","Ur"))

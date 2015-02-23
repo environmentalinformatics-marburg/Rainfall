@@ -4,10 +4,15 @@
 \alias{ppStat}
 \title{Calculate zonal statistics for cloud patches}
 \usage{
-ppStat(x, cloudPatches, var)
+ppStat(scenerasters, cloudPatches, var = c("mean", "sd", "min", "max"))
 }
 \arguments{
-\item{x}{RasterLayer or rasterStack}
+\item{scenerasters}{RasterLayer or rasterStack of spectral channels}
+
+\item{cloudPatches}{A Raster of cloud entities calculated
+by \code{\link{geometryVariables}}}
+
+\item{var}{}
 }
 \description{
 Calculate zonal statistics for cloud patches

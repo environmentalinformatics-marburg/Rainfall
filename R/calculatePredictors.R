@@ -1,6 +1,9 @@
 #' Calculate predictors from MSG cloud masked data
 #' @param scenerasters A raster stack of cloud masked MSG scenes with non 
 #' clouded areas were set to NA
+#' @param model A rfe object Optional. Can be used instad of the spectral,texture,
+#' pptext,zonstat,shape parameters. Variables included in the optimal model are the
+#' calculated.
 #' @param sunzenith A raster of the sun zenith values
 #' @param spectral A character vector indicating the msg channels to be included.
 #' Possible values: "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",
@@ -22,54 +25,54 @@
 #' "sunzenith" which will also be used as variables.
 #' see \code{\link{geometryVariables}} and \code{\link{borgIndices}} 
 #' for description of the variables.
-
+#' @author Hanna Meyer
 #' @param date Date of the msg scene in format yyyymmddhhmm. Only imprtant if 
 #' the day of the year (jday) is calculated (see param "further").
 #' @examples
-#' #list msg raster in the example folder:
-#' scenes<-list.files(system.file("msg",package="Rainfall"),
-#' pattern=".rst$")
-#' 
-#' # name the variables (according file name convention) 
-#' #which are to be used:
-#' x=c("ca02p0001","ca02p0002","ca02p0003","ct01dk004","ct01dk005",
-#' "ct01dk006","ct01dk007","ct01dk008","ct01dk009","ct01dk010","ct01dk011")
-#' 
-#' # raster the sunzenith raster which is defined as "ma11" according to 
-#' #file name conventions:
-#' sunzenith<-raster(system.file("msg",
-#' scenes[substr(scenes,20,23) =="ma11"],package="Rainfall"))
-#'  
+#' ############################################################################
+#' Example 1: Predictors from predictor list
+#' ############################################################################ 
 #' # stack the msg scenes:
-#' msg_example <-  stack(system.file("msg",
-#' scenes[substr(scenes,20,28)%in%x],package="Rainfall"))
+#' msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
 #' 
-#' date <- substr(scenes[1],1,12)
+#' # raster the sunzenith 
+#' sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
 #' 
-#' # set non clouded areas to NA:
-#' msg_example=reclassify(msg_example, cbind(-99,NA))
-#' 
-#' # name the msg channels:
-#' names(msg_example)<-c("VIS0.6","VIS0.8","NIR1.6","IR3.9",
-#' "WV6.2","WV7.3","IR8.7","IR9.7","IR10.8","IR12.0","IR13.4")
+#' #get Date
+#' date <- getDate(inpath)
 #' 
 #' #calculate variables (takes some time...)
 #' pred <- calculatePredictors(msg_example,
-#' sunzenith,
+#' sunzenith=sunzenith,
 #' spectral=c("VIS0.6","VIS0.8","NIR1.6","T0.6_1.6","T6.2_10.8"),
 #' texture=expand.grid(c("NIR1.6","T6.2_10.8"),
 #' c("variance", "contrast")),
 #' pptext=expand.grid("T3.9_10.8",c("variance","mean")),
 #' shape=c("Ar","CAI","SI","CI1"),
 #' zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
-#' "var"=c("mins","sds","maxs")),
+#' "var"=c("min","sd","max")),
 #' date=date)
 #' print(pred)
+#' ############################################################################
+#' Example 2:calculate predictors from an rfe model
+#' ############################################################################
+#' #'  # stack the msg scenes:
+#' msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
+#' 
+#' # raster the sunzenith 
+#' sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
+#' 
+#' #get Date
+#' date <- getDate(inpath)
+#' 
+#' load(system.file("rfeModel.RData",package="Rainfall"))
+#' pred<-calculatePredictors(msg_example,model=rfeModel,date=date)
 #' 
 
 
 calculatePredictors<-function (scenerasters,
-                               spectral,
+                               model=NULL,
+                               spectral=NULL,
                                sunzenith=NULL,
                                texture=NULL,
                                pptext=NULL,
@@ -78,6 +81,18 @@ calculatePredictors<-function (scenerasters,
                                further=c("sunzenith","jday"),
                                date){
   require(raster)
+  
+  if(!is.null(model)){
+    vars<-varFromRfe(model)
+    spectral<-vars$spectral
+    texture<-vars$texture
+    pptext<-vars$pptext
+    zonstat<-vars$zonstat
+    shape<-vars$shape
+    further<-vars$further
+    
+  }
+  
   if (class(texture[,1])=="factor") texture[,1] <- as.character(texture[,1])
   if (class(texture[,2])=="factor") texture[,2]<- as.character(texture[,2])
   if (class(pptext[,1])=="factor") pptext[,1]<- as.character(pptext[,1])
@@ -111,7 +126,7 @@ calculatePredictors<-function (scenerasters,
   ### Geometry parameters ######################################################
   if (!is.null(shape)||!is.null(pptext)||!is.null(zonstat)){
     shape<-c("cloudPatches",shape)
-    cloud_geometry <- geometryVariables (x=scenerasters[[4]],var=shape)
+    cloud_geometry <- geometryVariables (sceneraster=scenerasters[[1]],var=shape)
   }
   ### Texture per Patch ########################################################
   if (!is.null(pptext)){

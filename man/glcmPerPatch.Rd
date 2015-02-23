@@ -20,35 +20,13 @@ Calculate selected Texture parameters for overall cloud entities
  based on spectral properties
 }
 \examples{
-#' #list msg raster in the example folder:
-scenes<-list.files(system.file("msg",package="Rainfall"),
-pattern=".rst$")
-
-# name the variables (according file name convention)
-#which are to be used:
-x=c("ca02p0001","ca02p0002","ca02p0003","ct01dk004","ct01dk005",
-"ct01dk006","ct01dk007","ct01dk008","ct01dk009","ct01dk010","ct01dk011")
-
-# raster the sunzenith raster which is defined as "ma11" according to
-#file name conventions:
-sunzenith<-raster(system.file("msg",
-scenes[substr(scenes,20,23) =="ma11"],package="Rainfall"))
-
 # stack the msg scenes:
-msg_example <-  stack(system.file("msg",
-scenes[substr(scenes,20,28)\%in\%x],package="Rainfall"))
+msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
 
-date <- substr(scenes[1],1,12)
-
-# set non clouded areas to NA:
-msg_example=reclassify(msg_example, cbind(-99,NA))
-
-# name the msg channels:
-names(msg_example)<-c("VIS0.6","VIS0.8","NIR1.6","IR3.9",
-"WV6.2","WV7.3","IR8.7","IR9.7","IR10.8","IR12.0","IR13.4")
-
+#calculate cloud patches
 geometry <- geometryVariables(msg_example[[1]],var="cloudPatches")
 
+#calculate glcm per patch
 glcmPerPatch(msg_example[[1]],geometry$cloudPatches,var=c("mean"))
 }
 \seealso{

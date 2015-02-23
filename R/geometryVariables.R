@@ -1,6 +1,6 @@
 #' Calculate selected geometry variables for clouds
 #' 
-#' @param x A rasterLayer containing NA for non clouds and any value for 
+#' @param sceneraster A rasterLayer containing NA for non clouds and any value for 
 #' clouded areas
 #' @return A list of RasterStacks containing the texture parameters for each 
 #' combination of channel and filter  
@@ -9,25 +9,26 @@
 #'  \code{\link{borgIndices}}
 #' @examples
 #' 
-#' msg_example <-  raster(system.file("msg",
-#' "201010081250_mt09s_ct01dk009_m1hct_1000_rg01de_003000.rst",
-#' package="Rainfall"))
-#' 
-#' # set non clouded areas to NA:
-#' msg_example=reclassify(msg_example, cbind(-99,NA))
+#' msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"),
+#' channels="VIS0.8")
 #' 
 #' #calculate geometry Variables
 #' geometry <- geometryVariables(msg_example,var=c("Ar","Ur"))
 #' plot(geometry)
 
 
-geometryVariables <- function(x, var=c("Ar")){
-  if (class(x)=="RasterStack"||class(x)=="RasterBrick"){
-    x <- x[[1]]
+geometryVariables <- function(sceneraster, var=c("Ar"),setNA=-99){
+  if (class(sceneraster)=="RasterStack"||class(sceneraster)=="RasterBrick"){
+    sceneraster <- sceneraster[[1]]
+    print ("warning: only first element of the raster stack is used...")
+  }
+  # set non clouded areas to NA:
+  if (!is.null(setNA)){
+    sceneraster <- reclassify(sceneraster, cbind(setNA,NA))
   }
   require(SDMTools)
   namesvar<-c()
-  cloudPatches<-clump(x)
+  cloudPatches<-clump(sceneraster)
   names(cloudPatches)<-"cloudPatches"
   cloudStats<-PatchStat(cloudPatches)
   # patch area:
