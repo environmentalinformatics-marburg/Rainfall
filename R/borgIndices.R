@@ -14,7 +14,7 @@
 #'  Zeitschrift für Photogrammetrie und Vermessung, 66, 108-112.
 #'  @examples
 #'  msg_example <-  raster(system.file("extdata/msg",
-#'  "201010081250_mt09s_ct01dk009_m1hct_1000_rg01de_003000.rst",
+#'  "201007121650_mt09s_ct01dk009_m1hct_1000_rg01de_003000.rst",
 #'  package="Rainfall"))
 #'  # set non clouded areas to NA:
 #'  msg_example=reclassify(msg_example, cbind(-99,NA))

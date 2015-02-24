@@ -11,19 +11,20 @@
 varFromRfe<-function (rfeModel){
   
   vars<-rfeModel$optVariables
-  textures<-vars[substr(vars,1,2)=="f3"]
+  textures<-vars[substr(vars,1,1)=="f"]
   texture <-c()
   if (length(textures)>0){
     textures<-strsplit(textures,"_")
     for (i in 1:length(textures)){
-      if (length(textures[[i]])==4){
-        texture <-rbind(texture,cbind(textures[[i]][2],(textures[[i]][4])))
+      if (length(textures[[i]])==3){
+        texture <-rbind(texture,cbind(textures[[i]][2],textures[[i]][3],substr(textures[[i]][1],2,2)))
       }
-      if (length(textures[[i]])==5){
-        texture <- rbind(texture,cbind(paste0(textures[[i]][2],"_",textures[[i]][3]),textures[[i]][5]))
+      if (length(textures[[i]])==4){
+        texture <- rbind(texture,cbind(paste0(textures[[i]][2],"_",textures[[i]][3]),textures[[i]][4],substr(textures[[i]][1],2,2)))
       }
     }
   }
+  texture<-data.frame(texture)
   spectral<-vars[substr(vars,1,2)=="VI"|substr(vars,1,2)=="NI"|substr(vars,1,2)=="IR"|substr(vars,1,1)=="T"]
   
   if (length(spectral) >0){

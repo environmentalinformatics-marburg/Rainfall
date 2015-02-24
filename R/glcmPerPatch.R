@@ -50,7 +50,7 @@ glcmPerPatch <- function (x,patches,nrasters=1:nlayers(x),
     names(resultsNew)<-c(rep("ID",length(var)),
                          paste0(expand.grid(var,names(x))[,1],
                                 "_",expand.grid(var,names(x))[,2]))
-    if (length(var)>2){
+    if (length(var)>1){
       resultsNew<-resultsNew[-c(2:length(var))]
     }
     results<-rbind(results,resultsNew)

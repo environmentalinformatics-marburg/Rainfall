@@ -18,18 +18,33 @@ Main functions include
   \item{Handling of MSG images}{
     \itemize{
       \item{
-      e.g \code{\link{getChannels}}
+       \code{\link{getChannels}}
+      }
+      \item{
+       \code{\link{getSunzenith}}
+      }
+      \item{
+       \code{\link{getDate}}
+      }
+      \item{
+       \code{\link{getDaytime}}
       }
     }
   }
 
   \item{Calculation of predictor variables from MSG images}{
     \itemize{
+    \item{
+      Derivations of spectral data \code{\link{spectralDerivate}}
+      }
       \item{
       Texture variables \code{\link{textureVariables}} and \code{\link{glcmPerPatch}}
       }
       \item{
       Shape of cloud variables \code{\link{geometryVariables}}
+      }
+      \item{
+      Zonal statistics based on cloud entities \code{\link{ppStat}}
       }
     }
   }

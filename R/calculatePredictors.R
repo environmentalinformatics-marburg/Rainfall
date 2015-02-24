@@ -48,7 +48,7 @@
 #' sunzenith=sunzenith,
 #' spectral=c("VIS0.6","VIS0.8","NIR1.6","T0.6_1.6","T6.2_10.8"),
 #' texture=expand.grid(c("NIR1.6","T6.2_10.8"),
-#' c("variance", "contrast")),
+#' c("variance", "contrast"),c(3,9)),
 #' pptext=expand.grid("T3.9_10.8",c("variance","mean")),
 #' shape=c("Ar","CAI","SI","CI1"),
 #' zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
@@ -65,7 +65,7 @@
 #' sunzenith<-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 #' 
 #' #get Date
-#' date <- getDate(system.file("msg",package="Rainfall"))
+#' date <- getDate(system.file("extdata/msg",package="Rainfall"))
 #' 
 #' data(rfeModel)
 #' pred<-calculatePredictors(msg_example,model=rfeModel,date=date)
@@ -82,6 +82,7 @@ calculatePredictors<-function (scenerasters,
                                shape=NULL,
                                further=c("sunzenith","jday"),
                                date){
+  
   require(raster)
   require(doParallel)
   registerDoParallel(detectCores())
@@ -97,8 +98,10 @@ calculatePredictors<-function (scenerasters,
     
   }
   
+  if (ncol(texture)==2) texture=cbind(texture,rep(3,nrow(texture)))
   if (class(texture[,1])=="factor") texture[,1] <- as.character(texture[,1])
   if (class(texture[,2])=="factor") texture[,2]<- as.character(texture[,2])
+  if (class(texture[,3])=="factor") texture[,3]<- as.character(texture[,3])
   if (class(pptext[,1])=="factor") pptext[,1]<- as.character(pptext[,1])
   if (class(pptext[,2])=="factor") pptext[,2]<- as.character(pptext[,2])
   if (class(zonstat[,1])=="factor") zonstat[,1]<- as.character(zonstat[,1])
@@ -113,22 +116,33 @@ calculatePredictors<-function (scenerasters,
   }
   ### Texture parameters #######################################################
   if (!is.null(texture)){
-    glcm_varunique<-unique(texture[,1]) #first column=spectral var,second =texture
-    glcm_input <-lapply(glcm_varunique,FUN=function(x)texture[,2][texture[,1]==x])
-    names(glcm_input)<-glcm_varunique
+    glcm_filterunique<-unique(texture[,3])
+    
+    glcm_input <-lapply(glcm_filterunique,FUN=function(x)texture[,1][texture[,3]==x])
+    names(glcm_input)<-paste0("f", glcm_filterunique)
+    
+    for (k in 1:length(glcm_input)){
+      glcm_varunique<-unique(texture[,1][texture[,3]==glcm_filterunique[k]]) #first column=spectral var,second =texture
+      
+      glcm_input[[k]] <-lapply(glcm_varunique,FUN=function(x)texture[,2][texture[,1]==x&texture[,3]==glcm_filterunique[k]])
+      names(glcm_input[[k]])<-glcm_varunique
+    }
     
     glcm_filter<-list()
     
-    glcm_filter<-foreach(i=1:length (glcm_input),
-                         .packages= c("glcm","raster","doParallel","Rainfall"))%dopar%{
-                           tmp<-textureVariables (x=spectralvars[[names(glcm_input)[i]]],
-                                                  n_grey = 32,    
-                                                  var=as.character(glcm_input[[i]]),filter=3)
-                           names(tmp$size_3)<-paste0("f3_",names(glcm_input)[i],"_",
-                                                     names(tmp$size_3))
-                           return(tmp)
-                         }
-    
+    for (k in 1:length(glcm_input)){
+      glcm_filter[[k]]<-foreach(i=1:length (glcm_input[[k]]),
+                                .packages= c("glcm","raster","doParallel","Rainfall"))%dopar%{
+                                  tmp<-textureVariables (x=spectralvars[[names(glcm_input[[k]])[i]]],
+                                                         n_grey = 32,    
+                                                         var=as.character(glcm_input[[k]][[i]]),filter=as.numeric(glcm_filterunique[k]))
+                                  eval(parse(text=paste0("names(tmp$size_",glcm_filterunique[k],")=c(",
+                                                         paste0("'",names(glcm_input)[[k]],"_", 
+                                                                names(spectralvars[[names(glcm_input[[k]])[i]]]),
+                                                                "_",as.character(glcm_input[[k]][[i]]),collapse=",",sep="'"),")")))
+                                  return(tmp)
+                                }  
+    }
   }
   
   
@@ -200,8 +214,9 @@ calculatePredictors<-function (scenerasters,
   ###             Compile data table
   ##############################################################################
   
-  
-  result<-stack( spectralvars [[spectral]])
+  if(!is.null(spectral)){
+    result<-stack( spectralvars [[spectral]])
+  } else result <- stack()
   if (!is.null(texture)) result <- stack (result,stack(unlist(glcm_filter)))
   if(!is.null(shape)||!is.null(pptext)||!is.null(zonstat)){
     if(nlayers(cloud_geometry>1)) result <- stack (result,cloud_geometry[[-1]])

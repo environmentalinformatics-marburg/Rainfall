@@ -33,7 +33,7 @@
 
 #' @seealso \code{\link{glcm}}
 
-textureVariables <- function(x,nrasters=1:nlayers(x),filter=3,
+textureVariables <- function(x,nrasters=1:nlayers(x),filter=c(3),
                              var=c("mean", "variance", "homogeneity", 
                                    "contrast", "dissimilarity", 
                                    "entropy","second_moment")

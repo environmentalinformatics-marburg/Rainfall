@@ -28,27 +28,23 @@
 #' sunzenith<-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 #' 
 #' #get Date
-#' date <- getDate(inpath)
+#' date <- getDate(inpath=system.file("extdata/msg",package="Rainfall"))
 #' 
 #' #calculate variables (takes some time...)
 #' pred <- calculatePredictors(msg_example,
-#' sunzenith,
+#' sunzenith=sunzenith,
 #' spectral=c("VIS0.6","NIR1.6","T0.6_1.6"),
 #' texture=expand.grid(c("NIR1.6","T6.2_10.8"),
-#' c("variance", "contrast")),
-#'  pptext=expand.grid("T3.9_10.8",c("variance","mean")),
-#'  shape=c("Ar","CAI","SI","CI1"),
-#'  zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
-#'  var=c("min","sd","max")),
+#' c("variance", "contrast"),c(3,5,9)),
 #'  further=NULL,
 #'  date=date)
 #'  
 
 #'response <- raster(system.file("extdata/radar",
-#' "201010081250_radolan_SGrid.rst",package="Rainfall"))
+#' "201007121650_radolan_SGrid.rst",package="Rainfall"))
 #' 
 #' #Train small rfe model with 0.1% of the pixels (takes around 1 minute...)
-#' rfeModel <- rfe4rainfall(predictors,
+#' rfeModel <- rfe4rainfall(predictors=pred,
 #' response,
 #' sampsize=0.001)
 #' 
@@ -58,7 +54,8 @@
 #' predictors(rfeModel)
 #' plot(varImp(rfeModel$fit,scale=TRUE))
 
-rfe4rainfall <- function (predictors,response,
+rfe4rainfall <- function (predictors,
+                          response,
                           sampsize=0.25,
                           threshold=0.06,
                           varSize=c(1:5,seq(10,ncol(predictors),10)),
@@ -66,9 +63,10 @@ rfe4rainfall <- function (predictors,response,
                           nnetDecay = 0.05,
                           seed=20){
   require(caret)
+  require(raster)
   ### Preprocessing ############################################################
   if(class(predictors)=="RasterStack"||class(predictors)=="RasterBrick"){
-    predictors <- as.data.frame(predictors)
+    predictors <- raster::as.data.frame(predictors)
   }
   if(class(response)=="RasterLayer") {
     response <- values(response)
@@ -76,7 +74,7 @@ rfe4rainfall <- function (predictors,response,
   keep <- complete.cases(predictors)
   predictors <- predictors[keep,]
   response <- response[keep] 
-  if (response=="numeric"){
+  if (class(response)=="numeric"){
     keep <- response>threshold
     response<-response[keep]
     predictors <- predictors[keep,]

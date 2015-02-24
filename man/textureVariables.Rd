@@ -4,9 +4,9 @@
 \alias{textureVariables}
 \title{Calculate selected Texture parameters from clouds based on spectral properties}
 \usage{
-textureVariables(x, nrasters = 1:nlayers(x), filter = 3, var = c("mean",
-  "variance", "homogeneity", "contrast", "dissimilarity", "entropy",
-  "second_moment"), parallel = TRUE, n_grey = 32)
+textureVariables(x, nrasters = 1:nlayers(x), filter = c(3),
+  var = c("mean", "variance", "homogeneity", "contrast", "dissimilarity",
+  "entropy", "second_moment"), parallel = TRUE, n_grey = 32)
 }
 \arguments{
 \item{x}{A rasterLayer or a rasterStack containing different channels

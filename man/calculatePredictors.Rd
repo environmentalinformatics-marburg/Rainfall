@@ -70,7 +70,7 @@ pred <- calculatePredictors(msg_example,
 sunzenith=sunzenith,
 spectral=c("VIS0.6","VIS0.8","NIR1.6","T0.6_1.6","T6.2_10.8"),
 texture=expand.grid(c("NIR1.6","T6.2_10.8"),
-c("variance", "contrast")),
+c("variance", "contrast"),c(3,9)),
 pptext=expand.grid("T3.9_10.8",c("variance","mean")),
 shape=c("Ar","CAI","SI","CI1"),
 zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
@@ -87,7 +87,7 @@ msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
 sunzenith<-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 
 #get Date
-date <- getDate(system.file("msg",package="Rainfall"))
+date <- getDate(system.file("extdata/msg",package="Rainfall"))
 
 data(rfeModel)
 pred<-calculatePredictors(msg_example,model=rfeModel,date=date)
