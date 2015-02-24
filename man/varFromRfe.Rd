@@ -17,7 +17,7 @@ in calculatePredictors
 This is an internal function used by calculatePredictors
 }
 \examples{
-load(system.file("rfeModel.RData",package="Rainfall"))
+data(rfeModel)
 varFromRfe(rfeModel)
 }
 \author{

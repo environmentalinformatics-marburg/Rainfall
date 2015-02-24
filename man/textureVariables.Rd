@@ -40,10 +40,10 @@ for the rainfall retrieval
 ## example on how to calculate texture from a list of msg channels
 
 #'# stack the msg scenes:
-msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
+msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
 
 # raster the sunzenith
-sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
+sunzenith<-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 
 #calculate texture
 result <- textureVariables(msg_example,nrasters=1:3,

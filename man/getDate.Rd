@@ -18,7 +18,7 @@ The date as character
 Get the date from a msg scene's inputpath
 }
 \examples{
-date <-getDate(inpath=system.file("msg",package="Rainfall"))
+date <-getDate(inpath=system.file("extdata/msg",package="Rainfall"))
 }
 \author{
 Hanna Meyer

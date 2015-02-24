@@ -5,7 +5,7 @@
 #' @description This is an internal function used by calculatePredictors
 #' @author Hanna Meyer
 #' @examples
-#' load(system.file("rfeModel.RData",package="Rainfall"))
+#' data(rfeModel)
 #' varFromRfe(rfeModel) 
 
 varFromRfe<-function (rfeModel){

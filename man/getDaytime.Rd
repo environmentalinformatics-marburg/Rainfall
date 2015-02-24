@@ -16,7 +16,7 @@ Character with value either "day", "twilight" or "night
 Classify a scene into day, twilight, night according to its sunzenith
 }
 \examples{
-sunzenith <-getSunzenith(inpath=system.file("msg",package="Rainfall"))
+sunzenith <-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 GetDaytime(sunzenith)
 }
 

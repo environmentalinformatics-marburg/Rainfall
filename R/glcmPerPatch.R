@@ -5,7 +5,7 @@
 #'  @seealso \code{\link{calculateTexture}}, \code{\link{glcm}}
 #'  @examples
 #'  # stack the msg scenes:
-#' msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
+#' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
 #' 
 #' #calculate cloud patches
 #' geometry <- geometryVariables(msg_example[[1]],var="cloudPatches")

@@ -4,7 +4,7 @@
 #' @return The date as character
 #' @author Hanna Meyer
 #' @examples
-#' date <-getDate(inpath=system.file("msg",package="Rainfall"))
+#' date <-getDate(inpath=system.file("extdata/msg",package="Rainfall"))
 
 
 getDate <- function (inpath,type="rst"){

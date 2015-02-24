@@ -24,7 +24,7 @@ combination of channel and filter
 Calculate selected geometry variables for clouds
 }
 \examples{
-msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"),
+msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"),
 channels="VIS0.8")
 
 #calculate geometry Variables

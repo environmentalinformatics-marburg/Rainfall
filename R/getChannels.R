@@ -7,7 +7,7 @@
 #' @return A Raster stack of the MSG channels
 #' @author Hanna Meyer
 #' @examples
-#' msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"),
+#' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"),
 #' channels=c("VIS0.6","IR12.0"))
 
 getChannels <- function (inpath, type="rst",channels= c(

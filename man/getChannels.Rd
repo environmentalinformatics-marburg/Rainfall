@@ -25,7 +25,7 @@ A Raster stack of the MSG channels
 Get channels from a msg scene's inputpath
 }
 \examples{
-msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"),
+msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"),
 channels=c("VIS0.6","IR12.0"))
 }
 \author{

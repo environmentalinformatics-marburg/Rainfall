@@ -4,7 +4,7 @@
 #' @return The sunzenith raster
 #' @author Hanna Meyer
 #' @examples
-#' sunzenith <-getSunzenith(inpath=system.file("msg",package="Rainfall"))
+#' sunzenith <-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 
 
 getSunzenith <- function(inpath,type="rst"){

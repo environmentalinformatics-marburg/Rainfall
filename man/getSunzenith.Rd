@@ -18,7 +18,7 @@ The sunzenith raster
 Get sunzenith raster from a msg scene's inputpath
 }
 \examples{
-sunzenith <-getSunzenith(inpath=system.file("msg",package="Rainfall"))
+sunzenith <-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 }
 \author{
 Hanna Meyer

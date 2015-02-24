@@ -9,11 +9,13 @@ rfe4rainfall(predictors, response, sampsize = 0.25, threshold = 0.06,
   ncol(predictors), 8), nnetDecay = 0.05, seed = 20)
 }
 \arguments{
-\item{predictors}{A data.frame with each column is one predictor and each
-row represents one pixel}
+\item{predictors}{Either a data.frame with each column is one predictor and each
+row represents one pixel. Or (if only one scene is used for training)
+a RasterStack with one Raster is one Predictor Variable.}
 
-\item{response}{Vector of either Rainfall area or rainfall rates for
-the corresponding pixels in predictors}
+\item{response}{A vector of either Rainfall area or rainfall rates for
+the corresponding pixels in predictors. If only one scene is used for model
+training, "response" may also be a RasterLayer of the response variable.}
 
 \item{threshold}{if response is Rainfall rate: pixels larger than
 the threshold are used for rainfall rate training}
@@ -40,10 +42,10 @@ scaled considering max=365 and min=1
 }
 \examples{
 # stack the msg scenes:
-msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
+msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
 
 # raster the sunzenith
-sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
+sunzenith<-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 
 #get Date
 date <- getDate(inpath)
@@ -61,11 +63,8 @@ c("variance", "contrast")),
  further=NULL,
  date=date)
 
-#create data.frame from predictors
-predictors <- as.data.frame(pred)
-response <- raster(system.file("radar",
+response <- raster(system.file("extdata/radar",
 "201010081250_radolan_SGrid.rst",package="Rainfall"))
-response <- values(response)
 
 #Train small rfe model with 0.1\% of the pixels (takes around 1 minute...)
 rfeModel <- rfe4rainfall(predictors,

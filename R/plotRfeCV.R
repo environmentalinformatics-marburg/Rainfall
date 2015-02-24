@@ -8,15 +8,7 @@
 #' @seealso \code{\link{rfe}}
 #' @note returnResamp = "all" must be set in rfe training
 #' @examples
-#' data(BloodBrain)
-#' x <- scale(bbbDescr[,-nearZeroVar(bbbDescr)])
-#' x <- x[, -findCorrelation(cor(x), .8)]
-#' x <- as.data.frame(x)
-#' set.seed(1)
-#' rfeModel <- rfe(x, logBBB,
-#' sizes = c(2, 10,30, 35, 40, 60, 65),
-#' rfeControl = rfeControl(functions = lmFuncs, 
-#' method="cv",returnResamp = "all"),method="nnet")
+#' data(rfeModel)
 #' plotRfeCV(rfeModel)
 
 plotRfeCV <- function (rfeModel,metric="RMSE"){

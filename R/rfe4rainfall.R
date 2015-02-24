@@ -1,8 +1,10 @@
 #' Performs recursive feature selction
-#' @param predictors A data.frame with each column is one predictor and each
-#' row represents one pixel
-#' @param response Vector of either Rainfall area or rainfall rates for
-#' the corresponding pixels in predictors
+#' @param predictors Either a data.frame with each column is one predictor and each
+#' row represents one pixel. Or (if only one scene is used for training) 
+#' a RasterStack with one Raster is one Predictor Variable.
+#' @param response A vector of either Rainfall area or rainfall rates for
+#' the corresponding pixels in predictors. If only one scene is used for model 
+#' training, "response" may also be a RasterLayer of the response variable.
 #' @param threshold if response is Rainfall rate: pixels larger than
 #' the threshold are used for rainfall rate training
 #' @param seed Any integer number. Used to produce reproducable results
@@ -20,10 +22,10 @@
 #' @examples
 
 #' # stack the msg scenes:
-#' msg_example <-getChannels(inpath=system.file("msg",package="Rainfall"))
+#' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
 #' 
 #' # raster the sunzenith 
-#' sunzenith<-getSunzenith(inpath=system.file("msg",package="Rainfall"))
+#' sunzenith<-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 #' 
 #' #get Date
 #' date <- getDate(inpath)
@@ -41,11 +43,9 @@
 #'  further=NULL,
 #'  date=date)
 #'  
-#'#create data.frame from predictors
-#'predictors <- as.data.frame(pred)
-#'response <- raster(system.file("radar",
+
+#'response <- raster(system.file("extdata/radar",
 #' "201010081250_radolan_SGrid.rst",package="Rainfall"))
-#' response <- values(response)
 #' 
 #' #Train small rfe model with 0.1% of the pixels (takes around 1 minute...)
 #' rfeModel <- rfe4rainfall(predictors,
@@ -67,6 +67,12 @@ rfe4rainfall <- function (predictors,response,
                           seed=20){
   require(caret)
   ### Preprocessing ############################################################
+  if(class(predictors)=="RasterStack"||class(predictors)=="RasterBrick"){
+    predictors <- as.data.frame(predictors)
+  }
+  if(class(response)=="RasterLayer") {
+    response <- values(response)
+  }
   keep <- complete.cases(predictors)
   predictors <- predictors[keep,]
   response <- response[keep] 
