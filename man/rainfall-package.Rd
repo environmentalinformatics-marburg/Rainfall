@@ -31,6 +31,7 @@ Main functions include
       }
     }
   }
+  
 
   \item{Calculation of predictor variables from MSG images}{
     \itemize{
@@ -60,3 +61,4 @@ Main functions include
 
 \item{Visualisations}{}
 }
+

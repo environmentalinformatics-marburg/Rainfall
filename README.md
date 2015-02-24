@@ -3,4 +3,6 @@ Functions for training, prediction and validation of an MSG based optical rainfa
 
 
 Install the package with 
+library(devtools)
+
 install_github("environmentalinformatics-marburg/Rainfall")
