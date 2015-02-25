@@ -34,7 +34,7 @@
 #' the day of the year (jday) is calculated (see param "further").
 #' @examples
 #' ############################################################################
-#' Example 1: Predictors from predictor list
+#' #Example 1: Predictors from predictor list
 #' ############################################################################ 
 #' # stack the msg scenes:
 #' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
@@ -60,19 +60,13 @@
 #' date=date)
 #' print(pred)
 #' ############################################################################
-#' Example 2:calculate predictors from an rfe model
+#' #Example 2:calculate predictors from an rfe model
 #' ############################################################################
 #' #'  # stack the msg scenes:
 #' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
 #' 
-#' # raster the sunzenith 
-#' sunzenith<-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
-#' 
-#' #get Date
-#' date <- getDate(system.file("extdata/msg",package="Rainfall"))
-#' 
 #' data(rfeModel)
-#' pred<-calculatePredictors(msg_example,model=rfeModel,date=date)
+#' pred<-calculatePredictors(msg_example,model=rfeModel,date=NULL,sunzenith=NULL)
 #' 
 
 
@@ -256,9 +250,9 @@ calculatePredictors<-function (scenerasters,
   } else result <- stack()
   if (!is.null(texture)) {
     if(!is.null(model)){
-      tmp <-unlist(lapply(unlist(glcm_filter),names))
+      tmp2 <- unlist(lapply(unlist(glcm_filter),names))
       glcm_filter<-stack(unlist(glcm_filter))
-      names(glcm_filter)<-tmp
+      names(glcm_filter)<-tmp2
     }
     result <- stack (result,stack(unlist(glcm_filter)))
   }

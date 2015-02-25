@@ -3,7 +3,7 @@
 #' @return Character with value either "day", "twilight" or "night
 #' @examples
 #' sunzenith <-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
-#' GetDaytime(sunzenith)
+#' getDaytime(sunzenith)
 getDaytime<-function(sunzenith){
   meanzenith=mean(values(sunzenith))
   if (meanzenith<70) time = "day"

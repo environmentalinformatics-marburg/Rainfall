@@ -17,6 +17,6 @@ Classify a scene into day, twilight, night according to its sunzenith
 }
 \examples{
 sunzenith <-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
-GetDaytime(sunzenith)
+getDaytime(sunzenith)
 }
 

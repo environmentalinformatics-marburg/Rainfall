@@ -57,7 +57,7 @@ Calculate predictors from MSG cloud masked data
 }
 \examples{
 ############################################################################
-Example 1: Predictors from predictor list
+#Example 1: Predictors from predictor list
 ############################################################################
 # stack the msg scenes:
 msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
@@ -83,19 +83,13 @@ zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
 date=date)
 print(pred)
 ############################################################################
-Example 2:calculate predictors from an rfe model
+#Example 2:calculate predictors from an rfe model
 ############################################################################
 #'  # stack the msg scenes:
 msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
 
-# raster the sunzenith
-sunzenith<-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
-
-#get Date
-date <- getDate(system.file("extdata/msg",package="Rainfall"))
-
 data(rfeModel)
-pred<-calculatePredictors(msg_example,model=rfeModel,date=date)
+pred<-calculatePredictors(msg_example,model=rfeModel,date=NULL,sunzenith=NULL)
 }
 \author{
 Hanna Meyer

@@ -16,7 +16,7 @@
 plotPredCorr <- function(predictors,subset=1:20){
   require(corrplot)
   if (class(predictors)=="RasterStack"||class(predictors)=="RasterBrick"){
-    predictors<-as.data.frame(predictors) 
+    predictors<-raster::as.data.frame(predictors) 
   }
   predictors<-predictors[complete.cases(predictors),]
   if ("jday" %in% names(predictors)){
