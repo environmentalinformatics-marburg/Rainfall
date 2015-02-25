@@ -10,8 +10,8 @@
 #' "IR9.7","IR10.8","IR12.0","IR13.4","T0.6_1.6","T6.2_10.8","T7.3_12.0",
 #' "T8.7_10.8","T10.8_12.0", "T3.9_7.3","T3.9_10.8"
 #' @param texture data frame of all spectral and texture combinations ("mean", "variance", "homogeneity", 
-#' "contrast", "dissimilarity", "entropy","second_moment") which are
-#' to be calculated. (Tip: Use expand.grid to create this data.frame)
+#' "contrast", "dissimilarity", "entropy","second_moment") and filter sizes 
+#' which are to be calculated. (Tip: Use expand.grid to create this data.frame)
 #' @param pptext data frame of all spectral and texture combinations which are
 #' to be calculated for teh overall cloud entity.
 #'  (Tip: Use expand.grid to create this data.frame)
@@ -23,6 +23,8 @@
 #' are "Ar",SI","CA","Ur","CAI","PAR","distEdges","Re","Ru","OIC",
 #' CI1","CO1","CI2","CO2","CCI1","CCI2","CO","SHD","C1","E",
 #' "TR","CR","C2","FR","EI","SF1","GSI","SF2","C3","SF3"
+#' @param filterstat data.frame of all spectral and "mean","min","max","sd" and
+#' filter size combinations
 #' @param further a character vector including Currently "jday" and/or 
 #' "sunzenith" which will also be used as variables.
 #' see \code{\link{geometryVariables}} and \code{\link{borgIndices}} 
@@ -51,6 +53,8 @@
 #' c("variance", "contrast"),c(3,9)),
 #' pptext=expand.grid("T3.9_10.8",c("variance","mean")),
 #' shape=c("Ar","CAI","SI","CI1"),
+#' filterstat=expand.grid(c("VIS0.6","T6.2_10.8"),
+#' c("min", "max"),c(3,9)),
 #' zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
 #' "var"=c("min","sd","max")),
 #' date=date)
@@ -79,6 +83,7 @@ calculatePredictors<-function (scenerasters,
                                texture=NULL,
                                pptext=NULL,
                                zonstat=NULL,
+                               filterstat=NULL,
                                shape=NULL,
                                further=c("sunzenith","jday"),
                                date){
@@ -91,6 +96,7 @@ calculatePredictors<-function (scenerasters,
     vars<-varFromRfe(model)
     spectral<-vars$spectral
     texture<-vars$texture
+    filterstat<-vars$filterstat
     pptext<-vars$pptext
     zonstat<-vars$zonstat
     shape<-vars$shape
@@ -102,12 +108,15 @@ calculatePredictors<-function (scenerasters,
   if (class(texture[,1])=="factor") texture[,1] <- as.character(texture[,1])
   if (class(texture[,2])=="factor") texture[,2]<- as.character(texture[,2])
   if (class(texture[,3])=="factor") texture[,3]<- as.character(texture[,3])
+  if (class(filterstat[,1])=="factor") filterstat[,1] <- as.character(filterstat[,1])
+  if (class(filterstat[,2])=="factor") filterstat[,2]<- as.character(filterstat[,2])
+  if (class(filterstat[,3])=="factor") filterstat[,3]<- as.character(filterstat[,3])
   if (class(pptext[,1])=="factor") pptext[,1]<- as.character(pptext[,1])
   if (class(pptext[,2])=="factor") pptext[,2]<- as.character(pptext[,2])
   if (class(zonstat[,1])=="factor") zonstat[,1]<- as.character(zonstat[,1])
   if (class(zonstat[,2])=="factor") zonstat[,2]<- as.character(zonstat[,2])
   
-  names<-unique(c(spectral,texture[,1],pptext[,1]))
+  names<-unique(c(spectral,texture[,1],pptext[,1],zonstat[,1],filterstat[,1]))
   spectralvars <- spectralDerivate (scenerasters, names)
   if (nlayers(spectralvars)>0){
     spectralvars<-stack(scenerasters,spectralvars)
@@ -119,7 +128,7 @@ calculatePredictors<-function (scenerasters,
     glcm_filterunique<-unique(texture[,3])
     
     glcm_input <-lapply(glcm_filterunique,FUN=function(x)texture[,1][texture[,3]==x])
-    names(glcm_input)<-paste0("f", glcm_filterunique)
+    names(glcm_input)<-paste0("glcm", glcm_filterunique)
     
     for (k in 1:length(glcm_input)){
       glcm_varunique<-unique(texture[,1][texture[,3]==glcm_filterunique[k]]) #first column=spectral var,second =texture
@@ -145,6 +154,34 @@ calculatePredictors<-function (scenerasters,
     }
   }
   
+  
+  ### Filter ###################################################################
+  
+  if (!is.null(filterstat)){
+    filterunique<-unique(filterstat[,3])
+    
+    filter_input <-lapply(filterunique,FUN=function(x)filterstat[,1][filterstat[,3]==x])
+    names(filter_input)<-paste0("filter", filterunique)
+    
+    for (k in 1:length(filter_input)){
+      filter_varunique<-unique(filterstat[,1][filterstat[,3]==filterunique[k]]) #first column=spectral var,second =filterstat
+      
+      filter_input[[k]] <-lapply(filter_varunique,FUN=function(x)filterstat[,2][filterstat[,1]==x&filterstat[,3]==filterunique[k]])
+      names(filter_input[[k]])<-filter_varunique
+    }
+    
+    spatial_filter<-list()
+    
+    for (k in 1:length(filter_input)){
+      spatial_filter[[k]]<-foreach(i=1:length (filter_input[[k]]),
+                                   .packages= c("raster","doParallel","Rainfall"))%dopar%{
+                                     tmp<-filterStats (scenerasters=spectralvars[[names(filter_input[[k]])[i]]],
+                                                       var=as.character(filter_input[[k]][[i]]),size=as.numeric(filterunique[k]))
+                                     
+                                     return(tmp)
+                                   }  
+    }
+  }
   
   
   ### Geometry parameters ######################################################
@@ -217,12 +254,22 @@ calculatePredictors<-function (scenerasters,
   if(!is.null(spectral)){
     result<-stack( spectralvars [[spectral]])
   } else result <- stack()
-  if (!is.null(texture)) result <- stack (result,stack(unlist(glcm_filter)))
+  if (!is.null(texture)) {
+    if(!is.null(model)){
+      tmp <-unlist(lapply(unlist(glcm_filter),names))
+      glcm_filter<-stack(unlist(glcm_filter))
+      names(glcm_filter)<-tmp
+    }
+    result <- stack (result,stack(unlist(glcm_filter)))
+  }
   if(!is.null(shape)||!is.null(pptext)||!is.null(zonstat)){
     if(nlayers(cloud_geometry>1)) result <- stack (result,cloud_geometry[[-1]])
   }
   if (!is.null(pptext)) {result <- stack (result,stack(unlist(
     pp_glcmPatches)))
+  }
+  if (!is.null(filterstat)) {result <- stack (result,stack(unlist(
+    spatial_filter)))
   }
   if (!is.null(zonstat)) result <- stack (result,stack(unlist(zonalstat)))
   if(!is.null(further)) result <- stack (result,furtherVar)

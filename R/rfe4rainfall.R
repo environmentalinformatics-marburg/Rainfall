@@ -36,6 +36,8 @@
 #' spectral=c("VIS0.6","NIR1.6","T0.6_1.6"),
 #' texture=expand.grid(c("NIR1.6","T6.2_10.8"),
 #' c("variance", "contrast"),c(3,5,9)),
+#' filterstat=expand.grid(c("NIR1.6","T6.2_10.8"),
+#' c("sd","min"),c(3,5,9)),
 #'  further=NULL,
 #'  date=date)
 #'  

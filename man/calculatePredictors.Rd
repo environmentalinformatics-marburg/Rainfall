@@ -6,7 +6,7 @@
 \usage{
 calculatePredictors(scenerasters, model = NULL, spectral = NULL,
   sunzenith = NULL, texture = NULL, pptext = NULL, zonstat = NULL,
-  shape = NULL, further = c("sunzenith", "jday"), date)
+  filterstat = NULL, shape = NULL, further = c("sunzenith", "jday"), date)
 }
 \arguments{
 \item{scenerasters}{A raster stack of cloud masked MSG scenes with non
@@ -24,8 +24,8 @@ Possible values: "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",
 \item{sunzenith}{A raster of the sun zenith values}
 
 \item{texture}{data frame of all spectral and texture combinations ("mean", "variance", "homogeneity",
-"contrast", "dissimilarity", "entropy","second_moment") which are
-to be calculated. (Tip: Use expand.grid to create this data.frame)}
+"contrast", "dissimilarity", "entropy","second_moment") and filter sizes
+which are to be calculated. (Tip: Use expand.grid to create this data.frame)}
 
 \item{pptext}{data frame of all spectral and texture combinations which are
 to be calculated for teh overall cloud entity.
@@ -35,6 +35,9 @@ to be calculated for teh overall cloud entity.
 ("mean","min","max","sd") combinations
  (min,max,mean or sd) which are to be calculated for the overall cloud entity.
  (Tip: Use expand.grid to create this data.frame)}
+
+\item{filterstat}{data.frame of all spectral and "mean","min","max","sd" and
+filter size combinations}
 
 \item{shape}{geoemtry variables which should be included. Possible values
 are "Ar",SI","CA","Ur","CAI","PAR","distEdges","Re","Ru","OIC",
@@ -73,6 +76,8 @@ texture=expand.grid(c("NIR1.6","T6.2_10.8"),
 c("variance", "contrast"),c(3,9)),
 pptext=expand.grid("T3.9_10.8",c("variance","mean")),
 shape=c("Ar","CAI","SI","CI1"),
+filterstat=expand.grid(c("VIS0.6","T6.2_10.8"),
+c("min", "max"),c(3,9)),
 zonstat=data.frame("spec"=c("VIS0.8","VIS0.8","T6.2_10.8"),
 "var"=c("min","sd","max")),
 date=date)

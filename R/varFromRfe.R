@@ -11,20 +11,39 @@
 varFromRfe<-function (rfeModel){
   
   vars<-rfeModel$optVariables
-  textures<-vars[substr(vars,1,1)=="f"]
+  textures<-vars[substr(vars,1,4)=="glcm"]
   texture <-c()
   if (length(textures)>0){
     textures<-strsplit(textures,"_")
     for (i in 1:length(textures)){
       if (length(textures[[i]])==3){
-        texture <-rbind(texture,cbind(textures[[i]][2],textures[[i]][3],substr(textures[[i]][1],2,2)))
+        texture <-rbind(texture,cbind(textures[[i]][2],textures[[i]][3],substr(textures[[i]][1],5,5)))
       }
       if (length(textures[[i]])==4){
-        texture <- rbind(texture,cbind(paste0(textures[[i]][2],"_",textures[[i]][3]),textures[[i]][4],substr(textures[[i]][1],2,2)))
+        texture <- rbind(texture,cbind(paste0(textures[[i]][2],"_",textures[[i]][3]),textures[[i]][4],substr(textures[[i]][1],5,5)))
       }
     }
   }
   texture<-data.frame(texture)
+  
+  filterstats<-vars[substr(vars,1,1)=="f"]
+  filterstat <-c()
+  if (length(filterstats)>0){
+    filterstats<-strsplit(filterstats,"_")
+    for (i in 1:length(filterstats)){
+      if (length(filterstats[[i]])==3){
+        filterstat <-rbind(filterstat,cbind(filterstats[[i]][2],filterstats[[i]][3],substr(filterstats[[i]][1],2,2)))
+      }
+      if (length(filterstats[[i]])==4){
+        filterstat <- rbind(filterstat,cbind(paste0(filterstats[[i]][2],"_",filterstats[[i]][3]),filterstats[[i]][4],substr(filterstats[[i]][1],2,2)))
+      }
+    }
+  }
+  filterstat<-data.frame(filterstat)
+  
+  
+  
+  
   spectral<-vars[substr(vars,1,2)=="VI"|substr(vars,1,2)=="NI"|substr(vars,1,2)=="IR"|substr(vars,1,1)=="T"]
   
   if (length(spectral) >0){
@@ -71,7 +90,7 @@ varFromRfe<-function (rfeModel){
   further<-vars[vars=="sunzenith"|vars=="jday"]
   
   result <- list("spectral"=spectral,"texture"=texture,"shape"=shape,
-                 "pptext"=pptext,"zonstat"=zonstat,"further"=further)
+                 "pptext"=pptext,"zonstat"=zonstat,"filterstat"=filterstat,"further"=further)
   result <- result[lapply(result,length)!=0]
   return(result)
 }

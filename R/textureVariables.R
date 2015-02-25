@@ -50,31 +50,30 @@ textureVariables <- function(x,nrasters=1:nlayers(x),filter=c(3),
       if (parallel){
         glcm_filter[[j]]<-foreach(i=nrasters,
                                   .packages= c("glcm","raster"))%dopar%{
-                                    glcm(x[[i]], 
+                                    mask(glcm(x[[i]], 
                                          window = c(filter[j], filter[j]), 
                                          shift=list(c(0,1), c(1,1), c(1,0), 
                                                     c(1,-1)),
                                          statistics=var,n_grey=n_grey,
-                                         na_opt="ignore") 
+                                         na_opt="ignore"), x[[i]])
                                   } 
       } else {
         glcm_filter[[j]]<-foreach(i=nrasters,
                                   .packages= c("glcm","raster"))%do%{
-                                    glcm(x[[i]], 
+                                    mask(glcm(x[[i]], 
                                          window = c(filter[j], filter[j]), 
                                          shift=list(c(0,1), c(1,1), c(1,0), 
                                                     c(1,-1)),
                                          statistics=var,n_grey=n_grey,
-                                         na_opt="ignore") 
+                                         na_opt="ignore"), x[[i]])
                                   }
       }
       names(glcm_filter[[j]])<-names(x)[nrasters]
     } else {
-      glcm_filter[[j]]<-glcm(x, window = c(filter[j], filter[j]), 
+      glcm_filter[[j]]<-mask(glcm(x, window = c(filter[j], filter[j]), 
                              shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
                              statistics=var,n_grey=n_grey,
-                             na_opt="ignore"
-      ) 
+                             na_opt="ignore"), x)
     }   
   }
   names(glcm_filter)<-paste0("size_",filter)
