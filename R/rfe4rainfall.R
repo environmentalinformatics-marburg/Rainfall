@@ -58,14 +58,15 @@
 
 rfe4rainfall <- function (predictors,
                           response,
-                          sampsize=0.25,
+                          sampsize=1,
                           threshold=0.06,
                           varSize=c(1:5,seq(10,ncol(predictors),10)),
-                          nnetSize=seq(2,ncol(predictors),8),
+                          nnetSize=c(seq(2,10,2),seq(20,ncol(predictors),10)),
                           nnetDecay = 0.05,
                           seed=20){
   require(caret)
   require(raster)
+  require(doParallel)
   ### Preprocessing ############################################################
   if(class(predictors)=="RasterStack"||class(predictors)=="RasterBrick"){
     predictors <- raster::as.data.frame(predictors)

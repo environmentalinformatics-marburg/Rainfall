@@ -53,6 +53,7 @@ train4rainfall <- function (predictors,
                             keepScale=TRUE){
   require(caret)
   require(raster)
+  require(doParallel)
   ### Preprocessing ############################################################
   if(class(predictors)=="RasterStack"||class(predictors)=="RasterBrick"){
     predictors <- raster::as.data.frame(predictors)
