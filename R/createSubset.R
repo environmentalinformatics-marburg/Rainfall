@@ -12,7 +12,7 @@
 #' @seealso \code{\link{createDataPartition}}
 #' @description Bases on createDataPartition from the caret package.
 
-createSubset <- function (predictors, response, sampsize=0.01){
+createSubset <- function (predictors, response, sampsize=0.01, seed=20){
   
   if(class(predictors)=="RasterStack"||class(predictors)=="RasterBrick"){
     predictors <- raster::as.data.frame(predictors)
@@ -29,6 +29,7 @@ createSubset <- function (predictors, response, sampsize=0.01){
     response<-response[keep]
     predictors <- predictors[keep,]
   }
+  set.seed(seed)
   samples<-createDataPartition(response,
                                p = sampsize,list=FALSE)
   response<-response[samples]

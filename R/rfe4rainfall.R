@@ -76,7 +76,7 @@ rfe4rainfall <- function (predictors,
   }
   
   
-  traindata <- createSubset(predictors,response,sampsize=sampsize,seed=20)
+  traindata <- createSubset(predictors,response,sampsize=sampsize)
   rm(predictors)
   rm(response)
   gc()
