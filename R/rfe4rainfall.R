@@ -86,8 +86,8 @@ rfe4rainfall <- function (predictors,
                                p = sampsize,list=FALSE)
   response=response[samples]
   if (class(response)=="character"||class(response)=="factor"){
-    response=as.factor(response)
-    response=factor(response,levels=c("Rain","NoRain"))
+    response <- as.factor(response)
+    response <- factor(response,levels=c("Rain","NoRain"))
   }
   predictors <- predictors[samples,]
   
@@ -107,23 +107,23 @@ rfe4rainfall <- function (predictors,
     nnetFuncs$summary <- twoClassSummary
     tctrl <- trainControl(
       method="cv",
-      classProbs =TRUE)
+      classProbs =FALSE) #for real training set it to TRUE
     rctrl <- rfeControl(index=cvSplits,
                         functions = nnetFuncs,
                         method="cv",
                         returnResamp = "all")
-    metric="ROC"
-    maximize=TRUE
-    linout=FALSE
+    metric<-"ROC"
+    maximize<-TRUE
+    linout<-FALSE
   } else{
     tctrl <- trainControl(method="cv")
     rctrl <- rfeControl(index=cvSplits,
                         functions = nnetFuncs,
                         method="cv",
                         returnResamp = "all")
-    linout=TRUE
-    metric="RMSE"
-    maximize=FALSE
+    linout<-TRUE
+    metric<-"RMSE"
+    maximize<-FALSE
   }
   ### RFE Model  ###############################################################    
   rfeModel <- rfe(predictors,
