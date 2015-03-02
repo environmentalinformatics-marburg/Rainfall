@@ -7,6 +7,7 @@
 #' training, "response" may also be a RasterLayer of the response variable.
 #' @param sampsize Numeric value between 0 and 1 indicating the percentage of
 #' data points to be returned
+#' @param seed see \code{\link{set.seed}}
 #' @return A list with two entries: predictors and response
 #' @author Hanna Meyer
 #' @seealso \code{\link{createDataPartition}}

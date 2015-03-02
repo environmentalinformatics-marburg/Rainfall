@@ -76,7 +76,7 @@ rfe4rainfall <- function (predictors,
   }
   
   
-  traindata <- createSubset(predictors,response,sampsize=sampsize)
+  traindata <- createSubset(predictors,response,sampsize=sampsize,seed=seed)
   rm(predictors)
   rm(response)
   gc()
@@ -98,7 +98,7 @@ rfe4rainfall <- function (predictors,
     nnetFuncs$summary <- twoClassSummary
     tctrl <- trainControl(
       method="cv",
-      classProbs =FALSE) #for real training set it to TRUE
+      classProbs =TRUE) 
     rctrl <- rfeControl(index=cvSplits,
                         functions = nnetFuncs,
                         method="cv",
