@@ -8,7 +8,7 @@
 #' @param sampsize Numeric value between 0 and 1 indicating the percentage of
 #' data points to be returned
 #' @return A list with two entries: predictors and response
-#' @author
+#' @author Hanna Meyer
 #' @seealso \code{\link{createDataPartition}}
 #' @description Bases on createDataPartition from the caret package.
 

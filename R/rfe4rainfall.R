@@ -74,36 +74,27 @@ rfe4rainfall <- function (predictors,
   if(class(response)=="RasterLayer") {
     response <- values(response)
   }
-  keep <- complete.cases(predictors)
-  predictors <- predictors[keep,]
-  response <- response[keep] 
-  if (class(response)=="numeric"){
-    keep <- response>threshold
-    response<-response[keep]
-    predictors <- predictors[keep,]
-  }
-  samples<-createDataPartition(response,
-                               p = sampsize,list=FALSE)
-  response=response[samples]
-  if (class(response)=="character"||class(response)=="factor"){
-    response <- as.factor(response)
-    response <- factor(response,levels=c("Rain","NoRain"))
-  }
-  predictors <- predictors[samples,]
   
-  if ("jday" %in% names(predictors)){
-    jday <- (predictors$jday-mean(1:365))/sd(1:365) 
-    predictors<-data.frame(apply(predictors[,-which(names(predictors)=="jday")],2,scale),jday)
+  
+  traindata <- createSubset(predictors,response,sampsize=sampsize,seed=20)
+  rm(predictors)
+  rm(response)
+  gc()
+  
+  
+  if ("jday" %in% names(traindata$predictors)){
+    jday <- (traindata$predictors$jday-mean(1:365))/sd(1:365) 
+    traindata$predictors<-data.frame(apply(traindata$predictors[,-which(names(traindata$predictors)=="jday")],2,scale),jday)
   } else {
-    predictors<-data.frame(apply(predictors,2,scale))
+    traindata$predictors<-data.frame(apply(traindata$predictors,2,scale))
   }
   set.seed(seed)
-  cvSplits <- createFolds(response, k = 10,returnTrain=TRUE)
+  cvSplits <- createFolds(traindata$response, k = 10,returnTrain=TRUE)
   ### RFE Settings #############################################################  
   cl <- makeCluster(detectCores())
   registerDoParallel(cl)
   nnetFuncs <- caretFuncs #Default caret functions
-  if (class(response)=="factor"){
+  if (class(traindata$response)=="factor"){
     nnetFuncs$summary <- twoClassSummary
     tctrl <- trainControl(
       method="cv",
@@ -126,8 +117,8 @@ rfe4rainfall <- function (predictors,
     maximize<-FALSE
   }
   ### RFE Model  ###############################################################    
-  rfeModel <- rfe(predictors,
-                  response,
+  rfeModel <- rfe(traindata$predictors,
+                  traindata$response,
                   linout = linout, 
                   trace = FALSE,
                   sizes = varSize,

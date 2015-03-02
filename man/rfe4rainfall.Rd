@@ -4,9 +4,9 @@
 \alias{rfe4rainfall}
 \title{Performs recursive feature selction}
 \usage{
-rfe4rainfall(predictors, response, sampsize = 0.25, threshold = 0.06,
-  varSize = c(1:5, seq(10, ncol(predictors), 10)), nnetSize = seq(2,
-  ncol(predictors), 8), nnetDecay = 0.05, seed = 20)
+rfe4rainfall(predictors, response, sampsize = 1, threshold = 0.06,
+  varSize = c(1:5, seq(10, ncol(predictors), 10)), nnetSize = c(seq(2, 10,
+  2), seq(20, ncol(predictors), 10)), nnetDecay = 0.05, seed = 20)
 }
 \arguments{
 \item{predictors}{Either a data.frame with each column is one predictor and each
