@@ -5,6 +5,7 @@
 #' @param response A vector of either Rainfall area or rainfall rates for
 #' the corresponding pixels in predictors. If only one scene is used for model 
 #' training, "response" may also be a RasterLayer of the response variable.
+#' @param sampsize. Number of data points used for training
 #' @param threshold if response is Rainfall rate: pixels larger than
 #' the threshold are used for rainfall rate training
 #' @param seed Any integer number. Used to produce reproducable results
