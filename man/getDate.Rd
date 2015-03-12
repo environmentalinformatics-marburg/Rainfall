@@ -4,12 +4,17 @@
 \alias{getDate}
 \title{Get the date from a msg scene's inputpath}
 \usage{
-getDate(inpath, type = "rst")
+getDate(inpath, type = "rst", fromFolder = FALSE)
 }
 \arguments{
 \item{inpath}{The path to the msg channels including sunzenith of one scene}
 
-\item{type}{A character string indicating the file type}
+\item{type}{A character string indicating the file type.
+Can be ignored if fromFolder==TRUE}
+
+\item{fromFolder}{If FALSE (default) then the date is read from a single scene.
+If TRUE then the date is read from a list of folders named according the output
+of the MSG processing. eg "MT9P201001011515_mt09s"}
 }
 \value{
 The date as character

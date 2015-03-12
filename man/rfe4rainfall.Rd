@@ -27,6 +27,8 @@ variables to consider in rfe.}
 
 \item{seed}{Any integer number. Used to produce reproducable results}
 
+\item{sampsize.}{Number of data points used for training}
+
 \item{nnetDecay.}{Decay value(s) used in nnet training}
 }
 \value{
