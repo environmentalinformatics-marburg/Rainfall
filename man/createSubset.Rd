@@ -4,7 +4,7 @@
 \alias{createSubset}
 \title{Create a training subset from data}
 \usage{
-createSubset(predictors, response, sampsize = 0.01)
+createSubset(predictors, response, sampsize = 0.01, seed = 20)
 }
 \arguments{
 \item{predictors}{Either a data.frame with each column is one predictor and each
@@ -17,6 +17,8 @@ training, "response" may also be a RasterLayer of the response variable.}
 
 \item{sampsize}{Numeric value between 0 and 1 indicating the percentage of
 data points to be returned}
+
+\item{seed}{see \code{\link{set.seed}}}
 }
 \value{
 A list with two entries: predictors and response
