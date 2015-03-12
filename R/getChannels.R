@@ -14,7 +14,6 @@ getChannels <- function (inpath, type="rst",channels= c(
   "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",
   "IR9.7","IR10.8","IR12.0","IR13.4"), mask=-99){
   require(raster)
-  
   lut<-cbind(c("ca02p0001","ca02p0002","ca02p0003","ct01dk004","ct01dk005",
                "ct01dk006","ct01dk007","ct01dk008","ct01dk009","ct01dk010",
                "ct01dk011"),c(
@@ -27,7 +26,6 @@ getChannels <- function (inpath, type="rst",channels= c(
   x<-lut[,1][lut[,2]%in%channels]
   
   scenes<-list.files(inpath, pattern=paste0(".",type,"$"))
-  scenes<- scenes[substr(scenes,30,34)=="na001"]
 
   if (sum(substr(scenes,20,28)%in%x)<length(channels)){
     stop ("Warning: not all channels could be loaded. 

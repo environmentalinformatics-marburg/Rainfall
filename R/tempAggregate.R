@@ -1,4 +1,4 @@
-#' Aggregates MSG images to one hour (mean calculation)
+#' Aggregates MSG images and sunzenith to one hour (mean calculation)
 #' @param inpath Character string of the path to the MSG scenes. 
 #' Only one subfolder and the "/cal" is allowed 
 #' (as returned from the msg processing). E.g use this function for one day.
@@ -28,24 +28,25 @@ tempAggregate <- function (inpath, outpath=NULL, type="rst"){
     cfiles[[i]] <- paste0(inpath,"/",files[substr(date,1,10)==
                                              substr(outdates[i],1,10)])
   }
+  tmp=list.files(paste0(cfiles[[1]][1],"/cal"))[1]
+  meta=c(substr(tmp,30,34),substr(tmp,41,46))
   out <- foreach(i=1:length (cfiles),
                  .packages= c("raster","doParallel","Rainfall"))%dopar%{ 
                    ch=list()
                    for (k in 1:length(cfiles[[i]])){
-                     ch[[k]] <- getChannels(paste0(cfiles[[i]][k],"/cal"))  #hier eventuell noch paste mit /cal
+                     ch[[k]] <- stack(
+                       getChannels(paste0(cfiles[[i]][k],"/cal")),
+                       getSunzenith(paste0(cfiles[[i]][k],"/meta"))
+                     )
                    }
                    means <- stack()
                    for (k in 1: nlayers(ch[[1]])){
                      means=stack(means,calc(stack(lapply(ch,function(x)x[[k]])),mean))
                    }
                    names(means) <- names(ch[[1]])
-                   writeToFile(scenerasters=means,date=outdates[i],outpath=outpath)
+                   writeToFile(scenerasters=means,date=outdates[i],outpath=outpath, meta=meta)
                  }
   if(is.null(outpath)){
     return(out)
   }
 }
-
-
-
-#was ist mit sunzenith?

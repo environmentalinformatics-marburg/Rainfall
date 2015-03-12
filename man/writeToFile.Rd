@@ -5,7 +5,7 @@
 \title{Writes a stack of MSG channels to a new file with respect to file
 name conventions}
 \usage{
-writeToFile(scenerasters, date, outpath)
+writeToFile(scenerasters, date, outpath, meta = NA)
 }
 \arguments{
 \item{scenerasters}{Raster stack of MSG scenes originally retrieved by

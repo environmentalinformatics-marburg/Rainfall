@@ -2,7 +2,7 @@
 % Please edit documentation in R/tempAggregate.R
 \name{tempAggregate}
 \alias{tempAggregate}
-\title{Aggregates MSG images to one hour (mean calculation)}
+\title{Aggregates MSG images and sunzenith to one hour (mean calculation)}
 \usage{
 tempAggregate(inpath, outpath = NULL, type = "rst")
 }
@@ -24,7 +24,13 @@ environment as a list of rasterStacks. If outpath is specified,
 files are written to disk
 }
 \description{
-Aggregates MSG images to one hour (mean calculation)
+Aggregates MSG images and sunzenith to one hour (mean calculation)
+}
+\details{
+Bases on the following name conventions:
+Single scenes are stored in a folder MT9PDate_mt09s with Date is in the format
+yyymmddhhmm in the subfolder "cal".
+Scenes must be named according to the described file name conventions.
 }
 \author{
 Hanna Meyer
