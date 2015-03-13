@@ -18,6 +18,7 @@
 #' scaled considering max=365 and min=1
 #' @return A rfe model
 #' @author Hanna Meyer
+#' @export rfe4rainfall
 #' @seealso \code{\link{rfe}}
 #' @references rfe Function in the caret package
 #' @examples

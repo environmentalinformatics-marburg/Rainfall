@@ -10,6 +10,7 @@
 #' @return A list of RasterStacks containing the texture parameters for each 
 #' combination of channel and filter  
 #' @author Hanna Meyer
+#' @export geometryVariables
 #' @seealso \code{\link{SDMTools}}, \code{\link{clump}},
 #'  \code{\link{borgIndices}}
 #' @examples

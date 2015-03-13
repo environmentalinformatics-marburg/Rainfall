@@ -29,9 +29,10 @@
 #' "sunzenith" which will also be used as variables.
 #' see \code{\link{geometryVariables}} and \code{\link{borgIndices}} 
 #' for description of the variables.
-#' @author Hanna Meyer
 #' @param date Date of the msg scene in format yyyymmddhhmm. Only imprtant if 
 #' the day of the year (jday) is calculated (see param "further").
+#' @author Hanna Meyer
+#' @export calculatePredictors
 #' @examples
 #' ############################################################################
 #' #Example 1: Predictors from predictor list

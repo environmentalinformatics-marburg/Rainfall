@@ -7,6 +7,7 @@
 #' @param hours start to end hours
 #' @return character vector containing teh dates of the selected scenes 
 #' @author Hanna Meyer
+#' @export randomScenes
 #' @examples
 #' randomScenes(sampsize=0.01)
 #' 

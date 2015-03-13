@@ -1,6 +1,8 @@
 #' Classify a scene into day, twilight, night according to its sunzenith 
 #' @param sunzenith RasterLayer of sunzenith
 #' @return Character with value either "day", "twilight" or "night
+#' @author Hanna Meyer
+#' @export getDaytime
 #' @examples
 #' sunzenith <-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 #' getDaytime(sunzenith)

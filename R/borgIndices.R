@@ -8,6 +8,7 @@
 #' @details This function is mainly used as internal function of 
 #' \code{\link{geometryVariables}}
 #' @author Hanna Meyer
+#' @export borgIndices
 #' @references Borg, E. & Fichtelmann, B. (1998):
 #' Vergleichende Analyse von Formindizes zur Charaktersierung von 
 #' Landschaftsobjekten unter ökologischen Aspekten.

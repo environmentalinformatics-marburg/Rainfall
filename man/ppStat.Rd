@@ -26,4 +26,7 @@ geometry <- geometryVariables(msg_example,var=c("cloudPatches"))
 
 ppStat(msg_example,geometry$cloudPatches,var=c("mean","sd"))
 }
+\author{
+Hanna Meyer
+}
 

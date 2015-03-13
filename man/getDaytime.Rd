@@ -19,4 +19,7 @@ Classify a scene into day, twilight, night according to its sunzenith
 sunzenith <-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 getDaytime(sunzenith)
 }
+\author{
+Hanna Meyer
+}
 

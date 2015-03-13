@@ -10,6 +10,7 @@
 #' @param seed see \code{\link{set.seed}}
 #' @return A list with two entries: predictors and response
 #' @author Hanna Meyer
+#' @export createSubset
 #' @seealso \code{\link{createDataPartition}}
 #' @description Bases on createDataPartition from the caret package.
 

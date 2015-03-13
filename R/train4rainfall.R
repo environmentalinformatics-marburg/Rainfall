@@ -19,6 +19,7 @@
 #'  values for all predictors which can be used for ensuring same scaling 
 #'  with new unknown values.
 #' @author Hanna Meyer
+#' @export train4rainfall
 #' @seealso \code{\link{rfe}}
 #' @references train Function in the caret package
 #' @examples

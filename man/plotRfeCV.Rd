@@ -22,6 +22,9 @@ returnResamp = "all" must be set in rfe training
 data(rfeModel)
 plotRfeCV(rfeModel)
 }
+\author{
+Hanna Meyer
+}
 \seealso{
 \code{\link{rfe}}
 }

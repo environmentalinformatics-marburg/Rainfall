@@ -1,6 +1,11 @@
 #' Calculate statistics of spatial filters of MSG bands
 #' @param scenerasters A raster stack of cloud masked MSG scenes with non 
 #' clouded areas were set to NA
+#' @param size Integer of the window size
+#' @param var Variables to be calculated. Supported are min, mean, max, sd
+#' @param na.rm Should NA values from scenerasters be masked from the result?
+#' @author Hanna Meyer
+#' @export filterStats
 
 filterStats<-function(scenerasters,
                       size=3,

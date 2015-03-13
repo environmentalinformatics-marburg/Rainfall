@@ -6,6 +6,7 @@
 #' because there are no clouds. 
 #' @return A Raster stack of the MSG channels
 #' @author Hanna Meyer
+#' @export getChannels
 #' @examples
 #' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"),
 #' channels=c("VIS0.6","IR12.0"))

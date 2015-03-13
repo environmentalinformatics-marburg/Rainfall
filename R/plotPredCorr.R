@@ -3,6 +3,7 @@
 #' @param predictors Either A RasterStack of predictor Variables or a data.frame
 #' @param subset Indicates the predictors to use
 #' @author Hanna Meyer
+#' @export plotPredCorr
 #' @description bases on the corrplot package. 
 #' @references Taiyun Wei (2013). corrplot: Visualization of a correlation matrix. 
 #' R package version 0.73. http://CRAN.R-project.org/package=corrplot

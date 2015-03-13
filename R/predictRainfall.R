@@ -11,6 +11,7 @@
 #' @description Functions calculates predictors which are required by the model
 #' and uses them for prediction
 #' @author Hanna Meyer
+#' @export predictRainfall
 #' @examples
 #' # stack the msg scenes:
 #' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))

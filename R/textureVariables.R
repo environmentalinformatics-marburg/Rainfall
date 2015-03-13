@@ -15,6 +15,7 @@
 #' @details This functions fills the glcm function with standard settings used 
 #' for the rainfall retrieval
 #' @author Hanna Meyer
+#' @export textureVariables
 #' @examples 
 #' ## example on how to calculate texture from a list of msg channels
 #' 

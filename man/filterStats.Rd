@@ -10,8 +10,17 @@ filterStats(scenerasters, size = 3, var = c("min", "mean", "max", "sd"),
 \arguments{
 \item{scenerasters}{A raster stack of cloud masked MSG scenes with non
 clouded areas were set to NA}
+
+\item{size}{Integer of the window size}
+
+\item{var}{Variables to be calculated. Supported are min, mean, max, sd}
+
+\item{na.rm}{Should NA values from scenerasters be masked from the result?}
 }
 \description{
 Calculate statistics of spatial filters of MSG bands
+}
+\author{
+Hanna Meyer
 }
 

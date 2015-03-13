@@ -2,6 +2,8 @@
 #'  based on spectral properties
 #'  @param x 
 #'  @return a raster stack of the texture parameters for each entity
+#'  @author Hanna Meyer
+#'  @export glcmPerPatch
 #'  @seealso \code{\link{calculateTexture}}, \code{\link{glcm}}
 #'  @examples
 #'  # stack the msg scenes:

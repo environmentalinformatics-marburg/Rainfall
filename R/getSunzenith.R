@@ -3,6 +3,7 @@
 #' @param type A character string indicating the file type
 #' @return The sunzenith raster
 #' @author Hanna Meyer
+#' @export getSunzenith
 #' @examples
 #' sunzenith <-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 

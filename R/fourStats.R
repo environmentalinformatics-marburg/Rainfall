@@ -2,6 +2,7 @@
 #' @author Max Kuhn 
 #' @description is used as internal function in caret's rfe and train
 #' @references http://caret.r-forge.r-project.org/custom_models.html
+#' @export fourStats
 
 fourStats <- function (data, lev = levels(data$obs), model = NULL) {
   ## This code will get use the area under the ROC curve and the

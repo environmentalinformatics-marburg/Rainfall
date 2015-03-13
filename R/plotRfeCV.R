@@ -5,6 +5,8 @@
 #' to visualize the effect of the numbers of variables on the model performance.
 #' @param rfeModel A rfe object
 #' @param metric The metric to visualize. must be stored in the rfe object
+#' @author Hanna Meyer
+#' @export plotRfeCV
 #' @seealso \code{\link{rfe}}
 #' @note returnResamp = "all" must be set in rfe training
 #' @examples

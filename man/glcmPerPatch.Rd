@@ -29,6 +29,9 @@ geometry <- geometryVariables(msg_example[[1]],var="cloudPatches")
 #calculate glcm per patch
 glcmPerPatch(msg_example[[1]],geometry$cloudPatches,var=c("mean"))
 }
+\author{
+Hanna Meyer
+}
 \seealso{
 \code{\link{calculateTexture}}, \code{\link{glcm}}
 }

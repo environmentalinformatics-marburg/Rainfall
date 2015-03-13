@@ -6,6 +6,7 @@
 #' If TRUE then the date is read from a list of folders named according the output
 #' of the MSG processing. eg "MT9P201001011515_mt09s"
 #' @return The date as character
+#' @export getDate
 #' @author Hanna Meyer
 #' @examples
 #' date <-getDate(inpath=system.file("extdata/msg",package="Rainfall"))

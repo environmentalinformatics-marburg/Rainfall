@@ -15,6 +15,7 @@
 #' environment as a list of rasterStacks. If outpath is specified, 
 #' files are written to disk
 #' @author Hanna Meyer
+#' @export tempAggregate
 
 
 tempAggregate <- function (inpath, outpath=NULL, type="rst"){

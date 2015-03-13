@@ -3,6 +3,8 @@
 #' @param cloudPatches A Raster of cloud entities calculated 
 #' by \code{\link{geometryVariables}}
 #' @param var vector containing values of "mean","sd","min","max"
+#' @author Hanna Meyer
+#' @export ppStat
 #' @examples 
 #' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"),
 #' channels="VIS0.8")

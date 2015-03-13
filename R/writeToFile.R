@@ -7,6 +7,7 @@
 #' @return Nothing is returned to the R environment. New files are stored on disk.
 #' @details maimly used as internal function of \code{\link{tempAggregate}}
 #' @author Hanna Meyer
+#' @export writeToFile
 
 writeToFile <- function (scenerasters, date, outpath, meta=NA){
   cnames<-names(scenerasters)

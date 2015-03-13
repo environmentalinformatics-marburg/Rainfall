@@ -7,6 +7,7 @@
 #' @description The calculations base on the regressionStats or 
 #' classificationStats of the Rsenal package
 #' @author Hanna Meyer
+#' @export validate
 #' @seealso \code{\link{classificationStats}}, \code{\link{regressionStats}}
 
 validate <- function (obs, pred, type="regression",...){

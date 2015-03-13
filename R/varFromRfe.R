@@ -4,11 +4,12 @@
 #' in calculatePredictors
 #' @description This is an internal function used by calculatePredictors
 #' @author Hanna Meyer
+#' @export varFromRfe
 #' @examples
 #' data(rfeModel)
 #' varFromRfe(rfeModel) 
 
-varFromRfe<-function (rfeModel){
+varFromRfe <- function (rfeModel){
   
   vars<-rfeModel$optVariables
   textures<-vars[substr(vars,1,4)=="glcm"]
