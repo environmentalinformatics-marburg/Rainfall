@@ -24,8 +24,8 @@ tempAggregate <- function (inpath, outpath=NULL, returnResult=FALSE, type="rst")
   registerDoParallel(detectCores())
   files <-list.files(inpath)
   date <- getDate(inpath,fromFolder=TRUE)
+  if (date=="") stop ("inpath contains no MSG scenes")
   outdates <- paste0(unique(substr(date,1,10)),"00")
-  if (length(outdates)==0) stop ("inpath contains no MSG scenes")
   cfiles <- list()
   for (i in 1:length(outdates)){
     cfiles[[i]] <- paste0(inpath,"/",files[substr(date,1,10)==
