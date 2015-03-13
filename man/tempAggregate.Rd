@@ -4,7 +4,7 @@
 \alias{tempAggregate}
 \title{Aggregates MSG images and sunzenith to one hour (mean calculation)}
 \usage{
-tempAggregate(inpath, outpath = NULL, type = "rst")
+tempAggregate(inpath, outpath = NULL, returnResult = FALSE, type = "rst")
 }
 \arguments{
 \item{inpath}{Character string of the path to the MSG scenes.
@@ -14,6 +14,8 @@ e.g. inpath= /meteosat-images/2010/01/01/ including one folder for every scene
 and for every scene the folder "cal"}
 
 \item{outpath}{Character string of the output path}
+
+\item{returnResult}{if TRUE, data are returned to teh R environment}
 
 \item{type}{A character string indicating the file type.
 Can be ignored if fromFolder==TRUE}

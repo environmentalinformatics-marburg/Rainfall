@@ -2,14 +2,17 @@
 % Please edit documentation in R/ll2cr.R
 \name{ll2cr}
 \alias{ll2cr}
-\title{Get MSG pixel coordinates from geocordiantes}
+\title{Get MSG pixel coordinates (column/rows) from geocordiantes}
 \usage{
-ll2cr(lat, lon, ccoff = 1856, lloff = 1856)
+ll2cr(latlon, ccoff = 1856, lloff = 1856, type = "rst")
 }
 \arguments{
 \item{ccoff}{Integer coefficient of the scalling function (see page 28, Ref [1])}
 
 \item{lloff}{Integer coefficient of the scalling function  (see page 28, Ref [1])}
+
+\item{type}{either rst or NA. If rst col/rows are modified since idrisi
+starts with col/row 0 instead of 1}
 
 \item{latitude}{Numeric}
 
@@ -19,10 +22,15 @@ ll2cr(lat, lon, ccoff = 1856, lloff = 1856)
 Data frame including column and row of the MSG image
 }
 \description{
-Get MSG pixel coordinates from geocordiantes
+Get MSG pixel coordinates (column/rows) from geocordiantes
 }
 \examples{
-ll2cr(50.7,8.7)
+#for a single coordinate
+ll2cr(data.frame(50.7,8.7))
+
+#for more than one coordinate
+latlon=data.frame("lat"=c(50.7, 53.8),"lon"=c(8.7, 11.2))
+ll2cr(latlon)
 }
 \author{
 EUMETSAT 2005, 2009. (R implementation: Hanna Meyer)

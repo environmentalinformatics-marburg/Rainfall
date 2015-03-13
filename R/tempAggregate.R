@@ -7,6 +7,7 @@
 #' @param outpath Character string of the output path
 #' @param type A character string indicating the file type. 
 #' Can be ignored if fromFolder==TRUE
+#' @param returnResult if TRUE, data are returned to teh R environment
 #' @details Bases on the following name conventions:
 #' Single scenes are stored in a folder MT9PDate_mt09s with Date is in the format
 #' yyymmddhhmm in the subfolder "cal".
@@ -18,12 +19,13 @@
 #' @export tempAggregate
 
 
-tempAggregate <- function (inpath, outpath=NULL, type="rst"){
+tempAggregate <- function (inpath, outpath=NULL, returnResult=FALSE, type="rst"){
   require(doParallel)
   registerDoParallel(detectCores())
   files <-list.files(inpath)
   date <- getDate(inpath,fromFolder=TRUE)
   outdates <- paste0(unique(substr(date,1,10)),"00")
+  if (length(outdates)==0) stop ("inpath contains no MSG scenes")
   cfiles <- list()
   for (i in 1:length(outdates)){
     cfiles[[i]] <- paste0(inpath,"/",files[substr(date,1,10)==
@@ -45,9 +47,12 @@ tempAggregate <- function (inpath, outpath=NULL, type="rst"){
                      means=stack(means,calc(stack(lapply(ch,function(x)x[[k]])),mean))
                    }
                    names(means) <- names(ch[[1]])
+                   if (!is.null(outpath)){
                    writeToFile(scenerasters=means,date=outdates[i],outpath=outpath, meta=meta)
+                   }
+                   return(means)
                  }
-  if(is.null(outpath)){
+  if(is.null(outpath)||returnResult){
     return(out)
   }
 }

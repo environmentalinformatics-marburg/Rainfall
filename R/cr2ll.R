@@ -2,7 +2,9 @@
 #' @param column Integer
 #' @param row Integer
 #' @param ccoff Integer coefficient of the scalling function (see page 28, Ref [1])              
-#' @param lloff Integer coefficient of the scalling function  (see page 28, Ref [1])     
+#' @param lloff Integer coefficient of the scalling function  (see page 28, Ref [1]) 
+#' @param type either rst or NA. If rst col/rows are modified since idrisi 
+#' starts with col/row 0 instead of 1    
 #' @return Data frame including latitude and longitude of the MSG image
 #' @author EUMETSAT 2005, 2009. (R implementation: Hanna Meyer)
 #' @references
@@ -18,7 +20,14 @@
 #' @examples
 #' cr2ll(1669,3401)
 
-cr2ll=function(col,row,ccoff=1856,lloff=1856){
+cr2ll=function(col,row,ccoff=1856,lloff=1856,type="rst"){
+  
+  col <- 3712-col #-1 Idrisi (beginnt mit 0 zu zählen)
+  row <- 3712-row  #-1 Idrisi (beginnt mit 0 zu zählen)
+  if(type!="rst"){
+    col <- col+1
+    row <- row+1
+  }
   
   cr2llOut <- .Fortran("pixcoord2geocoord",
                        column = as.integer(col), 
