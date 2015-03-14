@@ -5,7 +5,7 @@
 #' e.g. inpath= /meteosat-images/2010/01/01/ including one folder for every scene 
 #' and for every scene the folder "cal"
 #' @param outpath Character string of the output path
-#' @param type A character string indicating the file type. 
+#' @param type A character string indicating the output file type. 
 #' Can be ignored if fromFolder==TRUE
 #' @param returnResult if TRUE, data are returned to teh R environment
 #' @details Bases on the following name conventions:
@@ -48,7 +48,7 @@ tempAggregate <- function (inpath, outpath=NULL, returnResult=FALSE, type="rst")
                    }
                    names(means) <- names(ch[[1]])
                    if (!is.null(outpath)){
-                   writeToFile(scenerasters=means,date=outdates[i],outpath=outpath, meta=meta)
+                   writeToFile(scenerasters=means,date=outdates[i],outpath=outpath, type=type, meta=meta)
                    }
                    return(means)
                  }
