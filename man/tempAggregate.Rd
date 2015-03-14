@@ -17,8 +17,7 @@ and for every scene the folder "cal"}
 
 \item{returnResult}{if TRUE, data are returned to teh R environment}
 
-\item{type}{A character string indicating the file type.
-Can be ignored if fromFolder==TRUE}
+\item{type}{A character string indicating the output file type.}
 }
 \value{
 If no outpath is speciefied, the results are returned to the R

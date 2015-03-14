@@ -6,7 +6,6 @@
 #' and for every scene the folder "cal"
 #' @param outpath Character string of the output path
 #' @param type A character string indicating the output file type. 
-#' Can be ignored if fromFolder==TRUE
 #' @param returnResult if TRUE, data are returned to teh R environment
 #' @details Bases on the following name conventions:
 #' Single scenes are stored in a folder MT9PDate_mt09s with Date is in the format
@@ -19,7 +18,7 @@
 #' @export tempAggregate
 
 
-tempAggregate <- function (inpath, outpath=NULL, returnResult=FALSE, type="tif"){
+tempAggregate <- function (inpath, outpath=NULL, returnResult=FALSE, type="rst"){
   require(doParallel)
   registerDoParallel(detectCores())
   files <-list.files(inpath)
