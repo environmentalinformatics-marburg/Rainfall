@@ -19,7 +19,7 @@
 #' @export tempAggregate
 
 
-tempAggregate <- function (inpath, outpath=NULL, returnResult=FALSE, type="rst"){
+tempAggregate <- function (inpath, outpath=NULL, returnResult=FALSE, type="tif"){
   require(doParallel)
   registerDoParallel(detectCores())
   files <-list.files(inpath)
