@@ -4,11 +4,9 @@
 \alias{cr2ll}
 \title{Get geocoordinates from MSG column and rows}
 \usage{
-cr2ll(col, row, ccoff = 1856, lloff = 1856, type = "rst")
+cr2ll(colrow, ccoff = 1856, lloff = 1856, type = "rst")
 }
 \arguments{
-\item{row}{Integer}
-
 \item{ccoff}{Integer coefficient of the scalling function (see page 28, Ref [1])}
 
 \item{lloff}{Integer coefficient of the scalling function  (see page 28, Ref [1])}
@@ -17,6 +15,8 @@ cr2ll(col, row, ccoff = 1856, lloff = 1856, type = "rst")
 starts with col/row 0 instead of 1}
 
 \item{column}{Integer}
+
+\item{row}{Integer}
 }
 \value{
 Data frame including latitude and longitude of the MSG image
@@ -25,10 +25,10 @@ Data frame including latitude and longitude of the MSG image
 Get geocoordinates from MSG column and rows
 }
 \examples{
-cr2ll(1669,3401)
+cr2ll(data.frame(c(1200,1340),c(2899,3435)))
 }
 \author{
-EUMETSAT 2005, 2009. (R implementation: Hanna Meyer)
+Hanna Meyer based on the FORTRAN Routine of EUMETSAT 2005, 2009.
 }
 \references{
 [1] LRIT/HRIT Global Specification

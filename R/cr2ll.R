@@ -6,7 +6,7 @@
 #' @param type either rst or NA. If rst col/rows are modified since idrisi 
 #' starts with col/row 0 instead of 1    
 #' @return Data frame including latitude and longitude of the MSG image
-#' @author EUMETSAT 2005, 2009. (R implementation: Hanna Meyer)
+#' @author Hanna Meyer based on the FORTRAN Routine of EUMETSAT 2005, 2009.
 #' @references
 #' [1] LRIT/HRIT Global Specification                     
 #' (CGMS 03, Issue 2.6, 12.08.1999)                  
@@ -18,25 +18,26 @@
 #' @useDynLib Rainfall
 #' @export cr2ll
 #' @examples
-#' cr2ll(1669,3401)
+#' ccr2ll(data.frame(c(2899,3435),c(1200,1340)))
 
-cr2ll=function(col,row,ccoff=1856,lloff=1856,type="rst"){
-  
-  col <- 3712-col #-1 Idrisi (beginnt mit 0 zu zählen)
-  row <- 3712-row  #-1 Idrisi (beginnt mit 0 zu zählen)
-  if(type!="rst"){
-    col <- col+1
-    row <- row+1
-  }
-  
-  cr2llOut <- .Fortran("pixcoord2geocoord",
-                       column = as.integer(col), 
-                       row = as.integer(row),
-                       ccoff = as.integer(ccoff), 
-                       lloff = as.integer(lloff),
-                       latitude = as.double(0),
-                       longitude = as.double(0),
-                       PACKAGE="Rainfall")
-  return(data.frame("Lat"=cr2llOut$latitude,"Lon"=cr2llOut$longitude))
-  
+cr2ll=function(colrow,ccoff=1856,lloff=1856,type="rst"){
+  cr2llOut <- apply(colrow,1,function(x){
+    col <- 3712-colrow[,1] #-1 Idrisi (beginnt mit 0 zu zählen)
+    row <- 3712-colrow[,2]  #-1 Idrisi (beginnt mit 0 zu zählen)
+    if(type!="rst"){
+      col <- col+1
+      row <- row+1
+    }
+    tmp <- .Fortran("pixcoord2geocoord",
+                    column = as.integer(col), 
+                    row = as.integer(row),
+                    ccoff = as.integer(ccoff), 
+                    lloff = as.integer(lloff),
+                    latitude = as.double(0),
+                    longitude = as.double(0),
+                    PACKAGE="Rainfall")
+    return(data.frame("Lat"=tmp$latitude,"Lon"=tmp$longitude))
+  })
+  do.call(rbind,cr2llOut)
+  return(do.call(rbind,cr2llOut))
 }

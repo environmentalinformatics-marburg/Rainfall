@@ -7,16 +7,15 @@
 ll2cr(latlon, ccoff = 1856, lloff = 1856, type = "rst")
 }
 \arguments{
+\item{latlon}{data.frame with first column =latitude and second column is
+longitude specified as numeric.}
+
 \item{ccoff}{Integer coefficient of the scalling function (see page 28, Ref [1])}
 
 \item{lloff}{Integer coefficient of the scalling function  (see page 28, Ref [1])}
 
 \item{type}{either rst or NA. If rst col/rows are modified since idrisi
 starts with col/row 0 instead of 1}
-
-\item{latitude}{Numeric}
-
-\item{longitude}{Numeric}
 }
 \value{
 Data frame including column and row of the MSG image
@@ -33,7 +32,7 @@ latlon=data.frame("lat"=c(50.7, 53.8),"lon"=c(8.7, 11.2))
 ll2cr(latlon)
 }
 \author{
-EUMETSAT 2005, 2009. (R implementation: Hanna Meyer)
+Hanna Meyer based on the FORTRAN Routine of EUMETSAT 2005, 2009.
 }
 \references{
 [1] LRIT/HRIT Global Specification

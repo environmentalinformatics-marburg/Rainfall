@@ -9,7 +9,7 @@
 #' @author Hanna Meyer
 #' @export writeToFile
 
-writeToFile <- function (scenerasters, date, outpath, meta=NA){
+writeToFile <- function (scenerasters, date, outpath, type="tif",meta=NA){
   cnames<-names(scenerasters)
   outpathname<-paste0(outpath,"/",substr(date,1,4),"/",substr(date,5,6),"/",
                       substr(date,7,8),"/",substr(date,9,10))
@@ -20,9 +20,9 @@ writeToFile <- function (scenerasters, date, outpath, meta=NA){
                  "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",
                  "IR9.7","IR10.8","IR12.0","IR13.4","sunzenith"))
   if (length(meta)==2){
-    outnames <- paste0(date,"_mt09s_",lut[cnames==lut[,2],1],"_",meta[1],"_1000_",meta[2],"_003000.rst")
+    outnames <- paste0(date,"_mt09s_",lut[cnames==lut[,2],1],"_",meta[1],"_1000_",meta[2],"_003000.",type)
   }else{
-    outnames <- paste0(date,"_mt09s_",lut[cnames==lut[,2],1],"_m1hct_1000_rg01xx_003000.rst")
+    outnames <- paste0(date,"_mt09s_",lut[cnames==lut[,2],1],"_m1hct_1000_rg01xx_003000.",type)
   }
   for (i in 1:nlayers(scenerasters)){
     writeRaster(scenerasters[[i]],filename=paste0(outpathname,"/",outnames[i]),overwrite=TRUE)

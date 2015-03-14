@@ -6,7 +6,7 @@
 #' @param type either rst or NA. If rst col/rows are modified since idrisi 
 #' starts with col/row 0 instead of 1     
 #' @return Data frame including column and row of the MSG image
-#' @author EUMETSAT 2005, 2009. (R implementation: Hanna Meyer)
+#' @author Hanna Meyer based on the FORTRAN Routine of EUMETSAT 2005, 2009.
 #' @references
 #' [1] LRIT/HRIT Global Specification                     
 #' (CGMS 03, Issue 2.6, 12.08.1999)                  
