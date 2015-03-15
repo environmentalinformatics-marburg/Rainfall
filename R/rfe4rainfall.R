@@ -8,6 +8,8 @@
 #' @param sampsize. Number of data points used for training
 #' @param threshold if response is Rainfall rate: pixels larger than
 #' the threshold are used for rainfall rate training
+#' @param out Either Rain or RInfo indicating weather rainfall rates
+#' or rainfall areas should be used.
 #' @param seed Any integer number. Used to produce reproducable results
 #' @param varSize integer vector indicating the numbers of 
 #' variables to consider in rfe.
@@ -50,7 +52,9 @@
 #' #Train small rfe model with 0.1% of the pixels (takes around 1 minute...)
 #' rfeModel <- rfe4rainfall(predictors=pred,
 #' response,
-#' sampsize=0.001)
+#' out="Rain",
+#' sampsize=0.01,
+#' varSize=c(2,5,10,15,20))
 #' 
 #' # Show results:
 #' print(rfeModel)
@@ -62,8 +66,9 @@ rfe4rainfall <- function (predictors,
                           response,
                           sampsize=1,
                           threshold=0.06,
-                          varSize=c(1:5,seq(10,ncol(predictors),10)),
-                          nnetSize=c(seq(2,10,2),seq(20,ncol(predictors),10)),
+                          out="Rain",
+                          varSize=c(1:5),
+                          nnetSize=c(1:5),
                           nnetDecay = 0.05,
                           seed=20){
   require(caret)
@@ -76,9 +81,8 @@ rfe4rainfall <- function (predictors,
   if(class(response)=="RasterLayer") {
     response <- values(response)
   }
-  
-  
-  traindata <- createSubset(predictors,response,sampsize=sampsize,seed=seed)
+    
+  traindata <- createSubset(predictors,response,threshold=threshold,out=out,sampsize=sampsize,seed=seed)
   rm(predictors)
   rm(response)
   gc()
@@ -96,7 +100,7 @@ rfe4rainfall <- function (predictors,
   cl <- makeCluster(detectCores())
   registerDoParallel(cl)
   nnetFuncs <- caretFuncs #Default caret functions
-  if (class(traindata$response)=="factor"){
+  if (out=="RInfo"){
     nnetFuncs$summary <- twoClassSummary
     tctrl <- trainControl(
       method="cv",

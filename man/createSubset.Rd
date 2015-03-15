@@ -4,7 +4,8 @@
 \alias{createSubset}
 \title{Create a training subset from data}
 \usage{
-createSubset(predictors, response, sampsize = 0.01, seed = 20)
+createSubset(predictors, response, out = "Rain", threshold = 0.06,
+  sampsize = 0.01, seed = 20)
 }
 \arguments{
 \item{predictors}{Either a data.frame with each column is one predictor and each
@@ -14,6 +15,12 @@ a RasterStack with one Raster is one Predictor Variable.}
 \item{response}{A vector of either Rainfall area or rainfall rates for
 the corresponding pixels in predictors. If only one scene is used for model
 training, "response" may also be a RasterLayer of the response variable.}
+
+\item{out}{Either Rain or RInfo indicating weather rainfall rates
+or rainfall areas should be used.}
+
+\item{threshold}{if response is Rainfall rate: pixels larger than
+the threshold are used for rainfall rate training}
 
 \item{sampsize}{Numeric value between 0 and 1 indicating the percentage of
 data points to be returned}

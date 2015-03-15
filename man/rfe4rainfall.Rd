@@ -5,8 +5,8 @@
 \title{Performs recursive feature selction}
 \usage{
 rfe4rainfall(predictors, response, sampsize = 1, threshold = 0.06,
-  varSize = c(1:5, seq(10, ncol(predictors), 10)), nnetSize = c(seq(2, 10,
-  2), seq(20, ncol(predictors), 10)), nnetDecay = 0.05, seed = 20)
+  out = "Rain", varSize = c(1:5), nnetSize = c(1:5), nnetDecay = 0.05,
+  seed = 20)
 }
 \arguments{
 \item{predictors}{Either a data.frame with each column is one predictor and each
@@ -19,6 +19,9 @@ training, "response" may also be a RasterLayer of the response variable.}
 
 \item{threshold}{if response is Rainfall rate: pixels larger than
 the threshold are used for rainfall rate training}
+
+\item{out}{Either Rain or RInfo indicating weather rainfall rates
+or rainfall areas should be used.}
 
 \item{varSize}{integer vector indicating the numbers of
 variables to consider in rfe.}
@@ -69,7 +72,9 @@ response <- raster(system.file("extdata/radar",
 #Train small rfe model with 0.1\% of the pixels (takes around 1 minute...)
 rfeModel <- rfe4rainfall(predictors=pred,
 response,
-sampsize=0.001)
+out="Rain",
+sampsize=0.001,
+varSize=seq(1,nlayers(pred),3))
 
 # Show results:
 print(rfeModel)
