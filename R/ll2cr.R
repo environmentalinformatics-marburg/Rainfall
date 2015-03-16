@@ -2,9 +2,7 @@
 #' @param latlon data.frame with first column =latitude and second column is
 #' longitude specified as numeric.
 #' @param ccoff Integer coefficient of the scalling function (see page 28, Ref [1])              
-#' @param lloff Integer coefficient of the scalling function  (see page 28, Ref [1])
-#' @param type either rst or NA. If rst col/rows are modified since idrisi 
-#' starts with col/row 0 instead of 1     
+#' @param lloff Integer coefficient of the scalling function  (see page 28, Ref [1])  
 #' @return Data frame including column and row of the MSG image
 #' @author Hanna Meyer based on the FORTRAN Routine of EUMETSAT 2005, 2009.
 #' @references
@@ -25,7 +23,7 @@
 #' ll2cr(latlon)
 
 
-ll2cr=function(latlon,ccoff=1856,lloff=1856,type="rst"){ 
+ll2cr=function(latlon,ccoff=1856,lloff=1856){ 
   ll2crOut <-  apply(latlon,1,function(x){
     lat <- x[1]
     lon <- x[2]
@@ -38,11 +36,7 @@ ll2cr=function(latlon,ccoff=1856,lloff=1856,type="rst"){
                   row = as.integer(0),
                   PACKAGE="Rainfall")
     tmp$column=3712-tmp$column #-1 --> Idrisi (beginnt mit 0 zu zählen)
-    tmp$row=3712-tmp$row #-1 --> Idrisi (beginnt mit 0 zu zählen)
-    if(type!="rst"){
-      tmp$column <- tmp$column+1
-      tmp$row <- tmp$row+1
-    }
+    tmp$row=3712-tmp$row #-1 --> Idrisi (beginnt mit 0 zu zähle)
     return(data.frame("Column"=tmp$column,"Row"=tmp$row))
   })
   do.call(rbind,ll2crOut)

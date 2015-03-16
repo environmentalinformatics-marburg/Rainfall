@@ -4,15 +4,12 @@
 \alias{cr2ll}
 \title{Get geocoordinates from MSG column and rows}
 \usage{
-cr2ll(colrow, ccoff = 1856, lloff = 1856, type = "rst")
+cr2ll(colrow, ccoff = 1856, lloff = 1856)
 }
 \arguments{
 \item{ccoff}{Integer coefficient of the scalling function (see page 28, Ref [1])}
 
 \item{lloff}{Integer coefficient of the scalling function  (see page 28, Ref [1])}
-
-\item{type}{either rst or NA. If rst col/rows are modified since idrisi
-starts with col/row 0 instead of 1}
 
 \item{column}{Integer}
 

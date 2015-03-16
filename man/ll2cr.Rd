@@ -4,7 +4,7 @@
 \alias{ll2cr}
 \title{Get MSG pixel coordinates (column/rows) from geocordiantes}
 \usage{
-ll2cr(latlon, ccoff = 1856, lloff = 1856, type = "rst")
+ll2cr(latlon, ccoff = 1856, lloff = 1856)
 }
 \arguments{
 \item{latlon}{data.frame with first column =latitude and second column is
@@ -13,9 +13,6 @@ longitude specified as numeric.}
 \item{ccoff}{Integer coefficient of the scalling function (see page 28, Ref [1])}
 
 \item{lloff}{Integer coefficient of the scalling function  (see page 28, Ref [1])}
-
-\item{type}{either rst or NA. If rst col/rows are modified since idrisi
-starts with col/row 0 instead of 1}
 }
 \value{
 Data frame including column and row of the MSG image
