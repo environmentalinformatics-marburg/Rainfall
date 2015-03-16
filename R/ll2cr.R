@@ -15,7 +15,6 @@
 #'  [2] MSG Ground Segment LRIT/HRIT Mission Specific 
 #'  Implementation, EUMETSAT Document, 
 #'  (EUM/MSG/SPE/057, Issue 6, 21. June 2006).
-#' @useDynLib Rainfall
 #' @export ll2cr
 #' @examples
 #' #for a single coordinate

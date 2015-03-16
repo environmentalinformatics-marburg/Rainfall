@@ -15,7 +15,6 @@
 #'  [2] MSG Ground Segment LRIT/HRIT Mission Specific 
 #'  Implementation, EUMETSAT Document, 
 #'  (EUM/MSG/SPE/057, Issue 6, 21. June 2006).
-#' @useDynLib Rainfall
 #' @export cr2ll
 #' @examples
 #' ccr2ll(data.frame(c(2899,3435),c(1200,1340)))

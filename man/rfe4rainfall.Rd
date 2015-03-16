@@ -73,8 +73,8 @@ response <- raster(system.file("extdata/radar",
 rfeModel <- rfe4rainfall(predictors=pred,
 response,
 out="Rain",
-sampsize=0.001,
-varSize=seq(1,nlayers(pred),3))
+sampsize=0.01,
+varSize=c(2,5,10,15,20))
 
 # Show results:
 print(rfeModel)
