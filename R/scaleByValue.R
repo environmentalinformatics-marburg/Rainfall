@@ -3,6 +3,7 @@
 #' @param scenerasters RasterStack of the scene which should be scaled
 #' @return scaleTable Data.frame created with \code{\link{calcScalingStats}}
 #' @author Hanna Meyer
+#' @export scaleByValue
 
 
 scaleByValue <- function (scenerasters, scaleTable){

@@ -4,6 +4,7 @@
 #' @param x Data.frame or rasterStack of the predictors
 #' @return Data.frame with mean and sd values
 #' @author Hanna Meyer
+#' @export calcScalingStats
 #' @examples
 #' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
 #' scaleparam <- calcScalingStats(msg_example)
