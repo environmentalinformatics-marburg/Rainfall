@@ -40,5 +40,6 @@ predictRainfall <- function (model, sceneraster, rainmask=NULL, sunzenith=NULL,
   if(!is.null(rainmask)){
    predVars<- mask(predVars,rainmask)
   }
-  prediction<-predict(predVars,model)
+  prediction<-predict(predVars,model$fit)
+  prediction<-mask(prediction,sceneraster[[1]])
 }
