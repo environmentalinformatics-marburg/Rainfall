@@ -4,12 +4,19 @@
 \alias{plotRfeCV}
 \title{Plot rfe model results based on cross validation}
 \usage{
-plotRfeCV(rfeModel, metric = "RMSE")
+plotRfeCV(rfeModel, metric = rfeModel$metric, xlim = "minmax",
+  ylim = "minmax")
 }
 \arguments{
 \item{rfeModel}{A rfe object}
 
 \item{metric}{The metric to visualize. must be stored in the rfe object}
+
+\item{xlim}{Numeric vector defining x axis limits. See \code{\link{plot}}.
+If xlim == "minmax" these limits are set according to the range of data values.}
+
+\item{ylim}{Numeric vector defining x axis limits. See \code{\link{plot}}.
+If ylim == "minmax" these limits are set according to the range of data values.}
 }
 \description{
 function takes an rfe model and plots the mean metric with standard deviations

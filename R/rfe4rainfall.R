@@ -87,6 +87,7 @@ rfe4rainfall <- function (predictors,
   rm(response)
   gc()
   
+  calcScaling<- calcScalingStats(traindata$predictors)
   
   if ("jday" %in% names(traindata$predictors)){
     jday <- (traindata$predictors$jday-mean(1:365))/sd(1:365) 
@@ -108,7 +109,8 @@ rfe4rainfall <- function (predictors,
     rctrl <- rfeControl(index=cvSplits,
                         functions = nnetFuncs,
                         method="cv",
-                        returnResamp = "all")
+                        returnResamp = "all",
+                        rerank=TRUE)
     metric<-"ROC"
     maximize<-TRUE
     linout<-FALSE
@@ -117,7 +119,8 @@ rfe4rainfall <- function (predictors,
     rctrl <- rfeControl(index=cvSplits,
                         functions = nnetFuncs,
                         method="cv",
-                        returnResamp = "all")
+                        returnResamp = "all",
+                        rerank=TRUE)
     linout<-TRUE
     metric<-"RMSE"
     maximize<-FALSE
@@ -137,5 +140,8 @@ rfe4rainfall <- function (predictors,
                   maximize=maximize)
   
   stopCluster(cl)
+  
+  rfeModel$scaleParam <- calcScaling
+  
   return(rfeModel)
 }

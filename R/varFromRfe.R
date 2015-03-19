@@ -67,6 +67,7 @@ varFromRfe <- function (rfeModel){
   
   zonstatTmp <- vars[substr(vars,nchar(vars)-1,nchar(vars))=="ax"|substr(vars,nchar(vars)-1,nchar(vars))=="sd"|
                        substr(vars,nchar(vars)-1,nchar(vars))=="in"|substr(vars,nchar(vars)-1,nchar(vars))=="an"]
+  zonstatTmp <- zonstatTmp[!substr(zonstatTmp,1,1)=="f"&&!substr(zonstatTmp,1,4)=="glcm"]
   zonstat=c()
   if (length(zonstatTmp)>0){
     zonstatTmp <- strsplit(zonstatTmp,"_")

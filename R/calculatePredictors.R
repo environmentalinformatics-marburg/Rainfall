@@ -96,6 +96,12 @@ calculatePredictors<-function (scenerasters,
     zonstat<-vars$zonstat
     shape<-vars$shape
     further<-vars$further
+    if ("sunzenith"%in%further&is.null(sunzenith)){
+      stop ("please provide sunzenith raster")
+    }
+    if ("jday"%in%further&is.null(date)){
+      stop ("please provide date information")
+    }
     
   }
   
@@ -268,6 +274,7 @@ calculatePredictors<-function (scenerasters,
   }
   if (!is.null(zonstat)) result <- stack (result,stack(unlist(zonalstat)))
   if(!is.null(further)) result <- stack (result,furtherVar)
+  
   
   return(result)
   

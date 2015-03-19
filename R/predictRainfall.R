@@ -33,8 +33,12 @@ predictRainfall <- function (model, sceneraster, rainmask=NULL, sunzenith=NULL,
   library(raster)
   predVars<-calculatePredictors(sceneraster,model=model,sunzenith=sunzenith,
                                 date=date)
-  if(!is.null(reference)){
-   predVars<- mask(predVars,reference)
+  
+  tmp<-rfeModel$scaleParam
+  
+  predVars <- scaleByValue(predVars,tmp)
+  if(!is.null(rainmask)){
+   predVars<- mask(predVars,rainmask)
   }
   prediction<-predict(predVars,model)
 }
