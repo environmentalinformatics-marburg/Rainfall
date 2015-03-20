@@ -47,7 +47,7 @@ train4rainfall <- function (predictors,
                             response,
                             sampsize=0.25,
                             threshold=0.06,
-                            nnetSize=seq(2,ncol(predictors),2),
+                            nnetSize=2:5,
                             nnetDecay = c(0.05,0.07),
                             thresholdTune=c(seq(0,0.1,0.05),seq(0.12,0.30,0.02),seq(0.35,1,0.05)),
                             seed=20,
@@ -74,7 +74,7 @@ train4rainfall <- function (predictors,
   }
   
   if(keepScale){
-    scalingparam<-data.frame("mean"=apply(predictors,2,mean),"sd"=apply(predictors,2,sd))
+    calcScaling<-data.frame("mean"=apply(predictors,2,mean),"sd"=apply(predictors,2,sd))
   }
   
   if ("jday" %in% names(predictors)){
@@ -135,7 +135,8 @@ train4rainfall <- function (predictors,
   ctrl <- trainControl(index=cvSplits,
                        method="cv",
                        summaryFunction = eval(parse(text=summaryFunction)),
-                       classProbs = classProbs)
+                       classProbs = classProbs,
+                       returnResamp = "all")
   
   
   model <- train(predictors,
@@ -150,9 +151,7 @@ train4rainfall <- function (predictors,
   
   stopCluster(cl)
   if (keepScale){
-    result <- list(model,scalingparam)
-    return(result)
-  }else{
-    return(model)
+    model$scalingparam=calcScaling
   }
+  return(model)
 }

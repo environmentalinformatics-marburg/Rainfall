@@ -5,9 +5,9 @@
 \title{Performs recursive feature selction}
 \usage{
 train4rainfall(predictors, response, sampsize = 0.25, threshold = 0.06,
-  nnetSize = seq(2, ncol(predictors), 2), nnetDecay = c(0.05, 0.07),
-  thresholdTune = c(seq(0, 0.1, 0.05), seq(0.12, 0.3, 0.02), seq(0.35, 1,
-  0.05)), seed = 20, keepScale = TRUE)
+  nnetSize = 2:5, nnetDecay = c(0.05, 0.07), thresholdTune = c(seq(0, 0.1,
+  0.05), seq(0.12, 0.3, 0.02), seq(0.35, 1, 0.05)), seed = 20,
+  keepScale = TRUE)
 }
 \arguments{
 \item{predictors}{Either a data.frame with each column is one predictor and each
