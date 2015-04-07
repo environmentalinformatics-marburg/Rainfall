@@ -1,5 +1,8 @@
 #' Extract variables from rfe model
 #' @param rfeModel An object of class rfe
+#' @param useOptimal Logical. Use the optimal variables from rfe or those
+#' less variables which lead to a model performance within one sd of the 
+#' optimal model?
 #' @return A list of variables from the rfe object which can be directly used
 #' in calculatePredictors
 #' @description This is an internal function used by calculatePredictors
@@ -9,9 +12,17 @@
 #' data(rfeModel)
 #' varFromRfe(rfeModel) 
 
-varFromRfe <- function (rfeModel){
-  
+varFromRfe <- function (rfeModel,useOptimal=TRUE){
+  if (class(rfeModel)=="rfe"){
+  if (useOptimal){
   vars<-rfeModel$optVariables
+  } else {
+    vars <- Rsenal::varsRfeCV(rfeModel)
+  }
+  } else {
+    vars <- names(rfeModel$trainingData)
+  }
+  
   textures<-vars[substr(vars,1,4)=="glcm"]
   texture <-c()
   if (length(textures)>0){

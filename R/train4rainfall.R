@@ -5,6 +5,7 @@
 #' @param response A vector of either Rainfall area or rainfall rates for
 #' the corresponding pixels in predictors. If only one scene is used for model 
 #' training, "response" may also be a RasterLayer of the response variable.
+#' @param scaleVars Center and scale variables?
 #' @param threshold if response is Rainfall rate: pixels larger than
 #' the threshold are used for rainfall rate training
 #' @param seed Any integer number. Used to produce reproducable results
@@ -45,6 +46,7 @@
 
 train4rainfall <- function (predictors,
                             response,
+                            scaleVars=FALSE,
                             sampsize=0.25,
                             threshold=0.06,
                             nnetSize=2:5,
@@ -62,7 +64,7 @@ train4rainfall <- function (predictors,
   if(class(response)=="RasterLayer") {
     response <- values(response)
   }
-
+  
   
   keep <- complete.cases(predictors)
   predictors <- predictors[keep,]
@@ -73,15 +75,17 @@ train4rainfall <- function (predictors,
     predictors <- predictors[keep,]
   }
   
-  if(keepScale){
-    calcScaling<-data.frame("mean"=apply(predictors,2,mean),"sd"=apply(predictors,2,sd))
-  }
   
-  if ("jday" %in% names(predictors)){
-    jday <- (predictors$jday-mean(1:365))/sd(1:365) 
-    predictors<-data.frame(apply(predictors[,-which(names(predictors)=="jday")],2,scale),jday)
-  } else {
-    predictors<-data.frame(apply(predictors,2,scale))
+  if(scaleVars){
+    if(keepScale){
+      calcScaling<-data.frame("mean"=apply(predictors,2,mean),"sd"=apply(predictors,2,sd))
+    }
+    if ("jday" %in% names(predictors)){
+      jday <- (predictors$jday-mean(1:365))/sd(1:365) 
+      predictors<-data.frame(apply(predictors[,-which(names(predictors)=="jday")],2,scale),jday)
+    } else {
+      predictors<-data.frame(apply(predictors,2,scale))
+    }
   }
   
   samples<-createDataPartition(response,
@@ -104,8 +108,7 @@ train4rainfall <- function (predictors,
     metric="Dist" #wenn nicht _thres dann "ROC
     maximize = FALSE #when dist is used, then min value is important
     classProbs =TRUE
-    metric="ROC"
-    maximize=TRUE
+    #metric="ROC"
     linout=FALSE
     summaryFunction = "fourStats"
     method=nnet_thres
@@ -123,8 +126,6 @@ train4rainfall <- function (predictors,
     maximize=FALSE
     classProbs =FALSE
     linout=TRUE
-    metric="RMSE"
-    maximize=FALSE
     summaryFunction ="defaultSummary"
     method="nnet"
     tuneGrid <- expand.grid(.size = nnetSize,
@@ -147,10 +148,11 @@ train4rainfall <- function (predictors,
                  trControl=ctrl,
                  tuneGrid=tuneGrid,
                  metric=metric,
-                 maximize=maximize)
+                 maximize=maximize,
+                 verbose=TRUE)
   
   stopCluster(cl)
-  if (keepScale){
+  if (keepScale & scaleVars){
     model$scalingparam=calcScaling
   }
   return(model)

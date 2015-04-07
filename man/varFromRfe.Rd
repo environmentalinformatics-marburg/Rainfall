@@ -4,10 +4,14 @@
 \alias{varFromRfe}
 \title{Extract variables from rfe model}
 \usage{
-varFromRfe(rfeModel)
+varFromRfe(rfeModel, useOptimal = TRUE)
 }
 \arguments{
 \item{rfeModel}{An object of class rfe}
+
+\item{useOptimal}{Logical. Use the optimal variables from rfe or those
+less variables which lead to a model performance within one sd of the
+optimal model?}
 }
 \value{
 A list of variables from the rfe object which can be directly used

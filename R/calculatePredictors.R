@@ -4,6 +4,9 @@
 #' @param model A rfe object Optional. Can be used instad of the spectral,texture,
 #' pptext,zonstat,shape parameters. Variables included in the optimal model are the
 #' calculated.
+#' @param useOptimal if is.null(model): Logical. Use the optimal variables from rfe or those
+#' less variables which lead to a model performance within one sd of the 
+#' optimal model?
 #' @param sunzenith A raster of the sun zenith values
 #' @param spectral A character vector indicating the msg channels to be included.
 #' Possible values: "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",
@@ -73,6 +76,7 @@
 
 calculatePredictors<-function (scenerasters,
                                model=NULL,
+                               useOptimal=TRUE,
                                spectral=NULL,
                                sunzenith=NULL,
                                texture=NULL,
@@ -88,7 +92,7 @@ calculatePredictors<-function (scenerasters,
   registerDoParallel(detectCores())
   
   if(!is.null(model)){
-    vars<-varFromRfe(model)
+    vars<-varFromRfe(model, useOptimal=useOptimal)
     spectral<-vars$spectral
     texture<-vars$texture
     filterstat<-vars$filterstat

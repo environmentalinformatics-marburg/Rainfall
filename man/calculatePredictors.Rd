@@ -4,9 +4,10 @@
 \alias{calculatePredictors}
 \title{Calculate predictors from MSG cloud masked data}
 \usage{
-calculatePredictors(scenerasters, model = NULL, spectral = NULL,
-  sunzenith = NULL, texture = NULL, pptext = NULL, zonstat = NULL,
-  filterstat = NULL, shape = NULL, further = c("sunzenith", "jday"), date)
+calculatePredictors(scenerasters, model = NULL, useOptimal = TRUE,
+  spectral = NULL, sunzenith = NULL, texture = NULL, pptext = NULL,
+  zonstat = NULL, filterstat = NULL, shape = NULL,
+  further = c("sunzenith", "jday"), date)
 }
 \arguments{
 \item{scenerasters}{A raster stack of cloud masked MSG scenes with non
@@ -15,6 +16,10 @@ clouded areas were set to NA}
 \item{model}{A rfe object Optional. Can be used instad of the spectral,texture,
 pptext,zonstat,shape parameters. Variables included in the optimal model are the
 calculated.}
+
+\item{useOptimal}{if is.null(model): Logical. Use the optimal variables from rfe or those
+less variables which lead to a model performance within one sd of the
+optimal model?}
 
 \item{spectral}{A character vector indicating the msg channels to be included.
 Possible values: "VIS0.6","VIS0.8","NIR1.6","IR3.9","WV6.2","WV7.3","IR8.7",

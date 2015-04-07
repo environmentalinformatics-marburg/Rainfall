@@ -4,10 +4,10 @@
 \alias{train4rainfall}
 \title{Performs recursive feature selction}
 \usage{
-train4rainfall(predictors, response, sampsize = 0.25, threshold = 0.06,
-  nnetSize = 2:5, nnetDecay = c(0.05, 0.07), thresholdTune = c(seq(0, 0.1,
-  0.05), seq(0.12, 0.3, 0.02), seq(0.35, 1, 0.05)), seed = 20,
-  keepScale = TRUE)
+train4rainfall(predictors, response, scaleVars = FALSE, sampsize = 0.25,
+  threshold = 0.06, nnetSize = 2:5, nnetDecay = c(0.05, 0.07),
+  thresholdTune = c(seq(0, 0.1, 0.05), seq(0.12, 0.3, 0.02), seq(0.35, 1,
+  0.05)), seed = 20, keepScale = TRUE)
 }
 \arguments{
 \item{predictors}{Either a data.frame with each column is one predictor and each
@@ -17,6 +17,8 @@ a RasterStack with one Raster is one Predictor Variable.}
 \item{response}{A vector of either Rainfall area or rainfall rates for
 the corresponding pixels in predictors. If only one scene is used for model
 training, "response" may also be a RasterLayer of the response variable.}
+
+\item{scaleVars}{Center and scale variables?}
 
 \item{threshold}{if response is Rainfall rate: pixels larger than
 the threshold are used for rainfall rate training}

@@ -5,7 +5,7 @@
 \title{Predicts the rainfall rate based on a trained model and MSG data}
 \usage{
 predictRainfall(model, sceneraster, rainmask = NULL, sunzenith = NULL,
-  date = NULL)
+  date = NULL, useOptimal = TRUE, scaleparam = model$scalingparam)
 }
 \arguments{
 \item{model}{The final model from either caret's train or rfe.
@@ -19,6 +19,12 @@ Load them with getChannels}
 \item{sunzenith}{optional. Only needed if included in the predictor variables}
 
 \item{date}{optional. only needed if jday is included in the predictor variables}
+
+\item{useOptimal}{if model is a rfe object: Logical. Use the optimal variables
+from rfe or those less variables which lead to a model performance within one
+sd of the optimal model?}
+
+\item{scaleparam}{A data.frame created with \code{\link{calcScalingStats}}}
 }
 \value{
 A Raster Layer containing predicted rainfall
@@ -35,7 +41,7 @@ reference <- raster(system.file("extdata/radar",
 "201007121650_radolan_SGrid.rst",package="Rainfall"))
 values(reference)[values(reference<0.06)]=NA
 
-data(rfeModel)
+data(rfemodel)
 
 #predict on the new scene (don't expect good results from the small model!)
 pred<-predictRainfall(model=rfeModel, sceneraster=msg_example, rainmask=reference)
