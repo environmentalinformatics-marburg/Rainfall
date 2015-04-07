@@ -1,7 +1,7 @@
 #' Writes a stack of MSG channels to a new file with respect to file
 #' name conventions
 #' @param scenerasters Raster stack of MSG scenes originally retrieved by 
-#' \code{\link{getCahnnels}}
+#' \code{\link{getChannels}}
 #' @param date Date of the scene. (see \code{\link{getDate}})
 #' @param outpath Path to where files are to be written
 #' @return Nothing is returned to the R environment. New files are stored on disk.

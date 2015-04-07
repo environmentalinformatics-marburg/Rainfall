@@ -11,9 +11,8 @@
 
 
 calcScalingStats <- function (x){
-  
   if (class(x)=="RasterStack"||class(x)=="RasterBrick"){
-    x <- as.data.frame(x)
+    x <- raster::as.data.frame(x)
   }
   
   means <- colMeans(x,na.rm = TRUE)

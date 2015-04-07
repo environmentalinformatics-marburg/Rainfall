@@ -9,7 +9,7 @@ writeToFile(scenerasters, date, outpath, type = "tif", meta = NA)
 }
 \arguments{
 \item{scenerasters}{Raster stack of MSG scenes originally retrieved by
-\code{\link{getCahnnels}}}
+\code{\link{getChannels}}}
 
 \item{date}{Date of the scene. (see \code{\link{getDate}})}
 
