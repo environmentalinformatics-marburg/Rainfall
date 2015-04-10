@@ -59,9 +59,15 @@ textureVariables <- function(x,
   #set values larger than the max/min value to the max/minvalue. 
   #Otherwise NA would be used
   if(!is.null(min_x)){
+    if (length(nrasters)>1){
     for (i in nrasters){
-      values(x[[i]])[values(x[[i]])>max_x[i]]=max_x[i]
-      values(x[[i]])[values(x[[i]])>min_x[i]]=min_x[i]
+      x[[i]]=reclassify(x[[i]], c(max_x[i],Inf,max_x[i]))
+      x[[i]]=reclassify(x[[i]], c(-Inf,min_x[i],min_x[i]))
+    }
+    } else
+    {
+      x=reclassify(x, c(max_x[i],Inf,max_x[i]))
+      x=reclassify(x, c(-Inf,min_x[i],min_x[i])) 
     }
   }
   
