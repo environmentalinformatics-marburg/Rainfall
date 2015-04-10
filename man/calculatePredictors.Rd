@@ -6,8 +6,8 @@
 \usage{
 calculatePredictors(scenerasters, model = NULL, useOptimal = TRUE,
   spectral = NULL, sunzenith = NULL, texture = NULL, pptext = NULL,
-  zonstat = NULL, filterstat = NULL, shape = NULL,
-  further = c("sunzenith", "jday"), date)
+  zonstat = NULL, filterstat = NULL, shape = NULL, x_min = NULL,
+  y_min = NULL, further = c("sunzenith", "jday"), date)
 }
 \arguments{
 \item{scenerasters}{A raster stack of cloud masked MSG scenes with non
@@ -49,6 +49,8 @@ are "Ar",SI","CA","Ur","CAI","PAR","distEdges","Re","Ru","OIC",
 CI1","CO1","CI2","CO2","CCI1","CCI2","CO","SHD","C1","E",
 "TR","CR","C2","FR","EI","SF1","GSI","SF2","C3","SF3"}
 
+\item{x_min}{see \code{\link{textureVariables}}}
+
 \item{further}{a character vector including Currently "jday" and/or
 "sunzenith" which will also be used as variables.
 see \code{\link{geometryVariables}} and \code{\link{borgIndices}}
@@ -56,6 +58,8 @@ for description of the variables.}
 
 \item{date}{Date of the msg scene in format yyyymmddhhmm. Only imprtant if
 the day of the year (jday) is calculated (see param "further").}
+
+\item{x_max}{see \code{\link{textureVariables}}}
 }
 \description{
 Calculate predictors from MSG cloud masked data

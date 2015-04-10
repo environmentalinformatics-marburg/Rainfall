@@ -34,6 +34,8 @@
 #' for description of the variables.
 #' @param date Date of the msg scene in format yyyymmddhhmm. Only imprtant if 
 #' the day of the year (jday) is calculated (see param "further").
+#' @param x_min see \code{\link{textureVariables}} 
+#' @param x_max see \code{\link{textureVariables}} 
 #' @author Hanna Meyer
 #' @export calculatePredictors
 #' @examples
@@ -84,6 +86,8 @@ calculatePredictors<-function (scenerasters,
                                zonstat=NULL,
                                filterstat=NULL,
                                shape=NULL,
+                               x_min=NULL,
+                               y_min=NULL,
                                further=c("sunzenith","jday"),
                                date){
   
@@ -147,9 +151,11 @@ calculatePredictors<-function (scenerasters,
     for (k in 1:length(glcm_input)){
       glcm_filter[[k]]<-foreach(i=1:length (glcm_input[[k]]),
                                 .packages= c("glcm","raster","doParallel","Rainfall"))%dopar%{
-                                  tmp<-textureVariables (x=spectralvars[[names(glcm_input[[k]])[i]]],
-                                                         n_grey = 32,    
-                                                         var=as.character(glcm_input[[k]][[i]]),filter=as.numeric(glcm_filterunique[k]))
+                                  tmp<-textureVariables (x=spectralvars[[names(glcm_input[[k]])[i]]],   
+                                                         var=as.character(glcm_input[[k]][[i]]),
+                                                         filter=as.numeric(glcm_filterunique[k]),
+                                                         min_x=min_x[names(glcm_input[[k]])[i]],
+                                                         max_x=max_x[names(glcm_input[[k]])[i]])
                                   eval(parse(text=paste0("names(tmp$size_",glcm_filterunique[k],")=c(",
                                                          paste0("'",names(glcm_input)[[k]],"_", 
                                                                 names(spectralvars[[names(glcm_input[[k]])[i]]]),

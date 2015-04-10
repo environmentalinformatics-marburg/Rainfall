@@ -10,6 +10,10 @@
 #' @param n_grey Number of grey values. see \code{\link{glcm}}
 #' @param parallel A logical value indicating whether parameters are calculated 
 #' parallely or not
+#' @param min_x for each channel the minimum value which can occur. If NULL then
+#' the minimum value from the rasterLayer is used.
+#' @param max_x for each channel the maximum value which can occur. If NULL then
+#' the maximum value from the rasterLayer is used.
 #' @return A list of RasterStacks containing the texture parameters for each 
 #' combination of channel and filter  
 #' @details This functions fills the glcm function with standard settings used 
@@ -34,47 +38,67 @@
 
 #' @seealso \code{\link{glcm}}
 
-textureVariables <- function(x,nrasters=1:nlayers(x),filter=c(3),
+textureVariables <- function(x,
+                             nrasters=1:nlayers(x),
+                             filter=c(3),
                              var=c("mean", "variance", "homogeneity", 
                                    "contrast", "dissimilarity", 
-                                   "entropy","second_moment")
-                             ,parallel=TRUE,n_grey = 32){
+                                   "entropy","second_moment"),
+                             parallel=TRUE,
+                             n_grey = 128,
+                             min_x=NULL,
+                             max_x=NULL){
   require(glcm) 
   require(raster)
   if (parallel){
     require(doParallel)
     registerDoParallel(detectCores())
   }
+  
+  
+  #set values larger than the max/min value to the max/minvalue. 
+  #Otherwise NA would be used
+  if(!is.null(min_x)){
+    for (i in nrasters){
+      values(x[[i]])[values(x[[i]])>max_x[i]]=max_x[i]
+      values(x[[i]])[values(x[[i]])>min_x[i]]=min_x[i]
+    }
+  }
+  
+  
   glcm_filter<-list()
   for (j in 1:length(filter)){
-    if (class (x)=="RasterStack"||class (x)=="RasterBrick"){
+    if (class (x)=="RasterStack"||class (x)=="RasterBrick"){  
       if (parallel){
         glcm_filter[[j]]<-foreach(i=nrasters,
                                   .packages= c("glcm","raster"))%dopar%{
                                     mask(glcm(x[[i]], 
-                                         window = c(filter[j], filter[j]), 
-                                         shift=list(c(0,1), c(1,1), c(1,0), 
-                                                    c(1,-1)),
-                                         statistics=var,n_grey=n_grey,
-                                         na_opt="ignore"), x[[i]])
+                                              window = c(filter[j], filter[j]), 
+                                              shift=list(c(0,1), c(1,1), c(1,0), 
+                                                         c(1,-1)),
+                                              statistics=var,n_grey=n_grey,
+                                              min_x=min_x[i],max_x=max_x[i],
+                                              na_opt="center"), x[[i]])
                                   } 
       } else {
         glcm_filter[[j]]<-foreach(i=nrasters,
                                   .packages= c("glcm","raster"))%do%{
                                     mask(glcm(x[[i]], 
-                                         window = c(filter[j], filter[j]), 
-                                         shift=list(c(0,1), c(1,1), c(1,0), 
-                                                    c(1,-1)),
-                                         statistics=var,n_grey=n_grey,
-                                         na_opt="ignore"), x[[i]])
+                                              window = c(filter[j], filter[j]), 
+                                              shift=list(c(0,1), c(1,1), c(1,0), 
+                                                         c(1,-1)),
+                                              statistics=var,n_grey=n_grey,
+                                              min_x=min_x[i],max_x=max_x[i],
+                                              na_opt="center"), x[[i]])
                                   }
       }
       names(glcm_filter[[j]])<-names(x)[nrasters]
     } else {
       glcm_filter[[j]]<-mask(glcm(x, window = c(filter[j], filter[j]), 
-                             shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
-                             statistics=var,n_grey=n_grey,
-                             na_opt="ignore"), x)
+                                  shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
+                                  statistics=var,n_grey=n_grey,
+                                  min_x=min_x,max_x=max_x,
+                                  na_opt="center"), x)
     }   
   }
   names(glcm_filter)<-paste0("size_",filter)

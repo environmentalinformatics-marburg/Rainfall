@@ -6,7 +6,8 @@
 \usage{
 textureVariables(x, nrasters = 1:nlayers(x), filter = c(3),
   var = c("mean", "variance", "homogeneity", "contrast", "dissimilarity",
-  "entropy", "second_moment"), parallel = TRUE, n_grey = 32)
+  "entropy", "second_moment"), parallel = TRUE, n_grey = 255,
+  min_x = NULL, max_x = NULL)
 }
 \arguments{
 \item{x}{A rasterLayer or a rasterStack containing different channels
@@ -24,6 +25,12 @@ see \code{\link{glcm}}}
 parallely or not}
 
 \item{n_grey}{Number of grey values. see \code{\link{glcm}}}
+
+\item{min_x}{for each channel the minimum value which can occur. If NULL then
+the minimum value from the rasterLayer is used.}
+
+\item{max_x}{for each channel the maximum value which can occur. If NULL then
+the maximum value from the rasterLayer is used.}
 }
 \value{
 A list of RasterStacks containing the texture parameters for each
