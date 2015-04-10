@@ -87,7 +87,7 @@ calculatePredictors<-function (scenerasters,
                                filterstat=NULL,
                                shape=NULL,
                                min_x=NULL,
-                               min_x=NULL,
+                               max_x=NULL,
                                further=c("sunzenith","jday"),
                                date){
   

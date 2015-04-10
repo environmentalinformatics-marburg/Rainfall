@@ -6,7 +6,7 @@
 \usage{
 textureVariables(x, nrasters = 1:nlayers(x), filter = c(3),
   var = c("mean", "variance", "homogeneity", "contrast", "dissimilarity",
-  "entropy", "second_moment"), parallel = TRUE, n_grey = 255,
+  "entropy", "second_moment"), parallel = TRUE, n_grey = 128,
   min_x = NULL, max_x = NULL)
 }
 \arguments{
