@@ -8,6 +8,7 @@
 #' @param res resolution in degree of the projected raster
 #' @return x projected to Latlon
 #' @author Hanna Meyer
+#' @export projectMSG
 #' @examples
 #' #not run
 #' #yRaster=raster(paste(datapath,"/000000000000_00000_ml01danb1_na001_1000_rg01de_003000.rst",sep=""), 
