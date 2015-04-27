@@ -14,8 +14,9 @@
 #'  Implementation, EUMETSAT Document, 
 #'  (EUM/MSG/SPE/057, Issue 6, 21. June 2006).
 #' @export cr2ll
+#' @useDynLib Rainfall
 #' @examples
-#' ccr2ll(data.frame(c(2899,3435),c(1200,1340)))
+#' cr2ll(data.frame(c(2899,3435),c(1200,1340)))
 
 cr2ll=function(colrow,ccoff=1856,lloff=1856){
   cr2llOut <- apply(colrow,1,function(x){

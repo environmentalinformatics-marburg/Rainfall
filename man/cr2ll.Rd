@@ -22,7 +22,7 @@ Data frame including latitude and longitude of the MSG image
 Get geocoordinates from MSG column and rows
 }
 \examples{
-ccr2ll(data.frame(c(2899,3435),c(1200,1340)))
+cr2ll(data.frame(c(2899,3435),c(1200,1340)))
 }
 \author{
 Hanna Meyer based on the FORTRAN Routine of EUMETSAT 2005, 2009.

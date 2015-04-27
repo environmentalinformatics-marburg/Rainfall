@@ -14,6 +14,7 @@
 #'  Implementation, EUMETSAT Document, 
 #'  (EUM/MSG/SPE/057, Issue 6, 21. June 2006).
 #' @export ll2cr
+#' @useDynLib Rainfall
 #' @examples
 #' #for a single coordinate
 #' ll2cr(data.frame(50.7,8.7))
