@@ -12,9 +12,6 @@
 #' @param nnetSize Number of hidden units in nnet
 #' @param nnetDecay. Decay value(s) used in nnet training
 #' @param thresholdTune optional threshold tuning. Only if response ="RInfo"
-#' @param keepScale TRUE or FALSE. If TRUE a data.frame is returned in addition 
-#' to the model which gives the mean and sd values for each predictor.
-#'  This can be used to scale new data in the prediction
 #' @return A train object. If keepScaling=TRUE a list with the first object is
 #'  the train object and the second object is a data.frame including mean and sd 
 #'  values for all predictors which can be used for ensuring same scaling 
@@ -52,8 +49,7 @@ train4rainfall <- function (predictors,
                             nnetSize=2:5,
                             nnetDecay = c(0.05,0.07),
                             thresholdTune=c(seq(0,0.1,0.05),seq(0.12,0.30,0.02),seq(0.35,1,0.05)),
-                            seed=20,
-                            keepScale=TRUE){
+                            seed=20){
   require(caret)
   require(raster)
   require(doParallel)
@@ -77,15 +73,14 @@ train4rainfall <- function (predictors,
   
   
   if(scaleVars){
-    if(keepScale){
       calcScaling<-data.frame("mean"=apply(predictors,2,mean),"sd"=apply(predictors,2,sd))
-    }
-    if ("jday" %in% names(predictors)){
-      jday <- (predictors$jday-mean(1:365))/sd(1:365) 
-      predictors<-data.frame(apply(predictors[,-which(names(predictors)=="jday")],2,scale),jday)
-    } else {
-      predictors<-data.frame(apply(predictors,2,scale))
-    }
+      traindata$predictors <- scaleByValue(predVars,calcScaling)
+#    if ("jday" %in% names(predictors)){
+#      jday <- (predictors$jday-mean(1:365))/sd(1:365) 
+#      predictors<-data.frame(apply(predictors[,-which(names(predictors)=="jday")],2,scale),jday)
+#    } else {
+#      predictors<-data.frame(apply(predictors,2,scale))
+#    }
   }
   
   samples<-createDataPartition(response,
