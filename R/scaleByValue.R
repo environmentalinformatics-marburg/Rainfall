@@ -1,15 +1,25 @@
 #' Scales Predictors using mean and sd from lookup table
 #' 
-#' @param scenerasters RasterStack of the scene which should be scaled
+#' @param x RasterStack of the scene which should be scaled or data.frame
 #' @return scaleTable Data.frame created with \code{\link{calcScalingStats}}
 #' @author Hanna Meyer
 #' @export scaleByValue
 
 
-scaleByValue <- function (scenerasters, scaleTable){
-  for (i in 1:nlayers(scenerasters)){
-    rowID <- which(row.names(tmp)==names(scenerasters)[i])
-    scenerasters[[i]] <-  (scenerasters[[i]]-tmp$mean[rowID])/tmp$sd[rowID]
+scaleByValue <- function (x, scaleTable){
+  if(class(x)=="RasterStack"||class(x)=="RasterLayer"||class(x)=="RasterBrick"){
+    
+    for (i in 1:nlayers(x)){
+      rowID <- which(row.names(scaleTable)==names(x)[i])
+      x[[i]] <-  (x[[i]]-scaleTable$mean[rowID])/scaleTable$sd[rowID]
+    }
+  } else{
+    for (i in 1:ncol(x)){
+      rowID <- which(row.names(scaleTable)==colnames(x)[i])
+      x[,i] <-  (x[,i]-scaleTable$mean[rowID])/scaleTable$sd[rowID]
+    }
   }
-  return(scenerasters)
+  
+  
+  return(x)
 }

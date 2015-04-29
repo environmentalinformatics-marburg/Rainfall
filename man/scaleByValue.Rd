@@ -4,10 +4,10 @@
 \alias{scaleByValue}
 \title{Scales Predictors using mean and sd from lookup table}
 \usage{
-scaleByValue(scenerasters, scaleTable)
+scaleByValue(x, scaleTable)
 }
 \arguments{
-\item{scenerasters}{RasterStack of the scene which should be scaled}
+\item{x}{RasterStack of the scene which should be scaled or data.frame}
 }
 \value{
 scaleTable Data.frame created with \code{\link{calcScalingStats}}

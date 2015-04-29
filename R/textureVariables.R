@@ -66,8 +66,10 @@ textureVariables <- function(x,
     }
     } else
     {
-      x=reclassify(x, c(max_x[i],Inf,max_x[i]))
-      x=reclassify(x, c(-Inf,min_x[i],min_x[i])) 
+      #x=reclassify(x, c(max_x[i],Inf,max_x[i]))
+      #x=reclassify(x, c(-Inf,min_x[i],min_x[i])) 
+      x=reclassify(x, c(max_x,Inf,max_x))
+      x=reclassify(x, c(-Inf,min_x,min_x)) 
     }
   }
   

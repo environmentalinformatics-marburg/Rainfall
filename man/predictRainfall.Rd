@@ -5,7 +5,8 @@
 \title{Predicts the rainfall rate based on a trained model and MSG data}
 \usage{
 predictRainfall(model, sceneraster, rainmask = NULL, sunzenith = NULL,
-  date = NULL, useOptimal = TRUE, scaleparam = model$scalingparam)
+  date = NULL, useOptimal = TRUE, scaleparam = model$scaleParam,
+  min_x = NULL, max_x = NULL)
 }
 \arguments{
 \item{model}{The final model from either caret's train or rfe.

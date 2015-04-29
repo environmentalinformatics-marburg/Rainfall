@@ -32,11 +32,12 @@
 
 
 predictRainfall <- function (model, sceneraster, rainmask=NULL, sunzenith=NULL,
-                             date=NULL, useOptimal=TRUE, scaleparam=model$scalingparam){
+                             date=NULL, useOptimal=TRUE, scaleparam=model$scaleParam,
+                             min_x=NULL,max_x=NULL){
   require(caret)
   library(raster)
   predVars<-calculatePredictors(sceneraster,model=model,sunzenith=sunzenith,
-                                date=date,useOptimal=useOptimal)
+                                date=date,useOptimal=useOptimal,min_x=min_x,max_x=max_x)
   
   
   if (!is.null(scaleparam)){

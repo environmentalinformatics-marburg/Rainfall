@@ -89,12 +89,13 @@ rfe4rainfall <- function (predictors,
   
   calcScaling<- calcScalingStats(traindata$predictors)
   
-  if ("jday" %in% names(traindata$predictors)){
-    jday <- (traindata$predictors$jday-mean(1:365))/sd(1:365) 
-    traindata$predictors<-data.frame(apply(traindata$predictors[,-which(names(traindata$predictors)=="jday")],2,scale),jday)
-  } else {
-    traindata$predictors<-data.frame(apply(traindata$predictors,2,scale))
-  }
+ # if ("jday" %in% names(traindata$predictors)){
+  traindata$predictors <- scaleByValue(predVars,calcScaling)
+    #jday <- (traindata$predictors$jday-mean(1:365))/sd(1:365) 
+    #traindata$predictors<-data.frame(apply(traindata$predictors[,-which(names(traindata$predictors)=="jday")],2,scale),jday)
+#  } else {
+ #   traindata$predictors<-data.frame(apply(traindata$predictors,2,scale))
+#  }
   set.seed(seed)
   cvSplits <- createFolds(traindata$response, k = 10,returnTrain=TRUE)
   ### RFE Settings #############################################################  

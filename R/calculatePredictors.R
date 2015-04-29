@@ -148,8 +148,9 @@ calculatePredictors<-function (scenerasters,
     
     glcm_filter<-list()
     
+    
     for (k in 1:length(glcm_input)){
-      glcm_filter[[k]]<-foreach(i=1:length (glcm_input[[k]]),
+      glcm_filter[[k]]<-foreach(i=1:length(glcm_input[[k]]),
                                 .packages= c("glcm","raster","doParallel","Rainfall"))%dopar%{
                                   tmp<-textureVariables (x=spectralvars[[names(glcm_input[[k]])[i]]],   
                                                          var=as.character(glcm_input[[k]][[i]]),
