@@ -37,11 +37,12 @@
 #' data(rfeModel)
 #' pred<-calculatePredictors(msg_example,model=rfeModel,date=date)
 #' 
-#' train4rainfall(pred,response,sampsize=0.1)
+#' train4rainfall(pred,response,sampsize=0.1,out="Rain")
 
 
 train4rainfall <- function (predictors,
                             response,
+                            out="Rain",
                             scaleVars=FALSE,
                             sampsize=0.25,
                             threshold=0.06,
@@ -58,10 +59,6 @@ train4rainfall <- function (predictors,
   }
   if(class(response)=="RasterLayer") {
     response <- values(response)
-  }
-  out="RInfo"
-  if (class(response)=="numeric"){
-    out="Rain"
   }
   
 #  keep <- complete.cases(predictors)
