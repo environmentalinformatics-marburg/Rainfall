@@ -7,7 +7,7 @@
 train4rainfall(predictors, response, scaleVars = FALSE, sampsize = 0.25,
   threshold = 0.06, nnetSize = 2:5, nnetDecay = c(0.05, 0.07),
   thresholdTune = c(seq(0, 0.1, 0.05), seq(0.12, 0.3, 0.02), seq(0.35, 1,
-  0.05)), seed = 20, keepScale = TRUE)
+  0.05)), seed = 20)
 }
 \arguments{
 \item{predictors}{Either a data.frame with each column is one predictor and each
@@ -28,10 +28,6 @@ the threshold are used for rainfall rate training}
 \item{thresholdTune}{optional threshold tuning. Only if response ="RInfo"}
 
 \item{seed}{Any integer number. Used to produce reproducable results}
-
-\item{keepScale}{TRUE or FALSE. If TRUE a data.frame is returned in addition
-to the model which gives the mean and sd values for each predictor.
- This can be used to scale new data in the prediction}
 
 \item{nnetDecay.}{Decay value(s) used in nnet training}
 }

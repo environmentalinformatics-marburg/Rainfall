@@ -39,7 +39,6 @@
 #' 
 #' train4rainfall(pred,response,sampsize=0.1)
 
-###die min/max werte von skalierung rausschreiben!!!
 
 train4rainfall <- function (predictors,
                             response,
@@ -60,21 +59,24 @@ train4rainfall <- function (predictors,
   if(class(response)=="RasterLayer") {
     response <- values(response)
   }
-  
-  
-  keep <- complete.cases(predictors)
-  predictors <- predictors[keep,]
-  response <- response[keep] 
+  out="RInfo"
   if (class(response)=="numeric"){
-    keep <- response>threshold
-    response<-response[keep]
-    predictors <- predictors[keep,]
+    out="Rain"
   }
   
+#  keep <- complete.cases(predictors)
+#  predictors <- predictors[keep,]
+#  response <- response[keep] 
+#  if (class(response)=="numeric"){
+#    keep <- response>threshold
+#    response<-response[keep]
+#    predictors <- predictors[keep,]
+#  }
+  traindata <- createSubset(predictors,response,threshold=threshold,out=out,sampsize=sampsize,seed=seed) 
   
   if(scaleVars){
-      calcScaling<-data.frame("mean"=apply(predictors,2,mean),"sd"=apply(predictors,2,sd))
-      traindata$predictors <- scaleByValue(predVars,calcScaling)
+      calcScaling<-data.frame("mean"=apply(traindata$predictors,2,mean),"sd"=apply(predictors,2,sd))
+      traindata <- scaleByValue(traindata$predictors,calcScaling)
 #    if ("jday" %in% names(predictors)){
 #      jday <- (predictors$jday-mean(1:365))/sd(1:365) 
 #      predictors<-data.frame(apply(predictors[,-which(names(predictors)=="jday")],2,scale),jday)
@@ -83,23 +85,23 @@ train4rainfall <- function (predictors,
 #    }
   }
   
-  samples<-createDataPartition(response,
-                               p = sampsize,list=FALSE)
-  response=response[samples]
-  if (class(response)=="character"||class(response)=="factor"){
-    response=as.factor(response)
-    response=factor(response,levels=c("Rain","NoRain"))
-  }
-  predictors <- predictors[samples,]
+#  samples<-createDataPartition(traindata$response,
+#                               p = sampsize,list=FALSE)
+#  traindata$response=traindata$response[samples]
+#  if (class(traindata$response)=="character"||class(response)=="factor"){
+#    traindata$response=as.factor(traindata$response)
+#    traindata$response=factor(traindata$response,levels=c("Rain","NoRain"))
+#  }
+#  traindata$predictors <- traindata$predictors[samples,]
   
   set.seed(seed)
-  cvSplits <- createFolds(response, k = 10,returnTrain=TRUE)
+  cvSplits <- createFolds(traindata$response, k = 10,returnTrain=TRUE)
   ### train Settings #############################################################  
   cl <- makeCluster(detectCores())
   registerDoParallel(cl)
   
   
-  if (class(response)=="factor"){
+  if (class(traindata$response)=="factor"){
     metric="Dist" #wenn nicht _thres dann "ROC
     maximize = FALSE #when dist is used, then min value is important
     classProbs =TRUE
@@ -135,8 +137,8 @@ train4rainfall <- function (predictors,
                        returnResamp = "all")
   
   
-  model <- train(predictors,
-                 response,
+  model <- train(traindata$predictors,
+                 traindata$response,
                  linout = linout, 
                  trace = FALSE,
                  method = method,
@@ -147,7 +149,7 @@ train4rainfall <- function (predictors,
                  verbose=TRUE)
   
   stopCluster(cl)
-  if (keepScale & scaleVars){
+  if (scaleVars){
     model$scalingparam=calcScaling
   }
   return(model)
