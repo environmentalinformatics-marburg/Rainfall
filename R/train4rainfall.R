@@ -1,4 +1,4 @@
-#' Performs recursive feature selction
+#' Performs model training
 #' @param predictors Either a data.frame with each column is one predictor and each
 #' row represents one pixel. Or (if only one scene is used for training) 
 #' a RasterStack with one Raster is one Predictor Variable.
@@ -18,7 +18,7 @@
 #'  with new unknown values.
 #' @author Hanna Meyer
 #' @export train4rainfall
-#' @seealso \code{\link{rfe}}
+#' @seealso \code{\link{train}}
 #' @references train Function in the caret package
 #' @examples
 #' #' # stack the msg scenes:
@@ -73,7 +73,7 @@ train4rainfall <- function (predictors,
   
   if(scaleVars){
       calcScaling<-data.frame("mean"=apply(traindata$predictors,2,mean),"sd"=apply(predictors,2,sd))
-      traindata <- scaleByValue(traindata$predictors,calcScaling)
+      traindata$predictors <- scaleByValue(traindata$predictors,calcScaling)
 #    if ("jday" %in% names(predictors)){
 #      jday <- (predictors$jday-mean(1:365))/sd(1:365) 
 #      predictors<-data.frame(apply(predictors[,-which(names(predictors)=="jday")],2,scale),jday)
@@ -125,7 +125,7 @@ train4rainfall <- function (predictors,
     tuneGrid <- expand.grid(.size = nnetSize,
                             .decay = nnetDecay)
   }
-  ### RFE Model  ###############################################################    
+  ### Model  ###############################################################    
   
   ctrl <- trainControl(index=cvSplits,
                        method="cv",
