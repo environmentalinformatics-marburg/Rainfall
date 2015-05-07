@@ -2,7 +2,7 @@
 % Please edit documentation in R/train4rainfall.R
 \name{train4rainfall}
 \alias{train4rainfall}
-\title{Performs recursive feature selction}
+\title{Performs model training}
 \usage{
 train4rainfall(predictors, response, out = "Rain", scaleVars = FALSE,
   sampsize = 0.25, threshold = 0.06, nnetSize = 2:5, nnetDecay = c(0.05,
@@ -38,7 +38,7 @@ A train object. If keepScaling=TRUE a list with the first object is
  with new unknown values.
 }
 \description{
-Performs recursive feature selction
+Performs model training
 }
 \examples{
 #' # stack the msg scenes:
@@ -57,7 +57,7 @@ response <- raster(system.file("extdata/radar",
 data(rfeModel)
 pred<-calculatePredictors(msg_example,model=rfeModel,date=date)
 
-train4rainfall(pred,response,sampsize=0.1)
+train4rainfall(pred,response,sampsize=0.1,out="Rain")
 }
 \author{
 Hanna Meyer
@@ -66,6 +66,6 @@ Hanna Meyer
 train Function in the caret package
 }
 \seealso{
-\code{\link{rfe}}
+\code{\link{train}}
 }
 

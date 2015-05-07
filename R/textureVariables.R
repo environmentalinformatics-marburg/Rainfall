@@ -25,9 +25,6 @@
 #' 
 #' #'# stack the msg scenes:
 #' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"))
-#' 
-#' # raster the sunzenith 
-#' sunzenith<-getSunzenith(inpath=system.file("extdata/msg",package="Rainfall"))
 #'  
 #' #calculate texture
 #' result <- textureVariables(msg_example,nrasters=1:3,

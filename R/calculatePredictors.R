@@ -112,8 +112,9 @@ calculatePredictors<-function (scenerasters,
     }
     
   }
-  
-  if (ncol(texture)==2) texture=cbind(texture,rep(3,nrow(texture)))
+  if (!is.null(texture)){
+    if (ncol(texture)==2) texture=cbind(texture,rep(3,nrow(texture)))
+  }
   if (class(texture[,1])=="factor") texture[,1] <- as.character(texture[,1])
   if (class(texture[,2])=="factor") texture[,2]<- as.character(texture[,2])
   if (class(texture[,3])=="factor") texture[,3]<- as.character(texture[,3])

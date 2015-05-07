@@ -17,7 +17,7 @@ varFromRfe <- function (rfeModel,useOptimal=TRUE){
   if (useOptimal){
   vars<-rfeModel$optVariables
   } else {
-    vars <- Rsenal::varsRfeCV(rfeModel)
+    vars <- names(Rsenal::varsRfeCV(rfeModel))
   }
   } else {
     vars <- names(rfeModel$trainingData)
@@ -56,7 +56,7 @@ varFromRfe <- function (rfeModel,useOptimal=TRUE){
   
   
   
-  spectral<-vars[substr(vars,1,2)=="VI"|substr(vars,1,2)=="NI"|substr(vars,1,2)=="IR"|substr(vars,1,1)=="T"]
+  spectral<-vars[substr(vars,1,2)=="VI"|substr(vars,1,2)=="NI"|substr(vars,1,2)=="IR"|substr(vars,1,1)=="T"|substr(vars,1,2)=="WV"]
   
   if (length(spectral) >0){
     spectral <- spectral[substr(spectral,nchar(spectral)-1,nchar(spectral))!="ax"&substr(spectral,nchar(spectral)-1,nchar(spectral))!="sd"&

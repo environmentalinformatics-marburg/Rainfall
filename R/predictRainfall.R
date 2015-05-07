@@ -2,11 +2,15 @@
 #' 
 #' @param model The final model from either caret's train or rfe. 
 #' Use model$fit$finalModel or model$finalModel to get it
-#' @param sceneraster The Meteosat data from which rainfall should be predicted.
+#' @param inpath Path to the MSG data
+#' @param sceneraster If no inpath is specified: 
+#' The Meteosat data from which rainfall should be predicted.
 #' Load them with getChannels
 #' @param rainmask A raster indicates areas which are not raining with NA values
-#' @param sunzenith optional. Only needed if included in the predictor variables
-#' @param date optional. only needed if jday is included in the predictor variables
+#' @param If no inpath is specified: sunzenith optional. 
+#' Only needed if included in the predictor variables
+#' @param If no inpath is specified: date optional. 
+#' only needed if jday is included in the predictor variables
 #' @param useOptimal if model is a rfe object: Logical. Use the optimal variables 
 #' from rfe or those less variables which lead to a model performance within one 
 #' sd of the optimal model?
@@ -31,11 +35,16 @@
 #' validate(obs=reference,pred=pred)
 
 
-predictRainfall <- function (model, sceneraster, rainmask=NULL, sunzenith=NULL,
-                             date=NULL, useOptimal=TRUE, scaleparam=model$scaleParam,
+predictRainfall <- function (model, inpath=NULL, sceneraster, rainmask=NULL, sunzenith=NULL,
+                             date=NULL, useOptimal=FALSE, scaleparam=model$scaleParam,
                              min_x=NULL,max_x=NULL){
   require(caret)
   library(raster)
+  if (!is.null(inpath)){
+    sceneraster <- getChannels(inpath)
+    date <- getDate(inpath)
+    sunzenith <- getSunzenith(inpath)
+  }
   predVars<-calculatePredictors(sceneraster,model=model,sunzenith=sunzenith,
                                 date=date,useOptimal=useOptimal,min_x=min_x,max_x=max_x)
   

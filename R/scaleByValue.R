@@ -11,7 +11,11 @@ scaleByValue <- function (x, scaleTable){
     
     for (i in 1:nlayers(x)){
       rowID <- which(row.names(scaleTable)==names(x)[i])
+      if(nlayers(x)==1){
+        x <-  (x-scaleTable$mean[rowID])/scaleTable$sd[rowID]
+      }else{
       x[[i]] <-  (x[[i]]-scaleTable$mean[rowID])/scaleTable$sd[rowID]
+      }
     }
   } else{
     for (i in 1:ncol(x)){

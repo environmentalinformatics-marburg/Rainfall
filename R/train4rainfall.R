@@ -72,7 +72,8 @@ train4rainfall <- function (predictors,
   traindata <- createSubset(predictors,response,threshold=threshold,out=out,sampsize=sampsize,seed=seed) 
   
   if(scaleVars){
-      calcScaling<-data.frame("mean"=apply(traindata$predictors,2,mean),"sd"=apply(predictors,2,sd))
+    calcScaling<-calcScalingStats(traindata$predictors)
+      #calcScaling<-data.frame("mean"=apply(traindata$predictors,2,mean),"sd"=apply(predictors,2,sd))
       traindata$predictors <- scaleByValue(traindata$predictors,calcScaling)
 #    if ("jday" %in% names(predictors)){
 #      jday <- (predictors$jday-mean(1:365))/sd(1:365) 
@@ -147,7 +148,7 @@ train4rainfall <- function (predictors,
   
   stopCluster(cl)
   if (scaleVars){
-    model$scalingparam=calcScaling
+    model$scaleParam=calcScaling
   }
   return(model)
 }
