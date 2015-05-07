@@ -36,7 +36,7 @@
 
 
 predictRainfall <- function (model, inpath=NULL, sceneraster, rainmask=NULL, sunzenith=NULL,
-                             date=NULL, useOptimal=FALSE, scaleparam=model$scaleParam,
+                             date=NULL, useOptimal=TRUE, scaleparam=model$scaleParam,
                              min_x=NULL,max_x=NULL){
   require(caret)
   library(raster)
