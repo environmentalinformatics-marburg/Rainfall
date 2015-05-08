@@ -5,7 +5,7 @@
 \title{Predicts the rainfall rate based on a trained model and MSG data}
 \usage{
 predictRainfall(model, inpath = NULL, sceneraster, rainmask = NULL,
-  sunzenith = NULL, date = NULL, useOptimal = FALSE,
+  sunzenith = NULL, date = NULL, useOptimal = TRUE,
   scaleparam = model$scaleParam, min_x = NULL, max_x = NULL)
 }
 \arguments{

@@ -118,9 +118,12 @@ calculatePredictors<-function (scenerasters,
   if (class(texture[,1])=="factor") texture[,1] <- as.character(texture[,1])
   if (class(texture[,2])=="factor") texture[,2]<- as.character(texture[,2])
   if (class(texture[,3])=="factor") texture[,3]<- as.character(texture[,3])
-  if (class(filterstat[,1])=="factor") filterstat[,1] <- as.character(filterstat[,1])
-  if (class(filterstat[,2])=="factor") filterstat[,2]<- as.character(filterstat[,2])
-  if (class(filterstat[,3])=="factor") filterstat[,3]<- as.character(filterstat[,3])
+  if (class(filterstat[,1])=="factor") filterstat[,1] <- as.character(
+    filterstat[,1])
+  if (class(filterstat[,2])=="factor") filterstat[,2]<- as.character(
+    filterstat[,2])
+  if (class(filterstat[,3])=="factor") filterstat[,3]<- as.character(
+    filterstat[,3])
   if (class(pptext[,1])=="factor") pptext[,1]<- as.character(pptext[,1])
   if (class(pptext[,2])=="factor") pptext[,2]<- as.character(pptext[,2])
   if (class(zonstat[,1])=="factor") zonstat[,1]<- as.character(zonstat[,1])
@@ -137,13 +140,15 @@ calculatePredictors<-function (scenerasters,
   if (!is.null(texture)){
     glcm_filterunique<-unique(texture[,3])
     
-    glcm_input <-lapply(glcm_filterunique,FUN=function(x)texture[,1][texture[,3]==x])
+    glcm_input <-lapply(glcm_filterunique,FUN=function(x)texture[,1][
+      texture[,3]==x])
     names(glcm_input)<-paste0("glcm", glcm_filterunique)
     
     for (k in 1:length(glcm_input)){
       glcm_varunique<-unique(texture[,1][texture[,3]==glcm_filterunique[k]]) #first column=spectral var,second =texture
       
-      glcm_input[[k]] <-lapply(glcm_varunique,FUN=function(x)texture[,2][texture[,1]==x&texture[,3]==glcm_filterunique[k]])
+      glcm_input[[k]] <-lapply(glcm_varunique,FUN=function(x)texture[,2][
+        texture[,1]==x&texture[,3]==glcm_filterunique[k]])
       names(glcm_input[[k]])<-glcm_varunique
     }
     
@@ -173,13 +178,15 @@ calculatePredictors<-function (scenerasters,
   if (!is.null(filterstat)){
     filterunique<-unique(filterstat[,3])
     
-    filter_input <-lapply(filterunique,FUN=function(x)filterstat[,1][filterstat[,3]==x])
+    filter_input <-lapply(filterunique,FUN=function(x)filterstat[,1][
+      filterstat[,3]==x])
     names(filter_input)<-paste0("filter", filterunique)
     
     for (k in 1:length(filter_input)){
       filter_varunique<-unique(filterstat[,1][filterstat[,3]==filterunique[k]]) #first column=spectral var,second =filterstat
       
-      filter_input[[k]] <-lapply(filter_varunique,FUN=function(x)filterstat[,2][filterstat[,1]==x&filterstat[,3]==filterunique[k]])
+      filter_input[[k]] <-lapply(filter_varunique,FUN=function(x)filterstat[,2][
+        filterstat[,1]==x&filterstat[,3]==filterunique[k]])
       names(filter_input[[k]])<-filter_varunique
     }
     

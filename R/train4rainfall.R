@@ -48,7 +48,8 @@ train4rainfall <- function (predictors,
                             threshold=0.06,
                             nnetSize=2:5,
                             nnetDecay = c(0.05,0.07),
-                            thresholdTune=c(seq(0,0.1,0.05),seq(0.12,0.30,0.02),seq(0.35,1,0.05)),
+                            thresholdTune=c(seq(0,0.1,0.05),seq(0.12,0.30,0.02),
+                                            seq(0.35,1,0.05)),
                             seed=20){
   require(caret)
   require(raster)
@@ -69,7 +70,8 @@ train4rainfall <- function (predictors,
 #    response<-response[keep]
 #    predictors <- predictors[keep,]
 #  }
-  traindata <- createSubset(predictors,response,threshold=threshold,out=out,sampsize=sampsize,seed=seed) 
+  traindata <- createSubset(predictors,response,threshold=threshold,out=out,
+                            sampsize=sampsize,seed=seed) 
   
   if(scaleVars){
     calcScaling<-calcScalingStats(traindata$predictors)
@@ -94,7 +96,7 @@ train4rainfall <- function (predictors,
   
   set.seed(seed)
   cvSplits <- createFolds(traindata$response, k = 10,returnTrain=TRUE)
-  ### train Settings #############################################################  
+  ### train Settings ###########################################################
   cl <- makeCluster(detectCores())
   registerDoParallel(cl)
   

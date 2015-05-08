@@ -35,9 +35,16 @@
 #' validate(obs=reference,pred=pred)
 
 
-predictRainfall <- function (model, inpath=NULL, sceneraster, rainmask=NULL, sunzenith=NULL,
-                             date=NULL, useOptimal=TRUE, scaleparam=model$scaleParam,
-                             min_x=NULL,max_x=NULL){
+predictRainfall <- function (model, 
+                             inpath=NULL, 
+                             sceneraster, 
+                             rainmask=NULL, 
+                             sunzenith=NULL,
+                             date=NULL, 
+                             useOptimal=TRUE, 
+                             scaleparam=model$scaleParam,
+                             min_x=NULL,
+                             max_x=NULL){
   require(caret)
   library(raster)
   if (!is.null(inpath)){
@@ -46,7 +53,8 @@ predictRainfall <- function (model, inpath=NULL, sceneraster, rainmask=NULL, sun
     sunzenith <- getSunzenith(inpath)
   }
   predVars<-calculatePredictors(sceneraster,model=model,sunzenith=sunzenith,
-                                date=date,useOptimal=useOptimal,min_x=min_x,max_x=max_x)
+                                date=date,useOptimal=useOptimal,min_x=min_x,
+                                max_x=max_x)
   
   
   if (!is.null(scaleparam)){

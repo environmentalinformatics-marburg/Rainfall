@@ -8,6 +8,7 @@
 #' getDaytime(sunzenith)
 getDaytime<-function(sunzenith){
   meanzenith=mean(values(sunzenith))
+  if ((meanzenith)==-99) stop ("sunzenith raster contains unvalid data") 
   if (meanzenith<70) time = "day"
   if (meanzenith>=70&meanzenith<=108) time="twilight" 
   if (meanzenith>108) time="night"
