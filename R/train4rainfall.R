@@ -9,8 +9,9 @@
 #' @param threshold if response is Rainfall rate: pixels larger than
 #' the threshold are used for rainfall rate training
 #' @param seed Any integer number. Used to produce reproducable results
-#' @param nnetSize Number of hidden units in nnet
-#' @param nnetDecay. Decay value(s) used in nnet training
+#' @param method ML algorithm to be applied. default is nnet
+#' @param tuneGrid list of tuning parameters to be supplied to model training. 
+#' See https://topepo.github.io/caret/modelList.html for tuning values
 #' @param thresholdTune optional threshold tuning. Only if response ="RInfo"
 #' @return A train object. If keepScaling=TRUE a list with the first object is
 #'  the train object and the second object is a data.frame including mean and sd 
@@ -46,11 +47,13 @@ train4rainfall <- function (predictors,
                             scaleVars=FALSE,
                             sampsize=0.25,
                             threshold=0.06,
-                            nnetSize=2:5,
-                            nnetDecay = c(0.05,0.07),
+                            method="nnet",
+                            tuneGrid=list(.size = 2:5,
+                                        .decay = c(0.05,0.07)),
                             thresholdTune=c(seq(0,0.1,0.05),seq(0.12,0.30,0.02),
                                             seq(0.35,1,0.05)),
-                            seed=20){
+                            seed=20, 
+                            ...){
   require(caret)
   require(raster)
   require(doParallel)
@@ -108,14 +111,12 @@ train4rainfall <- function (predictors,
     #metric="ROC"
     linout=FALSE
     summaryFunction = "fourStats"
-    method=nnet_thres
+    method=eval(parse(text=paste0(method,"_thres")))
     if (!is.na(thresholdTune)){
-      tuneGrid <- expand.grid(.size = nnetSize,
-                              .decay = nnetDecay,
-                              .threshold = thresholdTune)
+      tuneGrid$.threshold = thresholdTune
+      tuneGrid <- expand.grid(tuneGrid)
     } else{
-      tuneGrid <- expand.grid(.size = nnetSize,
-                              .decay = nnetDecay)
+      tuneGrid <- expand.grid(tuneGrid)
     }
   }
   else{
@@ -124,9 +125,8 @@ train4rainfall <- function (predictors,
     classProbs =FALSE
     linout=TRUE
     summaryFunction ="defaultSummary"
-    method="nnet"
-    tuneGrid <- expand.grid(.size = nnetSize,
-                            .decay = nnetDecay)
+    method=method
+    tuneGrid <- expand.grid(tuneGrid)
   }
   ### Model  ###############################################################    
   
@@ -146,7 +146,8 @@ train4rainfall <- function (predictors,
                  tuneGrid=tuneGrid,
                  metric=metric,
                  maximize=maximize,
-                 verbose=TRUE)
+                 verbose=TRUE,
+                 ...)
   
   stopCluster(cl)
   if (scaleVars){

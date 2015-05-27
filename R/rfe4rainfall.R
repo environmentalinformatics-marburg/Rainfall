@@ -13,8 +13,9 @@
 #' @param seed Any integer number. Used to produce reproducable results
 #' @param varSize integer vector indicating the numbers of 
 #' variables to consider in rfe.
-#' @param nnetSize Number of hidden units in nnet
-#' @param nnetDecay. Decay value(s) used in nnet training
+#' @param method ML algorithm to be applied. default is nnet
+#' @param tuneGrid list of tuning parameters to be supplied to model training. 
+#' See https://topepo.github.io/caret/modelList.html for tuning values
 #' @details Predictors are centered and scaled according to mean and sd values.
 #' If the day of the year is used as predictor, this variable is 
 #' scaled considering max=365 and min=1
@@ -68,8 +69,9 @@ rfe4rainfall <- function (predictors,
                           threshold=0.06,
                           out="Rain",
                           varSize=c(1:5),
-                          nnetSize=c(1:5),
-                          nnetDecay = 0.05,
+                          tuneGrid=list(.size = 2:5,
+                                        .decay = c(0.05,0.07)),
+                          method="nnet",
                           seed=20){
   require(caret)
   require(raster)
@@ -102,14 +104,14 @@ rfe4rainfall <- function (predictors,
   ### RFE Settings #############################################################  
   cl <- makeCluster(detectCores())
   registerDoParallel(cl)
-  nnetFuncs <- caretFuncs #Default caret functions
+  trainFuncs <- caretFuncs #Default caret functions
   if (out=="RInfo"){
-    nnetFuncs$summary <- twoClassSummary
+    trainFuncs$summary <- twoClassSummary
     tctrl <- trainControl(
       method="cv",
       classProbs =TRUE) 
     rctrl <- rfeControl(index=cvSplits,
-                        functions = nnetFuncs,
+                        functions = trainFuncs,
                         method="cv",
                         returnResamp = "all",
                         rerank=TRUE)
@@ -119,7 +121,7 @@ rfe4rainfall <- function (predictors,
   } else{
     tctrl <- trainControl(method="cv")
     rctrl <- rfeControl(index=cvSplits,
-                        functions = nnetFuncs,
+                        functions = trainFuncs,
                         method="cv",
                         returnResamp = "all",
                         rerank=TRUE)
@@ -133,11 +135,10 @@ rfe4rainfall <- function (predictors,
                   linout = linout, 
                   trace = FALSE,
                   sizes = varSize,
-                  method = "nnet",
+                  method = method,
                   rfeControl = rctrl,
                   trControl=tctrl,
-                  tuneGrid=expand.grid(.size = nnetSize,
-                                       .decay = nnetDecay),
+                  tuneGrid=expand.grid(tuneGrid),
                   metric=metric,
                   maximize=maximize)
   

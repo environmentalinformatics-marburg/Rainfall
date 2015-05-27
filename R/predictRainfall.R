@@ -37,7 +37,7 @@
 
 predictRainfall <- function (model, 
                              inpath=NULL, 
-                             sceneraster, 
+                             sceneraster=NULL, 
                              rainmask=NULL, 
                              sunzenith=NULL,
                              date=NULL, 
