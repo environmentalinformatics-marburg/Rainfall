@@ -5,8 +5,8 @@
 \title{Performs recursive feature selction}
 \usage{
 rfe4rainfall(predictors, response, sampsize = 1, threshold = 0.06,
-  out = "Rain", varSize = c(1:5), nnetSize = c(1:5), nnetDecay = 0.05,
-  seed = 20)
+  out = "Rain", varSize = c(1:5), tuneGrid = list(.size = 2:5, .decay =
+  c(0.05, 0.07)), method = "nnet", seed = 20)
 }
 \arguments{
 \item{predictors}{Either a data.frame with each column is one predictor and each
@@ -26,13 +26,14 @@ or rainfall areas should be used.}
 \item{varSize}{integer vector indicating the numbers of
 variables to consider in rfe.}
 
-\item{nnetSize}{Number of hidden units in nnet}
+\item{tuneGrid}{list of tuning parameters to be supplied to model training.
+See https://topepo.github.io/caret/modelList.html for tuning values}
+
+\item{method}{ML algorithm to be applied. default is nnet}
 
 \item{seed}{Any integer number. Used to produce reproducable results}
 
 \item{sampsize.}{Number of data points used for training}
-
-\item{nnetDecay.}{Decay value(s) used in nnet training}
 }
 \value{
 A rfe model

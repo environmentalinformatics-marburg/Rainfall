@@ -5,9 +5,10 @@
 \title{Performs model training}
 \usage{
 train4rainfall(predictors, response, out = "Rain", scaleVars = FALSE,
-  sampsize = 0.25, threshold = 0.06, nnetSize = 2:5, nnetDecay = c(0.05,
-  0.07), thresholdTune = c(seq(0, 0.1, 0.05), seq(0.12, 0.3, 0.02), seq(0.35,
-  1, 0.05)), seed = 20)
+  sampsize = 0.25, threshold = 0.06, method = "nnet",
+  tuneGrid = list(.size = 2:5, .decay = c(0.05, 0.07)),
+  thresholdTune = c(seq(0, 0.1, 0.05), seq(0.12, 0.3, 0.02), seq(0.35, 1,
+  0.05)), seed = 20, ...)
 }
 \arguments{
 \item{predictors}{Either a data.frame with each column is one predictor and each
@@ -23,13 +24,14 @@ training, "response" may also be a RasterLayer of the response variable.}
 \item{threshold}{if response is Rainfall rate: pixels larger than
 the threshold are used for rainfall rate training}
 
-\item{nnetSize}{Number of hidden units in nnet}
+\item{method}{ML algorithm to be applied. default is nnet}
+
+\item{tuneGrid}{list of tuning parameters to be supplied to model training.
+See https://topepo.github.io/caret/modelList.html for tuning values}
 
 \item{thresholdTune}{optional threshold tuning. Only if response ="RInfo"}
 
 \item{seed}{Any integer number. Used to produce reproducable results}
-
-\item{nnetDecay.}{Decay value(s) used in nnet training}
 }
 \value{
 A train object. If keepScaling=TRUE a list with the first object is

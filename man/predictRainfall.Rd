@@ -4,7 +4,7 @@
 \alias{predictRainfall}
 \title{Predicts the rainfall rate based on a trained model and MSG data}
 \usage{
-predictRainfall(model, inpath = NULL, sceneraster, rainmask = NULL,
+predictRainfall(model, inpath = NULL, sceneraster = NULL, rainmask = NULL,
   sunzenith = NULL, date = NULL, useOptimal = TRUE,
   scaleparam = model$scaleParam, min_x = NULL, max_x = NULL)
 }
