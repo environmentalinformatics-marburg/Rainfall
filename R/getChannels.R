@@ -28,6 +28,8 @@ getChannels <- function (inpath, type="rst",channels= c(
   
   scenes<-list.files(inpath, pattern=paste0(".",type,"$"))
 
+  scenes <- scenes[substr(scenes, 30,34)=="na001"]
+  
   if (sum(substr(scenes,20,28)%in%x)<length(channels)){
     stop ("Warning: not all channels could be loaded. 
            check if they exist in the inpath")
