@@ -1,3 +1,15 @@
+#' Generate msg file names
+#' @param x Raster stack containing the MSG scenes
+#' @param date see getDate
+#' @return a vector of character strings
+#' @author Hanna Meyer
+#' @export generateFileName
+#' @examples
+#' msg_example <-getChannels(inpath=system.file("extdata/msg",package="Rainfall"),
+#' channels=c("VIS0.6","IR12.0"))
+#' generateFileName(msg_example,getDate(inpath=system.file("extdata/msg",package="Rainfall")))
+
+
 generateFileName <- function (x,date){
   
   lut<-cbind(c("ca02p0001","ca02p0002","ca02p0003","ct01dk004","ct01dk005",
