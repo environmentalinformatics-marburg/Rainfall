@@ -93,7 +93,7 @@ calculatePredictors<-function (scenerasters,
   
   require(raster)
   require(doParallel)
-  registerDoParallel(detectCores())
+  registerDoParallel(detectCores()-1)
   
   if(!is.null(model)){
     vars<-varFromRfe(model, useOptimal=useOptimal)

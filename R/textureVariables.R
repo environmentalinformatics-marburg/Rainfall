@@ -49,7 +49,7 @@ textureVariables <- function(x,
   require(raster)
   if (parallel){
     require(doParallel)
-    registerDoParallel(detectCores())
+    registerDoParallel(detectCores()-1)
   }
   
   
