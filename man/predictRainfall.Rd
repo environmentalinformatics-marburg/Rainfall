@@ -6,7 +6,8 @@
 \usage{
 predictRainfall(model, inpath = NULL, sceneraster = NULL, rainmask = NULL,
   sunzenith = NULL, date = NULL, useOptimal = TRUE,
-  scaleparam = model$scaleParam, min_x = NULL, max_x = NULL)
+  scaleparam = model$scaleParam, min_x = NULL, max_x = NULL,
+  type = "tif")
 }
 \arguments{
 \item{model}{The final model from either caret's train or rfe.
@@ -25,6 +26,8 @@ from rfe or those less variables which lead to a model performance within one
 sd of the optimal model?}
 
 \item{scaleparam}{A data.frame created with \code{\link{calcScalingStats}}}
+
+\item{type}{If inpath!=NULL then the data type of the MSG raster}
 
 \item{If}{no inpath is specified: sunzenith optional.
 Only needed if included in the predictor variables}

@@ -15,6 +15,7 @@
 #' from rfe or those less variables which lead to a model performance within one 
 #' sd of the optimal model?
 #' @param scaleparam A data.frame created with \code{\link{calcScalingStats}}
+#' @param type If inpath!=NULL then the data type of the MSG raster
 #' @return A Raster Layer containing predicted rainfall  
 #' @description Functions calculates predictors which are required by the model
 #' and uses them for prediction
@@ -44,13 +45,14 @@ predictRainfall <- function (model,
                              useOptimal=TRUE, 
                              scaleparam=model$scaleParam,
                              min_x=NULL,
-                             max_x=NULL){
+                             max_x=NULL,
+                             type="tif"){
   require(caret)
   library(raster)
   if (!is.null(inpath)){
-    sceneraster <- getChannels(inpath)
+    sceneraster <- getChannels(inpath,type=type)
     date <- getDate(inpath)
-    sunzenith <- getSunzenith(inpath)
+    sunzenith <- getSunzenith(inpath,type=type)
   }
   predVars<-calculatePredictors(sceneraster,model=model,sunzenith=sunzenith,
                                 date=date,useOptimal=useOptimal,min_x=min_x,
