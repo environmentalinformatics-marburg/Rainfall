@@ -21,6 +21,12 @@ Load them with getChannels}
 
 \item{rainmask}{A raster indicates areas which are not raining with NA values}
 
+\item{sunzenith}{If no inpath is specified: sunzenith optional.
+Only needed if included in the predictor variables}
+
+\item{date}{If no inpath is specified: date optional.
+only needed if jday is included in the predictor variables}
+
 \item{useOptimal}{if model is a rfe object: Logical. Use the optimal variables
 from rfe or those less variables which lead to a model performance within one
 sd of the optimal model?}
@@ -28,12 +34,6 @@ sd of the optimal model?}
 \item{scaleparam}{A data.frame created with \code{\link{calcScalingStats}}}
 
 \item{type}{If inpath!=NULL then the data type of the MSG raster}
-
-\item{If}{no inpath is specified: sunzenith optional.
-Only needed if included in the predictor variables}
-
-\item{If}{no inpath is specified: date optional.
-only needed if jday is included in the predictor variables}
 }
 \value{
 A Raster Layer containing predicted rainfall

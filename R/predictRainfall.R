@@ -7,9 +7,9 @@
 #' The Meteosat data from which rainfall should be predicted.
 #' Load them with getChannels
 #' @param rainmask A raster indicates areas which are not raining with NA values
-#' @param If no inpath is specified: sunzenith optional. 
+#' @param sunzenith If no inpath is specified: sunzenith optional. 
 #' Only needed if included in the predictor variables
-#' @param If no inpath is specified: date optional. 
+#' @param date If no inpath is specified: date optional. 
 #' only needed if jday is included in the predictor variables
 #' @param useOptimal if model is a rfe object: Logical. Use the optimal variables 
 #' from rfe or those less variables which lead to a model performance within one 
