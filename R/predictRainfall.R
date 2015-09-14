@@ -70,7 +70,7 @@ predictRainfall <- function (model,
   } else{
     prediction<-predict(predVars,model)
   }
-  prediction<-mask(prediction,predVars[[1]])
+  prediction<-mask(prediction,predVars[[4]])
   values(prediction)[values(prediction)<0]=0
   return(prediction)
 }
