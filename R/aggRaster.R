@@ -37,11 +37,11 @@ aggRaster <- function(data,
         tmp <- stack(data[[i]])
         calc(tmp, fun = sum, na.rm = TRUE, 
              filename = ifelse(write.file, 
-                               paste(path.out, days[i], "_24h.rst", sep = ""), 
+                               paste(path.out, days[i], "_24h.tif", sep = ""), 
                                ''), overwrite = TRUE)
       } else if(length(rasters[[i]]) == 1) {
         tmp <- data[[i]]
-        #writeRaster(tmp, file=paste(path.out, days[i], "_24h.rst", sep = ""), overwrite = TRUE)
+        #writeRaster(tmp, file=paste(path.out, days[i], "_24h.tif", sep = ""), overwrite = TRUE)
       }
       
       
@@ -58,7 +58,7 @@ aggRaster <- function(data,
           tmp <- stack(data[[i]][seq(j, j + agg.level - 1)])
           calc(tmp, fun = sum, na.rm = TRUE, 
                filename = ifelse(write.file, 
-                                 paste(path.out, days[i], "_", agg.level, "h_", j, ".rst", sep = ""),
+                                 paste(path.out, days[i], "_", agg.level, "h_", j, ".tif", sep = ""),
                                  ''), overwrite = TRUE)
           # Number of rasters per day indivisible by agg.level
         } else {
@@ -69,7 +69,7 @@ aggRaster <- function(data,
             if (nlayers(tmp) > 1) {
               calc(tmp, fun = sum, na.rm = TRUE, 
                    filename = ifelse(write.file, 
-                                     paste(path.out, days[i], "_", agg.level, "h_", j, ".rst", sep = ""), 
+                                     paste(path.out, days[i], "_", agg.level, "h_", j, ".tif", sep = ""), 
                                      ''), overwrite = TRUE)
             } else {
               tmp
