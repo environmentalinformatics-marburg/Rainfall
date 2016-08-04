@@ -14,9 +14,6 @@
 #' @export aggRaster
 
 
-
-
-#author:Meike Kühnlein
 aggRaster <- function(data, 
                       agg.level,
                       write.file = TRUE,
