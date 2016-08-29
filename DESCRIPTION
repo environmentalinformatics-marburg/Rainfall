@@ -5,8 +5,7 @@ Title: Functions for training, predictiion and validation of an MSG based
 Version: 1.0
 Date: 2015-02-16
 Author: Hanna Meyer
-Maintainer: Environmental Informatics <admin@environmentalinformatics-
-    marburg.de>
+Maintainer: Hanna Meyer <admin@environmentalinformatics-marburg.de>
 Description: Functions for training, predictiion and validation of an MSG based
     optical rainfall retrieval
 License: GNU GPL (>=3)
