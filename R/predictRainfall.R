@@ -68,7 +68,7 @@ predictRainfall <- function (model,
   if (class(model)=="rfe"){
   prediction <- predict(predVars,model$fit)
   } else{
-    prediction <- predict(predVars,model$finalModel)
+    prediction <- predict(predVars,model)
   }
   prediction<-mask(prediction,predVars[[4]])
   values(prediction)[values(prediction)<0]=0
