@@ -10,7 +10,7 @@
 
 
 msgstatmatch <- function (stationpath,MSG_extract,UTC=0){
-  matchfun <- function (i,MSG_extract,stationpath,files,filenames){
+  matchfun <- function (i,MSG_extract,stationpath,files,filenames,UTC){
     
     rainfall <- data.frame()
     statdatsub <- MSG_extract[MSG_extract$Station==unique(MSG_extract$Station)[i],]
@@ -64,7 +64,7 @@ msgstatmatch <- function (stationpath,MSG_extract,UTC=0){
   
   rslt <- foreach(i=1:length(unique(MSG_extract$Station)),.errorhandling = "remove",
                   .packages=lib,.combine = rbind)%dopar%{
-                    matchfun(i,MSG_extract,stationpath,files,filenames)}
+                    matchfun(i,MSG_extract,stationpath,files,filenames,UTC=UTC)}
   stopCluster(cl)
   
   names(rslt)[ncol(rslt)]<-"rainfall"
