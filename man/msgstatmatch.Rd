@@ -4,7 +4,7 @@
 \alias{msgstatmatch}
 \title{Match temporally aggregated (1h) MSG data with station data}
 \usage{
-msgstatmatch(stationpath, MSG_extract)
+msgstatmatch(stationpath, MSG_extract, UTC = 0)
 }
 \arguments{
 \item{stationpath}{path to the csv files of the 1h weather station data}
@@ -12,6 +12,8 @@ msgstatmatch(stationpath, MSG_extract)
 \item{MSG_extract}{result from extractMSG. The first column is the date, the 
 second column is the station name. The MSG data of the corresponding time and
 location are organized in the subsequent columns.}
+
+\item{UTC}{numeric. Time Zone specified in +/- x hours from UTC}
 }
 \description{
 Match temporally aggregated (1h) MSG data with station data

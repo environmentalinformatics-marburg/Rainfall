@@ -4,11 +4,12 @@
 #' @param MSG_extract result from extractMSG. The first column is the date, the 
 #' second column is the station name. The MSG data of the corresponding time and
 #' location are organized in the subsequent columns.
+#' @param UTC numeric. Time Zone specified in +/- x hours from UTC
 #' @author Hanna Meyer
 #' @export msgstatmatch
 
 
-msgstatmatch <- function (stationpath,MSG_extract){
+msgstatmatch <- function (stationpath,MSG_extract,UTC=0){
   matchfun <- function (i,MSG_extract,stationpath,files,filenames){
     
     rainfall <- data.frame()
@@ -25,6 +26,12 @@ msgstatmatch <- function (stationpath,MSG_extract){
     statdat$datetime <- gsub("-", "",statdat$datetime)
     statdat$datetime <- gsub("T", "",statdat$datetime)
     statdat$datetime <- gsub(":", "",statdat$datetime)
+    statdat$datetime <- as.POSIXct(statdat$datetime,format="%Y%m%d%H%M")+3600*UTC
+    statdat$datetime <- as.character(gsub("-","",statdat$datetime))
+    statdat$datetime <- gsub(" ","",statdat$datetime)
+    statdat$datetime <- gsub(":","",statdat$datetime)
+    statdat$datetime <- substr(statdat$datetime,1,12)
+
     
     for (k in 1:nrow(statdatsub)){
       if (any(statdatsub$date[k]==statdat$datetime)==FALSE){next}
