@@ -13,7 +13,7 @@ msgstatmatch(stationpath, MSG_extract, UTC = 0)
 second column is the station name. The MSG data of the corresponding time and
 location are organized in the subsequent columns.}
 
-\item{UTC}{numeric. Time Zone specified in +/- x hours from UTC}
+\item{UTC}{numeric. Time Zone of the station data specified in UTC hours from the UTC}
 }
 \description{
 Match temporally aggregated (1h) MSG data with station data
